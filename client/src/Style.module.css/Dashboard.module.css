@@ -1,0 +1,49 @@
+.darkIcons {
+    height: 6rem;
+    color: #000000;
+    align-self: baseline;
+}
+
+.darkLinks {
+    text-decoration: none;
+    color: #000000;
+    font-weight: bold;
+}
+
+.lightLinks {
+    text-decoration: none;
+    color: #fafafa;
+}
+
+.lightIcons {
+    height: 6rem;
+    color: #fafafa;
+    align-self: baseline;
+}
+
+.tiles {
+    background-color: #fafafa;
+    margin-left: 1rem;
+    padding: 1rem 0.5rem;
+}
+
+.billingTiles {
+    background: linear-gradient(to right, #0b3818, #000000);
+    color: #fafafa;
+    margin-left: 1rem;
+    padding: 1rem 0.5rem;
+}
+
+.newTiles {
+    background: linear-gradient(to right, #f27900, #000000);
+    color: #000000;
+    margin-left: 1rem;
+    padding: 1rem 0.5rem;
+}
+
+.adminTiles {
+    background: linear-gradient(to right, #39107B, #000000);
+    color: #fafafa;
+    margin-left: 1rem;
+    padding: 1rem 0.5rem;
+}
