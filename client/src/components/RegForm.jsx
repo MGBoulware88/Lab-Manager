@@ -73,10 +73,6 @@ export default function RegForm() {
                 <Button variant="login" type="submit" className="me-2 btn-success">
                     Create Account
                 </Button>
-                {/* This needs to close reg modal and open login modal --else redirect to a new login page */}
-                <div>
-                    Already have an account? <Link to={'/login'}>Login</Link>
-                </div>
             </Stack>
         </Form>
     );

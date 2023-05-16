@@ -52,9 +52,8 @@ This is an example Clinical Laboratory LIMS project using React (client) and Jav
 
 :heavy_check_mark: Requisition Management;\
 :heavy_check_mark: User Management;\
-:heavy_check_mark: Billing;
-:heavy_check_mark: Instrument Configurations;
-:heavy_check_mark: Instrument Configurations;
+:heavy_check_mark: Billing;\
+:heavy_check_mark: Instrument Configurations;\
 
 ## :rocket: Technologies ##
 

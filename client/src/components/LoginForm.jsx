@@ -89,9 +89,9 @@ export default function LoginForm() {
                     Login
                 </Button>
                 {/* This needs to close login modal and open reg modal --else redirect to a new reg page */}
-                <div>
+                {/* <div>
                     Don't have an account? <Link to={'/register'}>Sign Up</Link>
-                </div>
+                </div> */}
             </Stack>
         </Form>
     );

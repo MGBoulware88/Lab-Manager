@@ -1,9 +1,10 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Modal } from "react-bootstrap";
 import LoginForm from "./LoginForm";
 import RegForm from "./RegForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faHospital, faClipboard } from '@fortawesome/free-solid-svg-icons';
+import styles from "../Style.module.css/TopNav.module.css";
 
 export default function TopNav() {
     //which data needs to come in?
@@ -21,6 +22,13 @@ export default function TopNav() {
     }
     const hideRegModal = () => {
         setIsRegModalOpen(false);
+    }
+
+    const handleRegInstead = e => {
+        e.preventDefault();
+        setIsRegModalOpen(true);
+        console.log(isRegModalOpen);
+        setIsLoginModalOpen(false);
     }
 
     return (
@@ -53,25 +61,25 @@ export default function TopNav() {
             </Nav.Link>
             
             else: */}
-            <div className="d-flex px-2" style={{height: "8vh"}}>
-                <div className="col-3 d-flex gap-1" style={{height: "2rem"}}>
+            <div className="d-flex px-2" style={{ height: "8vh" }}>
+                <div className="col-3 d-flex gap-1" style={{ height: "2rem" }}>
                     {/* icon + login link */}
-                    
-                    <FontAwesomeIcon icon={faHospital} style={{color: "#0b3818", marginTop: "0.1rem"}}/>
-                    <p onClick={showLoginModal} style={{color: "green", fontWeight: "bold"}} className="modalToggle">
+
+                    <FontAwesomeIcon icon={faHospital} className={`${styles.navIcons}`} />
+                    <p onClick={showLoginModal} className={`modalToggle ${styles.navLinks}`}>
                         Login
                     </p>
 
                 </div>
                 <div className="col-6 d-flex justify-content-center">
                     {/* centered page title*/}
-                    <h1>Lab Manager</h1>
+                    <h1 className={`${styles.siteHeader}`}>Lab Manager</h1>
                 </div>
-                <div className="col-3 d-flex align-content-center justify-content-end gap-1" style={{height: "2rem"}}>
+                <div className="col-3 d-flex align-content-center justify-content-end gap-1" style={{ height: "2rem" }}>
                     {/* reg/learn more/site nav links*/}
                     <ul className="topNavLinks">
-                        <li onClick={showRegModal} style={{color: "green", fontWeight: "bold"}} className="modalToggle">
-                            <FontAwesomeIcon icon={faClipboard} style={{color: "#0b3818", marginTop: "0.1rem"}} />
+                        <li onClick={showRegModal} className={`modalToggle ${styles.navLinks}`}>
+                            <FontAwesomeIcon icon={faClipboard} className={`${styles.navIcons}`} />
                             Register
                         </li>
                     </ul>
@@ -86,6 +94,13 @@ export default function TopNav() {
                     </Modal.Header>
                     <Modal.Body>
                         <LoginForm />
+                        Don't have an account?<button 
+                        className={`btn-link ${styles.linkBtn}`}
+                        onClick={() => {
+                        setIsRegModalOpen(true);
+                        setIsLoginModalOpen(false);
+                        }
+                        }>Sign Up</button>
                     </Modal.Body>
                 </Modal>
             }
@@ -96,6 +111,13 @@ export default function TopNav() {
                     </Modal.Header>
                     <Modal.Body>
                         <RegForm />
+                        Already have an account?<button
+                        className={`btn-link ${styles.linkBtn}`}
+                        onClick={() => {
+                        setIsRegModalOpen(false);
+                        setIsLoginModalOpen(true);
+                        }
+                        }>Login</button>
                     </Modal.Body>
                 </Modal>
             }

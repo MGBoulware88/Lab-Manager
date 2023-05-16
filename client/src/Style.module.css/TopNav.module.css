@@ -1,0 +1,21 @@
+.navIcons {
+    color: #0a3316;
+    margin-top: 0.1rem;
+}
+
+.siteHeader {
+    color: #0a3316;
+}
+
+.navLinks {
+    color: #0a3316;
+    font-weight: bold;
+}
+
+.linkBtn {
+    background: none;
+    border: none;
+    color: inherit;
+    text-decoration: underline;
+    cursor: pointer;
+}

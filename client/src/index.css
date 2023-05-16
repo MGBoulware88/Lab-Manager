@@ -23,3 +23,8 @@ code {
   justify-content: space-evenly;
   gap: 1vw;
 }
+
+.neutralBackground {
+  /* background-color: azure; */
+  background-color:ghostwhite
+}
