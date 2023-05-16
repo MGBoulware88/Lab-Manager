@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Navbar, Nav, Button, Image, Collapse } from "react-bootstrap";
+import { Nav, Button, Collapse } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faUserGear, faChartLine, faRightFromBracket, faHospitalUser, faBedPulse, faScrewdriverWrench, faStarOfLife } from '@fortawesome/free-solid-svg-icons'
+import { faUsers, faChartLine, faRightFromBracket, faHospitalUser, faBedPulse, faScrewdriverWrench, faStarOfLife, faClipboard, faHouse } from '@fortawesome/free-solid-svg-icons'
 import styles from "../Style.module.css/SideNav.module.css";
 
 export default function SideNav() {
@@ -22,7 +22,7 @@ export default function SideNav() {
                     <Nav.Link href="/leads" className={`${styles.navLink}`}>
                         <Button
                             type="button"
-                            className={`btn btn-primary ${styles.sideNavBtn} `}
+                            className={`btn ${styles.sideNavBtn} `}
                             onMouseOver={(e) => {
                                 e.target.style.backgroundColor = "#f0f5fa";
                                 e.target.style.color = "#0b3818";
@@ -32,7 +32,7 @@ export default function SideNav() {
                                 e.target.style.color = "#00031C";
                             }}
                         >
-                            <FontAwesomeIcon icon={faChartLine} className="mx-3" />
+                            <FontAwesomeIcon icon={faHouse} className="mx-3" />
                             Dashboard
                         </Button>
                     </Nav.Link>
@@ -41,7 +41,7 @@ export default function SideNav() {
                     <Nav className={`${styles.navLink}`}>
                         <Button
                             type="button"
-                            className={`btn btn-primary ${styles.sideNavBtn} `}
+                            className={`btn ${styles.sideNavBtn} `}
                             onMouseOver={(e) => {
                                 e.target.style.backgroundColor = "#f0f5fa";
                                 e.target.style.color = "#0b3818";
@@ -61,17 +61,17 @@ export default function SideNav() {
                 </li>
                 <Collapse in={openManageLabs}>
                     <ul className={`ms-4 text-light ${styles.navList}`}>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/requisitions">Requisitions</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/tests">Test Configuration</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/instruments">Instruments</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/inventory">Inventory</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/requisitions">View Requisitions</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/requisitions/new">New Requisition</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/instruments">Manage Instruments</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/inventory">Manage Inventory</Nav.Link></li>
                     </ul>
                 </Collapse>
                 <li>
                     <Nav className={`${styles.navLink}`}>
                         <Button
                             type="button"
-                            className={`btn btn-primary ${styles.sideNavBtn} `}
+                            className={`btn ${styles.sideNavBtn} `}
                             onMouseOver={(e) => {
                                 e.target.style.backgroundColor = "#f0f5fa";
                                 e.target.style.color = "#0b3818";
@@ -91,16 +91,16 @@ export default function SideNav() {
                 </li>
                 <Collapse in={openManageUsers}>
                     <ul className={`ms-4 text-light ${styles.navList}`}>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/requisitions">Manage Users</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/tests">User Access History</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/instruments">User Logs</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/users">Manage Users</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/users/history">User Access History</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/users/logs">User Logs</Nav.Link></li>
                     </ul>
                 </Collapse>
                 <li>
                     <Nav className={`${styles.navLink}`}>
                         <Button
                             type="button"
-                            className={`btn btn-primary ${styles.sideNavBtn} `}
+                            className={`btn ${styles.sideNavBtn} `}
                             onMouseOver={(e) => {
                                 e.target.style.backgroundColor = "#f0f5fa";
                                 e.target.style.color = "#0b3818";
@@ -120,16 +120,16 @@ export default function SideNav() {
                 </li>
                 <Collapse in={openManageAccounts}>
                     <ul className={`ms-4 text-light ${styles.navList}`}>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/requisitions">Manage Accounts</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/tests">Account Settings</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/instruments">Account Access History</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/accounts">Manage Accounts</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/accounts/settings">Account Settings</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/accounts/history">Account Access History</Nav.Link></li>
                     </ul>
                 </Collapse>
                 <li>
                     <Nav className={`${styles.navLink}`}>
                         <Button
                             type="button"
-                            className={`btn btn-primary ${styles.sideNavBtn} `}
+                            className={`btn ${styles.sideNavBtn} `}
                             onMouseOver={(e) => {
                                 e.target.style.backgroundColor = "#f0f5fa";
                                 e.target.style.color = "#0b3818";
@@ -149,16 +149,16 @@ export default function SideNav() {
                 </li>
                 <Collapse in={openAdmin}>
                     <ul className={`ms-4 text-light ${styles.navList}`}>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/requisitions">Site Settings</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/tests">Mystery Menu</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/instruments">Coming Soon!</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/billing">Billing</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/settings">Site Settings</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/coming_soon">Coming Soon!</Nav.Link></li>
                     </ul>
                 </Collapse>
                 <li>
                     <Nav.Link href="/" className={`${styles.navLink}`}>
                         <Button
                             type="button"
-                            className={`btn btn-primary ${styles.sideNavBtn} `}
+                            className={`btn ${styles.sideNavBtn} `}
                             onMouseOver={(e) => {
                                 e.target.style.backgroundColor = "#f0f5fa";
                                 e.target.style.color = "#0b3818";

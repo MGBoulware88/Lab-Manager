@@ -3,6 +3,7 @@ import { GlobalContext } from './GlobalContext';
 import { Routes, Route } from 'react-router-dom';
 import Landing from './views/Landing';
 import Dashboard from './views/Dashboard';
+import RequisitionTable from './views/RequisitionTable';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Landing />}/>
           <Route exact path={`${SITENAV.dashboard}`} element={<Dashboard />}/>
+          <Route exact path={`/requisitions`} element={<RequisitionTable />}/>
           {/* catch any other path to redirect */}
           {/* <Route path="*" element={<CatchPath />} /> */}
         </Routes>

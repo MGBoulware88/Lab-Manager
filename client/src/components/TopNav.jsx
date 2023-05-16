@@ -24,13 +24,6 @@ export default function TopNav() {
         setIsRegModalOpen(false);
     }
 
-    const handleRegInstead = e => {
-        e.preventDefault();
-        setIsRegModalOpen(true);
-        console.log(isRegModalOpen);
-        setIsLoginModalOpen(false);
-    }
-
     return (
         // update to Navbar/Nav tags
         <>
