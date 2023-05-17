@@ -1,0 +1,7 @@
+.tableBorder th, .tableBorder td {
+    border: 1px solid #041208;
+}
+
+.tableBorder th {
+    background-color: #50AB42;
+}

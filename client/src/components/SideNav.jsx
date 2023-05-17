@@ -19,7 +19,7 @@ export default function SideNav() {
 
             <ul className={`${styles.navList}`}>
                 <li>
-                    <Nav.Link href="/leads" className={`${styles.navLink}`}>
+                    <Nav.Link href="/dashboard" className={`${styles.navLink}`}>
                         <Button
                             type="button"
                             className={`btn ${styles.sideNavBtn} `}

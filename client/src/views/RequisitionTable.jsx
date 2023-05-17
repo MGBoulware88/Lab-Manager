@@ -4,13 +4,15 @@ import TopNav from '../components/TopNav';
 import { Form, FloatingLabel, Table, Container, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faClipboard, faEye, faFilter, faMagnifyingGlassArrowRight, faPen, faPlus, faX } from '@fortawesome/free-solid-svg-icons';
+import styles from "../Style.module.css/RequisitionTable.module.css";
+
 
 export default function RequisitionTable() {
     const [searchTerm, setSearchTerm] = useState("");
     const [isNewReqModalOpen, setIsNewReqModalOpen] = useState(false);
 
-    const handleSearch = e => {
-        alert("You searched for ", searchTerm);
+    const handleSearch = () => {
+        alert("You searched for " + searchTerm);
     }
 
     const handleEditReq = id => {
@@ -38,7 +40,7 @@ export default function RequisitionTable() {
                                     label="search"
                                     className=""
                                 >
-                                    <Form.Control type="text" placeholder="search" onChange={e => setSearchTerm(e.target.value)}/>
+                                    <Form.Control type="text" placeholder="search" value={searchTerm} onChange={e => setSearchTerm(e.target.value)}/>
                                 </FloatingLabel>
 
                             </Form.Group>
@@ -50,7 +52,7 @@ export default function RequisitionTable() {
                         </Button>
                     </div>
                     <hr />
-                    <Table striped bordered hover variant="dark" size="sm">
+                    <Table  striped bordered hover variant="light" className={`${styles.tableBorder}`} >
                         <thead>
                             <tr>
                                 <th>Record ID</th>
@@ -303,6 +305,259 @@ export default function RequisitionTable() {
                             </tr>
                         </tbody>
                     </Table>
+                    {/* <Table  striped bordered hover variant="light" >
+                        <thead>
+                            <tr>
+                                <th>Record ID</th>
+                                <th>Patient Name</th>
+                                <th>Department</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>00124092</td>
+                                <td>John Doe</td>
+                                <td>Pathology</td>
+                                <td>In Progress</td>
+                                <td>
+                                    
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/edit?${"req_id"}`}>
+                                        <FontAwesomeIcon
+                                        icon={faPen}
+                                        title="Edit Req"
+                                        className="me-2 text-success"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleEditReq("req_id")}
+                                        target="_blank"
+                                        />
+                                    </a>
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/view?${"req_id"}`}>
+                                        
+                                        <FontAwesomeIcon
+                                        icon={faEye}
+                                        title="View Req"
+                                        className="me-2 text-primary"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleViewReq("req_id")}
+                                        />
+                                    </a>
+                                    
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/delete/${"req_id"}`}> 
+                                        <FontAwesomeIcon
+                                        icon={faX}
+                                        title="Delete Req"
+                                        className="me-1 text-danger"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleDeleteReq("req_id")}
+                                        target="_blank"
+                                        />
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>00124089</td>
+                                <td>Jane Doe</td>
+                                <td>Toxicology</td>
+                                <td>In Progress</td>
+                                <td>
+                                    
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/edit?${"req_id"}`}>
+                                        <FontAwesomeIcon
+                                        icon={faPen}
+                                        title="Edit Req"
+                                        className="me-2 text-success"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleEditReq("req_id")}
+                                        target="_blank"
+                                        />
+                                    </a>
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/view?${"req_id"}`}>
+                                        
+                                        <FontAwesomeIcon
+                                        icon={faEye}
+                                        title="View Req"
+                                        className="me-2 text-primary"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleViewReq("req_id")}
+                                        />
+                                    </a>
+                                    
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/delete/${"req_id"}`}> 
+                                        <FontAwesomeIcon
+                                        icon={faX}
+                                        title="Delete Req"
+                                        className="me-1 text-danger"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleDeleteReq("req_id")}
+                                        target="_blank"
+                                        />
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>I231310154</td>
+                                <td>Jim Bean</td>
+                                <td>Infectious Disease</td>
+                                <td>Billed</td>
+                                <td>
+                                
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/edit?${"req_id"}`}>
+                                        <FontAwesomeIcon
+                                        icon={faPen}
+                                        title="Edit Req"
+                                        className="me-2 text-success"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleEditReq("req_id")}
+                                        target="_blank"
+                                        />
+                                    </a>
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/view?${"req_id"}`}>
+                                        
+                                        <FontAwesomeIcon
+                                        icon={faEye}
+                                        title="View Req"
+                                        className="me-2 text-primary"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleViewReq("req_id")}
+                                        />
+                                    </a>
+                                    
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/delete/${"req_id"}`}> 
+                                        <FontAwesomeIcon
+                                        icon={faX}
+                                        title="Delete Req"
+                                        className="me-1 text-danger"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleDeleteReq("req_id")}
+                                        target="_blank"
+                                        />
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>M231200254</td>
+                                <td>LaFonda</td>
+                                <td>Microbiology</td>
+                                <td>Billed</td>
+                                <td>
+                                    
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/edit?${"req_id"}`}>
+                                        <FontAwesomeIcon
+                                        icon={faPen}
+                                        title="Edit Req"
+                                        className="me-2 text-success"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleEditReq("req_id")}
+                                        target="_blank"
+                                        />
+                                    </a>
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/view?${"req_id"}`}>
+                                        
+                                        <FontAwesomeIcon
+                                        icon={faEye}
+                                        title="View Req"
+                                        className="me-2 text-primary"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleViewReq("req_id")}
+                                        />
+                                    </a>
+                                    
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/delete/${"req_id"}`}> 
+                                        <FontAwesomeIcon
+                                        icon={faX}
+                                        title="Delete Req"
+                                        className="me-1 text-danger"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleDeleteReq("req_id")}
+                                        target="_blank"
+                                        />
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P231200058</td>
+                                <td>Alice Doe</td>
+                                <td>Pathology</td>
+                                <td>Received</td>
+                                <td>
+                                    
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/edit?${"req_id"}`}>
+                                        <FontAwesomeIcon
+                                        icon={faPen}
+                                        title="Edit Req"
+                                        className="me-2 text-success"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleEditReq("req_id")}
+                                        target="_blank"
+                                        />
+                                    </a>
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/view?${"req_id"}`}>
+                                        
+                                        <FontAwesomeIcon
+                                        icon={faEye}
+                                        title="View Req"
+                                        className="me-2 text-primary"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleViewReq("req_id")}
+                                        />
+                                    </a>
+                                    
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/delete/${"req_id"}`}> 
+                                        <FontAwesomeIcon
+                                        icon={faX}
+                                        title="Delete Req"
+                                        className="me-1 text-danger"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleDeleteReq("req_id")}
+                                        target="_blank"
+                                        />
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>P231320087</td>
+                                <td>James Dean</td>
+                                <td>Pathology</td>
+                                <td>Resulted</td>
+                                <td>
+                                    
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/edit?${"req_id"}`}>
+                                        <FontAwesomeIcon
+                                        icon={faPen}
+                                        title="Edit Req"
+                                        className="me-2 text-success"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleEditReq("req_id")}
+                                        target="_blank"
+                                        />
+                                    </a>
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/view?${"req_id"}`}>
+                                        
+                                        <FontAwesomeIcon
+                                        icon={faEye}
+                                        title="View Req"
+                                        className="me-2 text-primary"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleViewReq("req_id")}
+                                        />
+                                    </a>
+                                    
+                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/delete/${"req_id"}`}> 
+                                        <FontAwesomeIcon
+                                        icon={faX}
+                                        title="Delete Req"
+                                        className="me-1 text-danger"
+                                        style={{cursor: "pointer"}}
+                                        onClick={handleDeleteReq("req_id")}
+                                        target="_blank"
+                                        />
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </Table> */}
                 </Container>
 
             </div>
