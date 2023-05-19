@@ -1,0 +1,13 @@
+.tabHeader {
+    background-color: rgb(118, 161, 129);
+    color: #fafafa;
+}
+
+.tabBody {
+    background-color: #fafafa;
+    border:2px solid rgb(118, 161, 129);
+}
+
+.tabField {
+    background-color: #fafafa;
+}

@@ -5,3 +5,12 @@
 .tableBorder th {
     background-color: #50AB42;
 }
+
+.tableHeader {
+    position: sticky;
+    top: 80px;
+}
+
+.search {
+    background-color:rgb(175, 175, 200);
+}

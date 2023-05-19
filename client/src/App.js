@@ -17,7 +17,7 @@ function App() {
   // const USERDASHBOARD = '/dashboard';
 
   return (
-    <div className="pt-3 px-2 pb-2 neutralBackground">
+    <div className="neutralBackground">
       <GlobalContext.Provider value={{ SITENAV }}>
         <Routes>
           <Route exact path="/" element={<Landing />}/>

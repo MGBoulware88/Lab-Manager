@@ -121,6 +121,7 @@ export default function SideNav() {
                 <Collapse in={openManageAccounts}>
                     <ul className={`ms-4 text-light ${styles.navList}`}>
                         <li className={`${styles.subLink}`}><Nav.Link href="/accounts">Manage Accounts</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/accounts">Create Accounts</Nav.Link></li>
                         <li className={`${styles.subLink}`}><Nav.Link href="/accounts/settings">Account Settings</Nav.Link></li>
                         <li className={`${styles.subLink}`}><Nav.Link href="/accounts/history">Account Access History</Nav.Link></li>
                     </ul>

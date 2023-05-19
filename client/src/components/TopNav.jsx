@@ -54,7 +54,7 @@ export default function TopNav() {
             </Nav.Link>
             
             else: */}
-            <div className="d-flex px-2" style={{ height: "8vh" }}>
+            <div className="d-flex p-2 sticky-top" style={{ height: "80px", backgroundColor: "#0b3818", color: "#fafafa" }}>
                 <div className="col-3 d-flex gap-1" style={{ height: "2rem" }}>
                     {/* icon + login link */}
 
@@ -73,7 +73,7 @@ export default function TopNav() {
                     <ul className="topNavLinks">
                         <li onClick={showRegModal} className={`modalToggle ${styles.navLinks}`}>
                             <FontAwesomeIcon icon={faClipboard} className={`${styles.navIcons}`} />
-                            Register
+                            <span> Register</span>
                         </li>
                     </ul>
                 </div>

@@ -70,7 +70,7 @@ export default function RegForm() {
             </Form.Group>
             <Stack gap={3} className="p-2 m-auto">
 
-                <Button variant="login" type="submit" className="me-2 btn-success">
+                <Button variant="login" type="submit" className="me-2 bg-primary text-dark">
                     Create Account
                 </Button>
             </Stack>
