@@ -23,6 +23,11 @@
     padding: 0.5rem;
 }
 
+.stickyTop {
+    position: sticky;
+    top: 80px;
+}
+
 .brandLogo {
     height: 5rem;
     margin-bottom: 0.2rem;

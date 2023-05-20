@@ -1,23 +1,23 @@
 import React, { useState } from "react";
 import { Nav, Button, Collapse } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faUsers, faChartLine, faRightFromBracket, faHospitalUser, faBedPulse, faScrewdriverWrench, faStarOfLife, faClipboard, faHouse } from '@fortawesome/free-solid-svg-icons'
+import { faUsers, faRightFromBracket, faHospitalUser, faBedPulse, faScrewdriverWrench, faStarOfLife, faHouse } from '@fortawesome/free-solid-svg-icons'
 import styles from "../Style.module.css/SideNav.module.css";
 
 export default function SideNav() {
     const [openManageLabs, setOpenManageLabs] = useState(false);
-    const [openManageUsers, setOpenManageUsers] = useState(false);
+    // const [openManageUsers, setOpenManageUsers] = useState(false);
     const [openManageAccounts, setOpenManageAccounts] = useState(false);
     const [openAdmin, setOpenAdmin] = useState(false);
 
 
     return (
-        <div className={`btn-group-vertical justify-content-start align-items-center margin-auto ${styles.sideBar}`}>
+        <div className={`btn-group-vertical justify-content-start align-items-center margin-auto ${styles.sideBar} `}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <FontAwesomeIcon icon={faBedPulse} className={`mx-3 mb-2 ${styles.brandLogo}`} />
             </div>
 
-            <ul className={`${styles.navList}`}>
+            <ul className={`${styles.navList} ${styles.stickyTop}`}>
                 <li>
                     <Nav.Link href="/dashboard" className={`${styles.navLink}`}>
                         <Button
@@ -63,11 +63,11 @@ export default function SideNav() {
                     <ul className={`ms-4 text-light ${styles.navList}`}>
                         <li className={`${styles.subLink}`}><Nav.Link href="/requisitions">View Requisitions</Nav.Link></li>
                         <li className={`${styles.subLink}`}><Nav.Link href="/requisitions/new">New Requisition</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/instruments">Manage Instruments</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/inventory">Manage Inventory</Nav.Link></li>
+                        {/* <li className={`${styles.subLink}`}><Nav.Link href="/instruments">Manage Instruments</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/inventory">Manage Inventory</Nav.Link></li> */}
                     </ul>
                 </Collapse>
-                <li>
+                {/* <li>
                     <Nav className={`${styles.navLink}`}>
                         <Button
                             type="button"
@@ -95,7 +95,7 @@ export default function SideNav() {
                         <li className={`${styles.subLink}`}><Nav.Link href="/users/history">User Access History</Nav.Link></li>
                         <li className={`${styles.subLink}`}><Nav.Link href="/users/logs">User Logs</Nav.Link></li>
                     </ul>
-                </Collapse>
+                </Collapse> */}
                 <li>
                     <Nav className={`${styles.navLink}`}>
                         <Button
@@ -114,16 +114,16 @@ export default function SideNav() {
                             aria-expanded={openManageAccounts}
                         >
                             <FontAwesomeIcon icon={faHospitalUser} className="mx-3" />
-                            Account Management
+                            Accounts
                         </Button>
                     </Nav>
                 </li>
                 <Collapse in={openManageAccounts}>
                     <ul className={`ms-4 text-light ${styles.navList}`}>
                         <li className={`${styles.subLink}`}><Nav.Link href="/accounts">Manage Accounts</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/accounts">Create Accounts</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/accounts/settings">Account Settings</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/accounts/history">Account Access History</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/accounts">Add Accounts</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/accounts/settings">Add Providers</Nav.Link></li>
+                        {/* <li className={`${styles.subLink}`}><Nav.Link href="/accounts/history">Account Access History</Nav.Link></li> */}
                     </ul>
                 </Collapse>
                 <li>
@@ -150,8 +150,8 @@ export default function SideNav() {
                 </li>
                 <Collapse in={openAdmin}>
                     <ul className={`ms-4 text-light ${styles.navList}`}>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/billing">Billing</Nav.Link></li>
-                        <li className={`${styles.subLink}`}><Nav.Link href="/settings">Site Settings</Nav.Link></li>
+                        {/* <li className={`${styles.subLink}`}><Nav.Link href="/billing">Billing</Nav.Link></li>
+                        <li className={`${styles.subLink}`}><Nav.Link href="/settings">Site Settings</Nav.Link></li> */}
                         <li className={`${styles.subLink}`}><Nav.Link href="/coming_soon">Coming Soon!</Nav.Link></li>
                     </ul>
                 </Collapse>

@@ -54,7 +54,7 @@ export default function TopNav() {
             </Nav.Link>
             
             else: */}
-            <div className="d-flex p-2 sticky-top" style={{ height: "80px", backgroundColor: "#0b3818", color: "#fafafa" }}>
+            <div className="d-flex p-2 sticky-top" style={{ height: "80px", width: "100%", backgroundColor: "#0b3818", color: "#fafafa" }}>
                 <div className="col-3 d-flex gap-1" style={{ height: "2rem" }}>
                     {/* icon + login link */}
 

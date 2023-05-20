@@ -10,7 +10,7 @@ import FilterReqForm from '../components/FilterReqForm';
 
 export default function RequisitionTable() {
     const [searchTerm, setSearchTerm] = useState("");
-    const [isFilterReqModalOpen, setIsFilterReqModalOpen] = useState(false);
+    // const [isFilterReqModalOpen, setIsFilterReqModalOpen] = useState(false);
     const [requisitionData, setRequisitionData] = useState([]);
 
     useEffect(() => {
@@ -486,13 +486,13 @@ export default function RequisitionTable() {
         alert("You searched for " + searchTerm);
     }
 
-    const showFilterModal = () => {
-        setIsFilterReqModalOpen(true);
-    }
+    // const showFilterModal = () => {
+    //     setIsFilterReqModalOpen(true);
+    // }
 
-    const hideFilterModal = () => {
-        setIsFilterReqModalOpen(false);
-    }
+    // const hideFilterModal = () => {
+    //     setIsFilterReqModalOpen(false);
+    // }
 
     const handleEditReq = id => {
         console.log(id);
@@ -510,7 +510,6 @@ export default function RequisitionTable() {
             <div className="d-flex">
                 <SideNav />
                 <Container>
-                    <h1>Requisition Table Page</h1>
                     <div className='d-flex justify-content-between align-items-center'>
                         <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
                             <Form.Group controlId="inputSearchField">
@@ -524,9 +523,9 @@ export default function RequisitionTable() {
 
                             </Form.Group>
                             <FontAwesomeIcon icon={faMagnifyingGlassArrowRight} title="Search" style={{ color: "50AB42", height: "2rem", cursor: "pointer" }} onClick={handleSearch} />
-                            <FontAwesomeIcon icon={faFilter} title="Filter" style={{ color: "#485794", height: "1.75rem", cursor: "pointer" }} onClick={showFilterModal} />
+                            {/* <FontAwesomeIcon icon={faFilter} title="Filter" style={{ color: "#485794", height: "1.75rem", cursor: "pointer" }} onClick={showFilterModal} /> */}
                         </Form>
-                        {isFilterReqModalOpen &&
+                        {/* {isFilterReqModalOpen &&
                             <Modal show={isFilterReqModalOpen} onHide={hideFilterModal}>
                                 <Modal.Header closeButton>
                                     <Modal.Title>Filter Requisitions</Modal.Title>
@@ -535,7 +534,7 @@ export default function RequisitionTable() {
                                     <FilterReqForm reqData={requisitionData}/>
                                 </Modal.Body>
                             </Modal>
-                        }
+                        } */}
                         <a className="btn bg-success d-flex align-items-center gap-2 text-light" href="/requisitions/new">
                             +
                         </a>

@@ -5,6 +5,7 @@ import Landing from './views/Landing';
 import Dashboard from './views/Dashboard';
 import RequisitionTable from './views/RequisitionTable';
 import RequisitionForm from './views/RequisitionForm';
+import RequisitionRedirect from './components/RequisitionRedirect';
 
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
           <Route exact path={`${SITENAV.dashboard}`} element={<Dashboard />}/>
           <Route exact path={`/requisitions`} element={<RequisitionTable />}/>
           <Route exact path={`/requisitions/new`} element={<RequisitionForm />}/>
+          <Route exact path={`/requisitions/success`} element={<RequisitionRedirect />}/>
           {/* catch any other path to redirect */}
           {/* <Route path="*" element={<CatchPath />} /> */}
         </Routes>
