@@ -107,7 +107,7 @@ export default function RequisitionForm() {
 
     const handleReqFormSubmit = e => {
         e.preventDefault();
-        // alert("Saving. . .Saved!");
+
         //grab all the form data from state
 
         //post to server w/ error handling
@@ -119,27 +119,6 @@ export default function RequisitionForm() {
         //     setReqFormErrors("Form Errors: ", err)
         // }
 
-        //reset patient fields to default
-        // setPatientFirstName("");
-        // setPatientLastName("");
-        // setPatientDob("");
-        // setPatientSex("");
-        // setPatientAddressStreet("");
-        // setPatientAddress2("");
-        // setPatientAddressCity("");
-        // setPatientAddressState("");
-        // setPatientAddressZip("");
-        // setPatientInsuranceInsurer("");
-        // setPatientInsurancePlanId("");
-        // setPatientInsuranceEffectiveDate("");
-        // setPatientInsuranceGaurantorRelationship("Self");
-        // setPatientInsuranceGaurantorFirstName("");
-        // setPatientInsuranceGaurantorLastName("");
-        // setPatientInsuranceGaurantorDob("");
-        // setPatientInsuranceGaurantor({});
-        // //for better UX, Account & Provider can stay selected
-        // //reset test selection
-        // setTestOrder([]);
         // //reload new req page
         return navigate("/requisitions/success");
     }
@@ -396,6 +375,17 @@ export default function RequisitionForm() {
                                 </Tab>
                                 <Tab eventKey="testingInfo" title="Test Selection">
                                     <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
+                                        {/* Dynamic query:
+                                        get all Departments with List<Test> join
+                                        for each Department:
+                                        Deptartment.name as header
+                                            loop through array of tests as Form.Check
+                                            label, value = test.name
+                                            readonly
+                                            type = checkbox
+                                            id = toLowercase(test.name)
+                                            onChange={handleTestOrderChange}
+                                        */}
                                         <Form.Group>
                                             <h1 className="h6">Pathology</h1>
                                             <Form.Check

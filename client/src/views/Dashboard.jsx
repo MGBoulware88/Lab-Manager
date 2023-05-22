@@ -14,24 +14,18 @@ export default function Dashboard() {
             <div className="d-flex m-auto">
                 <SideNav />
                 <div>
-
-                    <Container className="d-flex row justify-content-center gap-4 px-3">
-                        <div className="row">
-                            <h1 className={`h2 ${styles.dashTitle}`}>Welcome, username!</h1>
-                        </div>
-                    </Container>
-                    <Container className="d-flex row justify-content-center gap-4 px-3">
+                    <Container className="d-flex row gap-2">
                         <Card className={`col-3 ${styles.tiles}`}>
                             <FontAwesomeIcon icon={faFileMedical} className={`mx-3 ${styles.tileIcons}`} />
                             <a href="/requisitions" className={`${styles.tileLinks}`}>Jump to Requisitions <FontAwesomeIcon icon={faShareFromSquare}/></a>
                         </Card>
                         <Card  className={`col-3 ${styles.tiles}`}>
                             <FontAwesomeIcon icon={faHospitalUser} className={`mx-3 ${styles.tileIcons}`} />
-                            <a href="/users/manage" className={`${styles.tileLinks}`}>Jump to User Management <FontAwesomeIcon icon={faShareFromSquare}/></a>
+                            <a href="/accounts/providers/add" className={`${styles.tileLinks}`}>Add Provider <FontAwesomeIcon icon={faShareFromSquare}/></a>
                         </Card>
                         <Card className={`col-3 ${styles.tiles}`}>
                             <FontAwesomeIcon icon={faFileInvoiceDollar} className={`mx-3 ${styles.tileIcons}`} />
-                            <a href="/billing" className={`${styles.tileLinks}`}>Jump to Billing <FontAwesomeIcon icon={faShareFromSquare}/></a>
+                            <a href="/accounts/add" className={`${styles.tileLinks}`}>Add Account <FontAwesomeIcon icon={faShareFromSquare}/></a>
                         </Card>
                         <Card className={`col-3 ${styles.tiles}`}>
                             <h3>New Orders - 25</h3>

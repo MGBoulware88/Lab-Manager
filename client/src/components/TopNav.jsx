@@ -57,7 +57,6 @@ export default function TopNav() {
             <div className="d-flex p-2 sticky-top" style={{ height: "80px", width: "100%", backgroundColor: "#0b3818", color: "#fafafa" }}>
                 <div className="col-3 d-flex gap-1" style={{ height: "2rem" }}>
                     {/* icon + login link */}
-
                     <FontAwesomeIcon icon={faHospital} className={`${styles.navIcons}`} />
                     <p onClick={showLoginModal} className={`modalToggle ${styles.navLinks}`}>
                         Login
@@ -70,12 +69,10 @@ export default function TopNav() {
                 </div>
                 <div className="col-3 d-flex align-content-center justify-content-end gap-1" style={{ height: "2rem" }}>
                     {/* reg/learn more/site nav links*/}
-                    <ul className="topNavLinks">
-                        <li onClick={showRegModal} className={`modalToggle ${styles.navLinks}`}>
-                            <FontAwesomeIcon icon={faClipboard} className={`${styles.navIcons}`} />
-                            <span> Register</span>
-                        </li>
-                    </ul>
+                    <FontAwesomeIcon icon={faClipboard} className={`${styles.navIcons}`} />
+                    <p onClick={showLoginModal} className={`modalToggle ${styles.navLinks}`}>
+                        Register
+                    </p>
                 </div>
 
             </div>
