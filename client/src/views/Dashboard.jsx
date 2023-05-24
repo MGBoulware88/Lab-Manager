@@ -19,13 +19,13 @@ export default function Dashboard() {
                             <FontAwesomeIcon icon={faFileMedical} className={`mx-3 ${styles.tileIcons}`} />
                             <a href="/requisitions" className={`${styles.tileLinks}`}>Jump to Requisitions <FontAwesomeIcon icon={faShareFromSquare}/></a>
                         </Card>
-                        <Card  className={`col-3 ${styles.tiles}`}>
-                            <FontAwesomeIcon icon={faHospitalUser} className={`mx-3 ${styles.tileIcons}`} />
-                            <a href="/accounts/providers/add" className={`${styles.tileLinks}`}>Add Provider <FontAwesomeIcon icon={faShareFromSquare}/></a>
-                        </Card>
                         <Card className={`col-3 ${styles.tiles}`}>
                             <FontAwesomeIcon icon={faFileInvoiceDollar} className={`mx-3 ${styles.tileIcons}`} />
                             <a href="/accounts/add" className={`${styles.tileLinks}`}>Add Account <FontAwesomeIcon icon={faShareFromSquare}/></a>
+                        </Card>
+                        <Card  className={`col-3 ${styles.tiles}`}>
+                            <FontAwesomeIcon icon={faHospitalUser} className={`mx-3 ${styles.tileIcons}`} />
+                            <a href="/accounts/providers/add" className={`${styles.tileLinks}`}>Add Provider <FontAwesomeIcon icon={faShareFromSquare}/></a>
                         </Card>
                         <Card className={`col-3 ${styles.tiles}`}>
                             <h3>New Orders - 25</h3>

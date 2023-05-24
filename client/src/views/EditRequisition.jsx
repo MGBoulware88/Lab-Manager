@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Form, FloatingLabel, Button, Tabs, Tab, Card } from "react-bootstrap";
 import SideNav from "../components/SideNav";
@@ -104,6 +104,13 @@ export default function RequisitionForm() {
     }
 
     const [reqFormErrors, setReqFormErrors] = useState([]);
+
+    //prepopulate the form from db
+    useEffect(() => {
+        //axios.get
+        //set state fields
+        console.log("I used effect!");
+    }, []);
 
     const handleReqFormSubmit = e => {
         e.preventDefault();

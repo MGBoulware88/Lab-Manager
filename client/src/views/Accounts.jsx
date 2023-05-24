@@ -15,7 +15,77 @@ export default function RequisitionTable() {
 
     useEffect(() => {
         //axios call to fetch req data from db
-        const allAccounts = [{ name: "Example Account A", id: "1", contact: "John" }, { name: "Example Account B", id: "2", contact: "John"  }, { name: "Example Account C", id: "3", contact: "John"  }, { name: "Example Account D", id: "4", contact: "John"  }, { name: "Example Account E", id: "5", contact: "John"  }, { name: "Example Account F", id: "6", contact: "John"  }, { name: "Example Account G", id: "7", contact: "John"  }];
+        const allAccounts = [{
+            name: "Example Account A",
+            id: "1",
+            contact: [{
+                name: "John Smith",
+                phone: "972-555-1234",
+                email: "john@mail.com"
+            }],
+            provider: "Example Provider A"
+        },
+        {
+            name: "Example Account B",
+            id: "2",
+            contact: [{
+                name: "Jane Doe",
+                phone: "972-555-4567",
+                email: "jane@mail.com"
+            }],
+            provider: "Example Provider B"
+        },
+        {
+            name: "Example Account C",
+            id: "3",
+            contact: [{ 
+                name: "Jimmy John",
+                phone: "817-555-7532",
+                email: "freshsubs@jj.com"
+            }],
+            provider: "Example Provider C"
+        },
+        {
+            name: "Example Account D",
+            id: "4",
+            contact: [{
+                name: "Alice Alisson",
+                phone: "682-555-1234",
+                email: "alice@a.com"
+            }],
+            provider: "Example Provider D"
+        },
+        {
+            name: "Example Account E",
+            id: "5",
+            contact: [{
+                name: "Edgar Figaro",
+                phone: "817-863-4569",
+                email: "sand@castle.com"
+            }],
+            provider: "Example Provider E"
+        },
+        {
+            name:
+                "Example Account F",
+            id: "6",
+            contact: [{
+                name: "Bird Person",
+                phone: "972-456-1234",
+                email: "bird@person.com"
+            }],
+            provider: "Example Provider F"
+        },
+        {
+            name: "Example Account G",
+            id: "7",
+            contact: [{
+                name: "Jane",
+                phone: "555-555-5555",
+                email: "thorsgirl99@gmail.com"
+            }],
+            provider: "Example Provider G"
+        }];
         setAllAccounts(allAccounts)
     }, [])
 
@@ -56,7 +126,7 @@ export default function RequisitionTable() {
                                     label="search"
                                     className=""
                                 >
-                                    <Form.Control type="text" placeholder="search" className={`${styles.search}`}value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                                    <Form.Control type="text" placeholder="search" className={`${styles.search}`} value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
                                 </FloatingLabel>
 
                             </Form.Group>
@@ -81,48 +151,48 @@ export default function RequisitionTable() {
                     <Table striped bordered hover variant="light" className={`${styles.tableBorder} ${styles.tableHeader}`} >
                         <thead >
                             <tr className={`${styles.tableHeader}`}>
-                                <th>Account Id</th>
                                 <th>Account Name</th>
                                 <th>Contact</th>
+                                <th>Account Provider</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {allAccounts.map((account, idx) => (
-                                <tr key={idx}>
-                                    <td>{account.id}</td>
+                                <tr key={account.id}>
                                     <td>{account.name}</td>
-                                    <td>{account.contact}</td>
+                                    <td>{account.contact[0].name} | phone: {account.contact[0].phone} | email: {account.contact[0].email}</td>
+                                    <td>{account.provider}</td>
                                     <td>
-                                    {/* <a target="_blank" rel="noreferrer noopener" href={`/accounts/edit?${"req_id"}`}>
+                                        <a target="_blank" rel="noreferrer noopener" href={`/accounts/edit/${account.id}`}>
                                         <FontAwesomeIcon
                                             icon={faPen}
-                                            title="Edit Req"
+                                            title="Edit Account"
                                             className="me-2 text-success"
                                             style={{ cursor: "pointer" }}
                                         />
                                     </a>
-                                    <a target="_blank" rel="noreferrer noopener" href={`/accounts/view?${"req_id"}`}>
+                                    <a target="_blank" rel="noreferrer noopener" href={`/accounts/view/${account.id}`}>
                                         <FontAwesomeIcon
                                             icon={faEye}
-                                            title="View Req"
+                                            title="View Account"
                                             className="me-2"
                                             style={{ cursor: "pointer" }}
                                         />
-                                    </a> */}
-                                    <a target="_blank" rel="noreferrer noopener" href={`/accounts/delete/${"account_id"}`}>
-                                        <FontAwesomeIcon
-                                            icon={faX}
-                                            title="Delete Account"
-                                            className="me-1 text-danger"
-                                            style={{ cursor: "pointer" }}
-                                            onClick={handleDeleteReq("account_id")}
-                                        />
                                     </a>
-                                </td>
+                                        <a target="_blank" rel="noreferrer noopener" href={`/accounts/delete/${account.id}`}>
+                                            <FontAwesomeIcon
+                                                icon={faX}
+                                                title="Delete Account"
+                                                className="me-1 text-danger"
+                                                style={{ cursor: "pointer" }}
+                                                onClick={handleDeleteReq("account_id")}
+                                            />
+                                        </a>
+                                    </td>
                                 </tr>
                             ))}
-                            
+
                         </tbody>
                     </Table>
                 </Container>

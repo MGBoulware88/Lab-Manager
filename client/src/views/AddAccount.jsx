@@ -48,6 +48,65 @@ export default function AddAccount() {
         return navigate('/accounts');
     }
 
+    //state and functions to render more provider fields
+    const [count, setCount] = useState(1);
+    const [providers, setProviders] = useState([{ name: "", npi: "" }]);
+
+
+    const handleAddFields = () => {
+        setCount(prevCount => prevCount + 1);
+        const newProvider = [...providers, { name: "", npi: "" }];
+        setProviders(newProvider);
+    }
+
+    const handleProviderNameChange = (idx, val) => {
+        setProviders(prevData => {
+            const newData = [...prevData];
+            newData[idx].name = val;
+            return newData;
+        })
+    }
+    const handleProviderNpiChange = (idx, val) => {
+        setProviders(prevData => {
+            const newData = [...prevData];
+            newData[idx].npi = val;
+            return newData;
+        })
+    }
+
+    const renderProviderFields = () => {
+        const providerFields = [];
+        for (let i = 1; i <= count; i++) {
+            providerFields.push(
+                <div key={i}>
+                    <Form.Group controlId='formAccountProviderName'>
+                        <FloatingLabel controlId="formAccountProviderName" label="Provider Name" className="mb-2">
+                            <Form.Control
+                                type="text"
+                                placeholder="Provider Name"
+                                value={providers[i-1].name || ""}
+                                onChange={e => handleProviderNameChange(i, e.target.value)}
+                                className={`${styles.formField}`}
+                            />
+                        </FloatingLabel>
+                    </Form.Group>
+                    <Form.Group controlId='formAccountProviderNPI'>
+                        <FloatingLabel controlId="formAccountProviderNPI" label="Provider NPI" className="mb-2">
+                            <Form.Control
+                                type="text"
+                                placeholder="Provider NPI"
+                                value={providers[i-1].npi || ""}
+                                onChange={e => handleProviderNpiChange(i, e.target.value)}
+                                className={`${styles.formField}`}
+                            />
+                        </FloatingLabel>
+                    </Form.Group>
+                </div>
+            )
+            return providerFields;
+        }
+    }
+
     return (
         <>
             <TopNav />
@@ -145,24 +204,8 @@ export default function AddAccount() {
                                         </FloatingLabel>
                                     </Form.Group>
                                     <h1 className="h6">Account Provider</h1>
-                                    <Form.Group controlId='formAccountProviderName'>
-                                        <FloatingLabel controlId="formAccountProviderName" label="Provider Name" className="mb-2">
-                                            <Form.Control type="text"
-                                                placeholder="Provider Name"
-                                                onChange={e => setAccountProviderName(e.target.value)}
-                                                className={`${styles.formField}`}
-                                            />
-                                        </FloatingLabel>
-                                    </Form.Group>
-                                    <Form.Group controlId='formAccountProviderNPI'>
-                                        <FloatingLabel controlId="formAccountProviderNPI" label="Provider NPI" className="mb-2">
-                                            <Form.Control type="text"
-                                                placeholder="Provider NPI"
-                                                onChange={e => setAccountProviderNpi(e.target.value)}
-                                                className={`${styles.formField}`}
-                                            />
-                                        </FloatingLabel>
-                                    </Form.Group>
+                                    {renderProviderFields().map((fields, idx) => fields)}
+                                    <Button onClick={handleAddFields}>+</Button>
                                 </div>
                             </div>
                         </Card>
