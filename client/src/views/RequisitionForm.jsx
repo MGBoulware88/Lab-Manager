@@ -1,11 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Form, FloatingLabel, Button, Tabs, Tab, Card } from "react-bootstrap";
 import SideNav from "../components/SideNav";
 import TopNav from "../components/TopNav";
 import styles from "../Style.module.css/RequisitionForm.module.css"
+import axios from 'axios';
+import { GlobalContext } from '../GlobalContext';
+
 
 export default function RequisitionForm() {
+    const baseUrl = useContext(GlobalContext).SITENAV.baseurl;
     const navigate = useNavigate();
     //patient info fields
     const [patientFirstName, setPatientFirstName] = useState("");
@@ -26,36 +30,86 @@ export default function RequisitionForm() {
     const [patientInsuranceGaurantorLastName, setPatientInsuranceGaurantorLastName] = useState("");
     const [patientInsuranceGaurantorDob, setPatientInsuranceGaurantorDob] = useState("");
     //provider info fields
-    const allAccounts = [{ name: "Example Account A", id: "1" }, { name: "Example Account B", id: "2" }, { name: "Example Account C", id: "3" }, { name: "Example Account D", id: "4" }, { name: "Example Account E", id: "5" }, { name: "Example Account F", id: "6" }, { name: "Example Account G", id: "7" }];
+    const [allAccounts, setAllAccounts] = useState([]);
     const [account, setAccount] = useState({});
-    const [accountProviders, setAccountProviders] = useState([{
-        firstName: "Example",
-        lastName: "Provider1",
-        npi: "125489636"
-    },
-    {
-        firstName: "Example",
-        lastName: "Provider2",
-        npi: "306489639"
-    },
-    {
-        firstName: "Example",
-        lastName: "Provider3",
-        npi: "985489636"
+    const [accountProviders, setAccountProviders] = useState([]);
+    const [orderingProvider, setOrderingProvider] = useState({});
+    //test options
+    const [allTestOptions, setAllTestOptions] = useState([]);
+    const [selectedTestOptions, setSelectedTestOptions] = useState([]);
+    const [departments, setDepartments] = useState([]);
+
+    const fetchAllAccounts = () => {
+        axios
+        .get(`${baseUrl}/accounts`)
+        .then(res => {
+            setAllAccounts(res.data);
+        })
+        .catch(err => {
+            console.log(err);
+        });
     }
-    ])
-    const [orderingProvider, setOrderingProvider] = useState({})
+
+    const fetchAllTestOptions = () => {
+        axios
+        .get(`${baseUrl}/test_options`)
+        .then(res => {
+            const tests = res.data;
+            console.log(tests);
+            setAllTestOptions(tests);
+        })
+        .catch(err => {
+            console.log(err);
+        }, []);
+    }
+
+    const parsedTestOptions = () => {
+        const departments = {};
+        const deptArray = [];
+        for (let i=0; i<allTestOptions.length; i++) {
+            const newKey = allTestOptions[i].department;
+            if (departments.hasOwnProperty(newKey)) {
+                const testName = allTestOptions[i].name;
+                departments[newKey].push(testName);
+            } else {
+                departments[newKey] = [];
+                const testName = allTestOptions[i].name;
+                departments[newKey].push(testName);
+            }
+        }
+        console.log("parsed: ", departments);
+        for (const department in departments) {
+            deptArray.push({department: departments[department]});
+        }
+        console.log(deptArray);
+        return deptArray;
+    }
+
+    useEffect(() => {
+        //grab all accounts to load dropdown
+        fetchAllAccounts();
+        console.log("AllAccounts: ", allAccounts)
+        //fetch all test options
+        fetchAllTestOptions();
+        //parse test options
+        setDepartments(parsedTestOptions());
+    }, []);
 
     const handleAccountChange = e => {
-        console.log("target is: ", e.target);
-        const accountSelection = e.target.value;
-        console.log(accountSelection);
         setAccount(e.target.value);
-        console.log("value is: ", account);
         //clear out any previous selection
         setAccountProviders([]);
         setOrderingProvider({});
         //query DB to retrieve doctors of this account
+        axios
+            .get(`${baseUrl}/providers/${e.target.value}`)
+            .then(res => {
+                const providerList = res.data;
+                setAccountProviders(providerList);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
     //testing info fields
     const [testOrder, setTestOrder] = useState([]);
@@ -103,7 +157,7 @@ export default function RequisitionForm() {
         setPatientInsuranceGaurantor(gaurantor);
     }
 
-    const [reqFormErrors, setReqFormErrors] = useState([]);
+    // const [reqFormErrors, setReqFormErrors] = useState([]);
 
     const handleReqFormSubmit = e => {
         e.preventDefault();
@@ -353,12 +407,11 @@ export default function RequisitionForm() {
                                             <h1 className="h6 mt-2 ms-2">Ordering Account:</h1>
                                             <Form.Select
                                                 className={`py-1 `}
-                                                value={account}
                                                 onChange={handleAccountChange}
                                             >
                                                 <option value="">Select Account</option>
                                                 {allAccounts.map((account, idx) => {
-                                                    return <option value={account.name} key={idx}>{account.name}</option>
+                                                    return <option value={account.id} key={idx}>{account.name}</option>
                                                 })
                                                 }
                                             </Form.Select>
@@ -373,9 +426,9 @@ export default function RequisitionForm() {
                                                 <option value="">Select Provider</option>
                                                 {accountProviders.map((provider, idx) => {
                                                     return <option
-                                                        value={`${provider.firstName} ${provider.lastName} - ${provider.npi}`}
+                                                        value={`${provider.id}`}
                                                         key={idx}
-                                                    >{provider.firstName} {provider.lastName} - {provider.npi}</option>
+                                                    >{provider.name} - {provider.npi}</option>
                                                 })
                                                 }
                                             </Form.Select>
@@ -383,19 +436,37 @@ export default function RequisitionForm() {
                                     </Card>
                                 </Tab>
                                 <Tab eventKey="testingInfo" title="Test Selection">
-                                    <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
-                                        {/* Dynamic query:
-                                        get all Departments with List<Test> join
-                                        for each Department:
-                                        Deptartment.name as header
-                                            loop through array of tests as Form.Check
-                                            label, value = test.name
-                                            readonly
-                                            type = checkbox
-                                            id = toLowercase(test.name)
-                                            onChange={handleTestOrderChange}
-                                        */}
-                                        <Form.Group>
+                                    {departments && departments.map((dept, idx) => {
+                                        return <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`} key={idx}>
+                                            <h1 className="h6">{dept}</h1>
+                                            {dept.map((test, idx) => {
+                                                return (<Form.Check
+                                                label={test.name}
+                                                value={test.name}
+                                                readOnly
+                                                type="checkbox"
+                                                name={dept}
+                                                key={idx}
+                                                id={test.name}
+                                                onChange={handleTestOrderChange}
+                                            />)
+                                            })}
+                                            {/* Dynamic query:
+                                            get all Departments with List<Test> join
+                                            for each Department:
+                                            Deptartment.name as header
+                                                loop through array of tests as Form.Check
+                                                label, value = test.name
+                                                readonly
+                                                type = checkbox
+                                                id = toLowercase(test.name)
+                                                onChange={handleTestOrderChange}
+                                            */}
+                                        </Card>
+
+                                    })}
+
+                                        {/* <Form.Group>
                                             <h1 className="h6">Pathology</h1>
                                             <Form.Check
                                                 label="Biopsy"
@@ -543,7 +614,7 @@ export default function RequisitionForm() {
                                                 onChange={handleTestOrderChange}
                                             />
                                         </Form.Group>
-                                    </Card>
+                                    </Card> */}
                                 </Tab>
                             </Tabs>
                             <Button className="bg-success mb-2 me-1 p-2 px-3 text-dark" type="submit">

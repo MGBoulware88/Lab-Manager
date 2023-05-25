@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useContext, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Button, Card, FloatingLabel, Form } from 'react-bootstrap';
 import TopNav from '../components/TopNav';
 import SideNav from '../components/SideNav';
@@ -8,9 +8,10 @@ import axios from 'axios';
 import { GlobalContext } from '../GlobalContext';
 
 
-export default function AddAccount() {
-    const baseUrl = useContext(GlobalContext).SITENAV.baseurl;
+export default function EditAccount() {
+    const baseUrl = useContext(GlobalContext).SITENAV.baseurl + '/accounts';
     const [accountName, setAccountName] = useState("");
+    const [addressId, setAddressId] = useState(0);
     const [accountAddressStreet, setAccountAddressStreet] = useState("");
     const [accountAddress2, setAccountAddress2] = useState("");
     const [accountAddressCity, setAccountAddressCity] = useState("");
@@ -19,12 +20,13 @@ export default function AddAccount() {
     const [accountContactName, setAccountContactName] = useState("");
     const [accountContactPhone, setAccountContactPhone] = useState("");
     const [accountContactEmail, setAccountContactEmail] = useState("");
+    const { id } = useParams();
 
     const navigate = useNavigate();
 
-    const handleAddAccount = async e => {
+    const handleEditAccount = async e => {
         e.preventDefault();
-        //generate the data for POST
+        //generate the data for PUT
         const data = new URLSearchParams();
         data.append("name", accountName);
         data.append("street", accountAddressStreet);
@@ -37,7 +39,7 @@ export default function AddAccount() {
         data.append("contactEmail", accountContactEmail);
 
         try {
-            const response = await axios.post(`${baseUrl}/accounts/new`, data, {
+            const response = await axios.put(`${baseUrl}/${id}`, data, {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
@@ -49,6 +51,32 @@ export default function AddAccount() {
         }
     }
 
+    const fetchAccount = id => {
+        axios
+            .get(`${baseUrl}/${id}`)
+            .then(res => {
+                const data = res.data;
+                const accountAddress = data?.address;
+                console.log(data);
+                setAccountName(data.name);
+                setAccountAddressStreet(accountAddress?.street);
+                setAccountAddress2(accountAddress?.address2);
+                setAccountAddressCity(accountAddress?.city);
+                setAccountAddressState(accountAddress?.state);
+                setAccountAddressZip(accountAddress?.zip);
+                setAccountContactName(data.contactName);
+                setAccountContactPhone(data.contactPhone);
+                setAccountContactEmail(data.contactEmail);
+            })
+            .catch(err => {
+                console.log(err);
+            })
+    }
+
+    useEffect(() => {
+        fetchAccount(id);
+    }, []);
+
 
 
     return (
@@ -57,8 +85,8 @@ export default function AddAccount() {
             <div className="d-flex">
                 <SideNav />
                 <div className="d-flex flex-column px-3">
-                    <h1 className="text-primary">Add account</h1>
-                    <Form onSubmit={handleAddAccount} className="">
+                    <h1 className="text-primary">Edit account</h1>
+                    <Form onSubmit={handleEditAccount} className="">
                         <Card border="primary" className={`p-2 mb-2 ${styles.cardBody}`}>
                             <div className="d-flex gap-3">
                                 <div>
@@ -67,6 +95,7 @@ export default function AddAccount() {
                                         <FloatingLabel controlId="formAccountName" label="Account Name" className="mb-2">
                                             <Form.Control type="text"
                                                 placeholder="Account Name"
+                                                value={accountName}
                                                 onChange={e => setAccountName(e.target.value)}
                                                 className={`${styles.formField}`}
                                             />
@@ -76,6 +105,7 @@ export default function AddAccount() {
                                         <FloatingLabel controlId="formPatientAddressStreet" label="Address" className="mb-2">
                                             <Form.Control type="text"
                                                 placeholder="Address"
+                                                value={accountAddressStreet}
                                                 onChange={e => setAccountAddressStreet(e.target.value)}
                                                 className={`${styles.formField}`}
                                             />
@@ -85,6 +115,7 @@ export default function AddAccount() {
                                         <FloatingLabel controlId="formAccountAddress2" label="Address 2" className="mb-2">
                                             <Form.Control type="text"
                                                 placeholder="Address 2"
+                                                value={accountAddress2}
                                                 onChange={e => setAccountAddress2(e.target.value)}
                                                 className={`${styles.formField}`}
                                             />
@@ -94,6 +125,7 @@ export default function AddAccount() {
                                         <FloatingLabel controlId="formAccountAddressCity" label="City" className="mb-2">
                                             <Form.Control type="text"
                                                 placeholder="City"
+                                                value={accountAddressCity}
                                                 onChange={e => setAccountAddressCity(e.target.value)}
                                                 className={`${styles.formField}`}
                                             />
@@ -103,6 +135,7 @@ export default function AddAccount() {
                                         <FloatingLabel controlId="formAccountAddressState" label="State" className="mb-2">
                                             <Form.Control type="text"
                                                 placeholder="State"
+                                                value={accountAddressState}
                                                 onChange={e => setAccountAddressState(e.target.value)}
                                                 className={`${styles.formField}`}
                                             />
@@ -112,6 +145,7 @@ export default function AddAccount() {
                                         <FloatingLabel controlId="formAccountAddressZip" label="Zip" className="mb-2">
                                             <Form.Control type="text"
                                                 placeholder="Zip"
+                                                value={accountAddressZip}
                                                 onChange={e => setAccountAddressZip(e.target.value)}
                                                 className={`${styles.formField}`}
                                             />
@@ -124,6 +158,7 @@ export default function AddAccount() {
                                         <FloatingLabel controlId="formAccountContactName" label="Contact Name" className="mb-2">
                                             <Form.Control type="text"
                                                 placeholder="Contact Name"
+                                                value={accountContactName}
                                                 onChange={e => setAccountContactName(e.target.value)}
                                                 className={`${styles.formField}`}
                                             />
@@ -133,6 +168,7 @@ export default function AddAccount() {
                                         <FloatingLabel controlId="formAccountContactPhone" label="Phone" className="mb-2">
                                             <Form.Control type="phone"
                                                 placeholder="Phone"
+                                                value={accountContactPhone}
                                                 onChange={e => setAccountContactPhone(e.target.value)}
                                                 className={`${styles.formField}`}
                                             />
@@ -142,6 +178,7 @@ export default function AddAccount() {
                                         <FloatingLabel controlId="formAccountContactEmail" label="Email" className="mb-2">
                                             <Form.Control type="email"
                                                 placeholder="Email"
+                                                value={accountContactEmail}
                                                 onChange={e => setAccountContactEmail(e.target.value)}
                                                 className={`${styles.formField}`}
                                             />

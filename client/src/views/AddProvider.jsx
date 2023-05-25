@@ -1,30 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button, Card, FloatingLabel, Form } from 'react-bootstrap';
 import styles from '../Style.module.css/AccountForm.module.css';
 import TopNav from '../components/TopNav';
 import SideNav from '../components/SideNav';
+import axios from 'axios';
+import { GlobalContext } from '../GlobalContext';
+
 
 export default function AddProvider() {
-    // const [allAccounts, setAllAccounts] = useState([]);
+    const baseUrl = useContext(GlobalContext).SITENAV.baseurl;
+
+    const [allAccounts, setAllAccounts] = useState([]);
     const [selectedAccount, setSelectedAccount] = useState({});
     const [providerName, setProviderName] = useState("");
-    const [npi, setNpi] = useState(null);
+    const [npi, setNpi] = useState("");
 
     const navigate = useNavigate();
 
-    const allAccounts = [{ name: "Example Account A", id: "1" }, { name: "Example Account B", id: "2" }, { name: "Example Account C", id: "3" }, { name: "Example Account D", id: "4" }, { name: "Example Account E", id: "5" }, { name: "Example Account F", id: "6" }, { name: "Example Account G", id: "7" }];
-
-    const handleAddProvider = e => {
+    const handleAddProvider = async e => {
         e.preventDefault();
-
-        navigate('/accounts')
+        //generate the data first
+        const data = new URLSearchParams();
+        data.append("name", providerName);
+        data.append("npi", npi);
+        try {
+            const response = await axios.post(`${baseUrl}/providers/new/${selectedAccount}`, data, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            });
+            console.log(response)
+            return navigate('/accounts');
+        } catch (err) {
+            console.log(err);
+        }
     };
 
-    // useEffect(() => {
-    //     //axios fetch all accounts
-    //     setAllAccounts(data)
-    // }, []);
+    //fetch all accounts
+    const fetchAccounts = () => {
+        axios
+            .get(`${baseUrl}/accounts`)
+            .then(res => {
+                const data = res.data;
+                data && setAllAccounts(data);
+                console.log(allAccounts);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    useEffect(() => {
+        fetchAccounts();
+    }, []);
 
     return (
         <>
@@ -46,7 +75,7 @@ export default function AddProvider() {
                                         >
                                             <option value="">Select Account</option>
                                                 {allAccounts.map((account, idx) => {
-                                                    return <option value={account.name} key={idx}>{account.name}</option>
+                                                    return <option value={account.id} key={idx}>{account.name}</option>
                                                 })
                                                 }
                                         </Form.Select>

@@ -1,93 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import SideNav from '../components/SideNav';
 import TopNav from '../components/TopNav';
 import { Form, FloatingLabel, Table, Container, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faFilter, faMagnifyingGlassArrowRight, faPen, faX } from '@fortawesome/free-solid-svg-icons';
 import styles from "../Style.module.css/RequisitionTable.module.css";
-import FilterReqForm from '../components/FilterReqForm';
+import axios from 'axios';
+import { GlobalContext } from '../GlobalContext';
 
 
 export default function RequisitionTable() {
+    const baseUrl = useContext(GlobalContext).SITENAV.baseurl + '/accounts';
+
     const [searchTerm, setSearchTerm] = useState("");
     // const [isFilterReqModalOpen, setIsFilterReqModalOpen] = useState(false);
-    const [allAccounts, setAllAccounts] = useState([]);
+    const [allAccounts, setAllAccounts] = useState(null);
 
+    //fetch all accounts
+    const fetchAccounts = () => {
+        axios
+            .get(`${baseUrl}`)
+            .then(res => {
+                const data = res.data;
+                data && setAllAccounts(data);
+                console.log(allAccounts);
+            })
+            .catch(err => {
+                console.log(err);
+            });
+    }
+
+    //fetch all accounts on render w/ empty dependency array so it only fetches once
     useEffect(() => {
-        //axios call to fetch req data from db
-        const allAccounts = [{
-            name: "Example Account A",
-            id: "1",
-            contact: [{
-                name: "John Smith",
-                phone: "972-555-1234",
-                email: "john@mail.com"
-            }],
-            provider: "Example Provider A"
-        },
-        {
-            name: "Example Account B",
-            id: "2",
-            contact: [{
-                name: "Jane Doe",
-                phone: "972-555-4567",
-                email: "jane@mail.com"
-            }],
-            provider: "Example Provider B"
-        },
-        {
-            name: "Example Account C",
-            id: "3",
-            contact: [{ 
-                name: "Jimmy John",
-                phone: "817-555-7532",
-                email: "freshsubs@jj.com"
-            }],
-            provider: "Example Provider C"
-        },
-        {
-            name: "Example Account D",
-            id: "4",
-            contact: [{
-                name: "Alice Alisson",
-                phone: "682-555-1234",
-                email: "alice@a.com"
-            }],
-            provider: "Example Provider D"
-        },
-        {
-            name: "Example Account E",
-            id: "5",
-            contact: [{
-                name: "Edgar Figaro",
-                phone: "817-863-4569",
-                email: "sand@castle.com"
-            }],
-            provider: "Example Provider E"
-        },
-        {
-            name:
-                "Example Account F",
-            id: "6",
-            contact: [{
-                name: "Bird Person",
-                phone: "972-456-1234",
-                email: "bird@person.com"
-            }],
-            provider: "Example Provider F"
-        },
-        {
-            name: "Example Account G",
-            id: "7",
-            contact: [{
-                name: "Jane",
-                phone: "555-555-5555",
-                email: "thorsgirl99@gmail.com"
-            }],
-            provider: "Example Provider G"
-        }];
-        setAllAccounts(allAccounts)
-    }, [])
+        fetchAccounts();
+    }, []);
 
     const handleSearch = e => {
         e.preventDefault();
@@ -101,16 +47,6 @@ export default function RequisitionTable() {
     // const hideFilterModal = () => {
     //     setIsFilterReqModalOpen(false);
     // }
-
-    const handleEditReq = id => {
-        console.log(id);
-    }
-    const handleViewReq = id => {
-        console.log(id);
-    }
-    const handleDeleteReq = id => {
-        console.log(id);
-    }
 
     return (
         <>
@@ -152,17 +88,19 @@ export default function RequisitionTable() {
                         <thead >
                             <tr className={`${styles.tableHeader}`}>
                                 <th>Account Name</th>
-                                <th>Contact</th>
-                                <th>Account Provider</th>
+                                <th>Contact Name</th>
+                                <th>Contact Phone</th>
+                                <th>Contact Email</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {allAccounts.map((account, idx) => (
+                            {allAccounts?.length > 0 ? allAccounts.map((account) => (
                                 <tr key={account.id}>
                                     <td>{account.name}</td>
-                                    <td>{account.contact[0].name} | phone: {account.contact[0].phone} | email: {account.contact[0].email}</td>
-                                    <td>{account.provider}</td>
+                                    <td>{account.contactName}</td>
+                                    <td>{account.contactPhone}</td>
+                                    <td>{account.contactEmail}</td>
                                     <td>
                                         <a target="_blank" rel="noreferrer noopener" href={`/accounts/edit/${account.id}`}>
                                         <FontAwesomeIcon
@@ -180,18 +118,23 @@ export default function RequisitionTable() {
                                             style={{ cursor: "pointer" }}
                                         />
                                     </a>
-                                        <a target="_blank" rel="noreferrer noopener" href={`/accounts/delete/${account.id}`}>
+                                        
                                             <FontAwesomeIcon
                                                 icon={faX}
                                                 title="Delete Account"
                                                 className="me-1 text-danger"
                                                 style={{ cursor: "pointer" }}
-                                                onClick={handleDeleteReq("account_id")}
                                             />
-                                        </a>
                                     </td>
                                 </tr>
-                            ))}
+                            )):
+                            <tr>
+                                <td>Add an account first</td>
+                                <td>Click the green button</td>
+                                <td>You can do it!</td>
+                                <td>I beleive in you!</td>
+                            </tr>
+                            }
 
                         </tbody>
                     </Table>

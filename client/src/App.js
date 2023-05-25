@@ -10,6 +10,7 @@ import RequisitionRedirect from './components/RequisitionRedirect';
 import AddAccount from './views/AddAccount';
 import AddProvider from './views/AddProvider';
 import Accounts from './views/Accounts';
+import EditAccount from './views/EditAccount';
 
 
 function App() {
@@ -33,7 +34,7 @@ function App() {
           <Route exact path={`/requisitions/success`} element={<RequisitionRedirect />}/>
           <Route exact path={`/accounts`} element={<Accounts/>}/>
           <Route exact path={`/accounts/new`} element={<AddAccount/>}/>
-          <Route exact path={`/accounts/new`} element={<AddAccount/>}/>
+          <Route path={`/accounts/edit/:id`} element={<EditAccount/>}/>
           <Route exact path={`/accounts/providers/new`} element={<AddProvider/>}/>
           {/* catch any other path to redirect */}
           {/* <Route path="*" element={<CatchPath />} /> */}
