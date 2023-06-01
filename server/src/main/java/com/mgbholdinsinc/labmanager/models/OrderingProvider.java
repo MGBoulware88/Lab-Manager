@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,8 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -32,16 +33,13 @@ public class OrderingProvider {
 	@NotEmpty
 	@Size(min=9, max=9, message="NPI must be 9 digits long!")
 	private String npi;
+	@JsonIgnore
 	@OneToMany(mappedBy="orderingProvider", fetch=FetchType.LAZY)
 	private List<Requisition> requisitions;
-	@ManyToMany(fetch=FetchType.LAZY)
-	@JoinTable(
-			name="accounts_providers",
-			joinColumns=@JoinColumn(name="provider_id"),
-			inverseJoinColumns=@JoinColumn(name="account_id")
-	)
-	private List<Account> accounts;
 	
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name="account_id")
+	private Account account;
 	@Column(updatable=false)
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createdAt;
@@ -49,9 +47,10 @@ public class OrderingProvider {
 	private Date updatedAt;
 	
 	public OrderingProvider() {}
-	public OrderingProvider(String orderingProviderName, String orderingProviderNpi) {
-		this.name = orderingProviderName;
-		this.npi = orderingProviderNpi;
+	
+	public OrderingProvider(String name, String npi) {
+		this.name = name;
+		this.npi = npi;
 	}
 	
 	@PrePersist
@@ -86,11 +85,11 @@ public class OrderingProvider {
 	public void setRequisitions(List<Requisition> requisitions) {
 		this.requisitions = requisitions;
 	}
-	public List<Account> getAccounts() {
-		return accounts;
+	public Account getAccounts() {
+		return account;
 	}
-	public void setAccounts(List<Account> accounts) {
-		this.accounts = accounts;
+	public void setAccount(Account account) {
+		this.account = account;
 	}
 	public Date getCreatedAt() {
 		return createdAt;

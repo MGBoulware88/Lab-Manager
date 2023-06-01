@@ -4,6 +4,8 @@ import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,6 +20,7 @@ import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name="insurances")
@@ -30,7 +33,7 @@ public class Insurance {
 	private String insurer;
 	@NotEmpty
 	private String planId;
-	@NotEmpty
+	@NotNull
 	private Date effectiveDate;
 	@NotEmpty
 	private String gaurantorRelationship;
@@ -38,11 +41,13 @@ public class Insurance {
 	private String gaurantorFirstName;
 	@NotEmpty
 	private String gaurantorLastName;
-	@NotEmpty
+	@NotNull
 	private Date gaurantorDob;
+	@JsonIgnore
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="patient_id")
 	private Patient patient;
+	@JsonIgnore
 	@OneToOne(mappedBy="insurance", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
 	private Requisition requisition;
 	@Column(updatable=false)

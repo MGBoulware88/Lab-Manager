@@ -14,7 +14,7 @@ public class RequisitionStatusService {
 	@Autowired
 	private RequisitionStatusRepository reqStatusRepo;
 	//get all
-	public List<RequisitionStatus> finaAllReqStatuses() {
+	public List<RequisitionStatus> findAllReqStatuses() {
 		List<RequisitionStatus> allReqStatuses = reqStatusRepo.findAll();
 		return allReqStatuses;
 	}
@@ -24,5 +24,10 @@ public class RequisitionStatusService {
 		if (optionalReqStatus.isPresent()) {
 			return optionalReqStatus.get();
 		} else return null;
+	}
+	
+	//create one
+	public RequisitionStatus createStatus(RequisitionStatus status) {
+		return reqStatusRepo.save(status);
 	}
 }

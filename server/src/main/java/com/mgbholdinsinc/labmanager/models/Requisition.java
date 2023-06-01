@@ -15,7 +15,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -27,31 +26,34 @@ public class Requisition {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@NotNull
-	private Long formId;
+	private int formId;
 	private String accessionNumber;
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "status_id")
 	private RequisitionStatus status;
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "patient_id")
 	private Patient patient;
 	@NotNull
-	@OneToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="insurance_id")
 	private Insurance insurance;
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "account_id")
 	private Account account;
 	@NotNull
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "ordering_provider_id")
 	private OrderingProvider orderingProvider;
 	@NotNull
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
+	@JoinColumn(name = "address_id")
+	private Address address;
+	@NotNull
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "requisitions_tests",
 			joinColumns = @JoinColumn(name = "requisition_id"),
@@ -61,7 +63,7 @@ public class Requisition {
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createdAt;
 	//@Column(updatable=false)
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="user_id")
 	private User createdBy;
 	@DateTimeFormat(pattern="yyyy-MM-dd")
@@ -92,11 +94,11 @@ public class Requisition {
 		this.id = id;
 	}
 
-	public Long getFormId() {
+	public int getFormId() {
 		return formId;
 	}
 
-	public void setFormId(Long formId) {
+	public void setFormId(int formId) {
 		this.formId = formId;
 	}
 
@@ -171,4 +173,21 @@ public class Requisition {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	public User getCreatedBy() {
+		return createdBy;
+	}
+
+	public void setCreatedBy(User createdBy) {
+		this.createdBy = createdBy;
+	}
+	
 }

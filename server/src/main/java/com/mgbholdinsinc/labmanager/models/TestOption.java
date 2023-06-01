@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -29,6 +31,7 @@ public class TestOption {
 	private String name;
 	@NotEmpty
 	private String department;
+	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
 			name = "requisitions_tests",
@@ -42,6 +45,11 @@ public class TestOption {
 	private Date updatedAt;
 	
 	public TestOption() {}
+	
+	public TestOption(String name, String dept) {
+		this.name = name;
+		this.department = dept;
+	}
 	
 	@PrePersist
     protected void onCreate(){

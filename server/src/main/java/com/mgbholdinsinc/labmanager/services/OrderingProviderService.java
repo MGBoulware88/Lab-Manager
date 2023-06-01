@@ -42,4 +42,9 @@ public class OrderingProviderService {
 	public void deleteOrderingProviderById(long id) {
 		orderingProviderRepo.deleteById(id);
 	}
+	
+	//find all Providers for a specific Account
+	public List<OrderingProvider> findAllOrderingProvidersByAccountId(Long id) {
+		return orderingProviderRepo.findByAccount_Id(id);
+	}
 }

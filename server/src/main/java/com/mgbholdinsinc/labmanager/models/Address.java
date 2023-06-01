@@ -1,8 +1,11 @@
 package com.mgbholdinsinc.labmanager.models;
 
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -11,6 +14,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
@@ -32,10 +37,17 @@ public class Address {
 	private String state;
 	@NotEmpty
 	private String zip;
-	@OneToOne(mappedBy="address", cascade=CascadeType.ALL, fetch = FetchType.LAZY)
-	private Patient patient;
+	@JsonIgnore
 	@OneToOne(mappedBy="address", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@JoinColumn(name="patient_id")
+	private Patient patient;
+	@JsonIgnore
+	@OneToOne(mappedBy="address", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	@JoinColumn(name="account_id")
 	private Account account;
+	@JsonIgnore
+	@OneToMany(mappedBy="address", cascade=CascadeType.ALL, fetch=FetchType.LAZY)
+	private List<Requisition> requisition;
 	@Column(updatable=false)
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createdAt;

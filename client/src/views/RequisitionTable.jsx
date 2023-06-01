@@ -1,485 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext, useCallback } from 'react';
 import SideNav from '../components/SideNav';
 import TopNav from '../components/TopNav';
 import { Form, FloatingLabel, Table, Container, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faFilter, faMagnifyingGlassArrowRight, faPen, faX } from '@fortawesome/free-solid-svg-icons';
 import styles from "../Style.module.css/RequisitionTable.module.css";
-import FilterReqForm from '../components/FilterReqForm';
-
+import axios from 'axios';
+import { GlobalContext } from '../GlobalContext';
 
 export default function RequisitionTable() {
+    const baseUrl = useContext(GlobalContext).SITENAV.baseurl;
     const [searchTerm, setSearchTerm] = useState("");
     // const [isFilterReqModalOpen, setIsFilterReqModalOpen] = useState(false);
     const [requisitionData, setRequisitionData] = useState([]);
 
     useEffect(() => {
-        //axios call to fetch req data from db
-        const allRequisitions = [{
-            id: "00124092",
-            firstName: "John",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "In Progress"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
-        },
-        {
-            id: "00124089",
-            firstName: "Jane",
-            lastName: "Doe",
-            department: "Toxicology",
-            status: "In Progress"
-        },
-        {
-            id: "I231310154",
-            firstName: "Jim",
-            lastName: "Bean",
-            department: "Infectious Disease",
-            status: "Billed"
-        },
-        {
-            id: "M231200254",
-            firstName: "LaFonda",
-            lastName: "",
-            department: "Microbiology",
-            status: "Billed"
-        },
-        {
-            id: "P231200058",
-            firstName: "Alice",
-            lastName: "Doe",
-            department: "Pathology",
-            status: "Received"
-        },
-        {
-            id: "P231320087",
-            firstName: "James",
-            lastName: "Dean",
-            department: "Pathology",
-            status: "Resulted"
+        async function getReqData() {
+            const response = await axios.get(`${baseUrl}/requisitions`);
+            const reqData = response.data;
+            setRequisitionData(reqData);
+            console.log(requisitionData);
         }
-    ]
-        setRequisitionData(allRequisitions)
-    }, [])
+
+        getReqData();
+
+    }, []);
 
     const handleSearch = e => {
         e.preventDefault();
@@ -493,16 +38,6 @@ export default function RequisitionTable() {
     // const hideFilterModal = () => {
     //     setIsFilterReqModalOpen(false);
     // }
-
-    const handleEditReq = id => {
-        console.log(id);
-    }
-    const handleViewReq = id => {
-        console.log(id);
-    }
-    const handleDeleteReq = id => {
-        console.log(id);
-    }
 
     return (
         <>
@@ -518,7 +53,7 @@ export default function RequisitionTable() {
                                     label="search"
                                     className=""
                                 >
-                                    <Form.Control type="text" placeholder="search" className={`${styles.search}`}value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                                    <Form.Control type="text" placeholder="search" className={`${styles.search}`} value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
                                 </FloatingLabel>
 
                             </Form.Group>
@@ -545,55 +80,60 @@ export default function RequisitionTable() {
                             <tr className={`${styles.tableHeader}`}>
                                 <th>Record ID</th>
                                 <th>Patient Name</th>
+                                <th>Account Name</th>
+                                <th>Provider Name</th>
                                 <th>Department</th>
                                 <th>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {requisitionData.map((req, idx) => (
-                                <tr key={idx}>
-                                    <td>{req.id}</td>
-                                    <td>{req.firstName} {req.lastName}</td>
-                                    <td>{req.department}</td>
-                                    <td>{req.status}</td>
+                            {requisitionData ? requisitionData.map((req, idx) => {
+                                return <tr key={idx}>
+                                    <td>{req?.accessionNumber ? req.accessionNumber : req?.formId}</td>
+                                    <td>{req?.patient?.firstName} {req?.patient?.lastName}</td>
+                                    <td>{req?.account?.name}</td>
+                                    <td>{req?.orderingProvider?.name}</td>
+                                    <td>{req?.testOrder[0]?.department}</td>
+                                    <td>{req?.status?.status}</td>
                                     <td>
-                                    {/* Edit Req --special permissions */}
-                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/edit?${"req_id"}`}>
-                                        <FontAwesomeIcon
-                                            icon={faPen}
-                                            title="Edit Req"
-                                            className="me-2 text-success"
-                                            style={{ cursor: "pointer" }}
-                                            onClick={handleEditReq("req_id")}
-                                        />
-                                    </a>
-                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/view?${"req_id"}`}>
-                                        {/* View Req */}
-                                        <FontAwesomeIcon
-                                            icon={faEye}
-                                            title="View Req"
-                                            className="me-2"
-                                            style={{ cursor: "pointer" }}
-                                            onClick={handleViewReq("req_id")}
-                                        />
-                                    </a>
-                                    {/* Delete Req --special permissions */}
-                                    <a target="_blank" rel="noreferrer noopener" href={`/requisitions/delete/${"req_id"}`}>
-                                        <FontAwesomeIcon
-                                            icon={faX}
-                                            title="Delete Req"
-                                            className="me-1 text-danger"
-                                            style={{ cursor: "pointer" }}
-                                            onClick={handleDeleteReq("req_id")}
-                                        />
-                                    </a>
-                                </td>
+                                        <a target="_blank" rel="noreferrer noopener" href={`/requisitions/edit?${req.id}`}>
+                                            <FontAwesomeIcon
+                                                icon={faPen}
+                                                title="Edit Req"
+                                                className="me-2 text-success"
+                                                style={{ cursor: "pointer" }}
+                                            />
+                                        </a>
+                                        <a target="_blank" rel="noreferrer noopener" href={`/requisitions/view?${req.id}`}>
+                                            <FontAwesomeIcon
+                                                icon={faEye}
+                                                title="View Req"
+                                                className="me-2"
+                                                style={{ cursor: "pointer" }}
+                                            />
+                                        </a>
+                                        <a target="_blank" rel="noreferrer noopener" href={`/requisitions/delete/${req.id}`}>
+                                            <FontAwesomeIcon
+                                                icon={faX}
+                                                title="Delete Req"
+                                                className="me-1 text-danger"
+                                                style={{ cursor: "pointer" }}
+                                            />
+                                        </a>
+                                    </td>
                                 </tr>
-                            ))}
-                            
+                            })
+                                :
+                                <tr>
+                                    <td colSpan={7}>Loading Requisition Data. . .</td>
+                                </tr>}
+
                         </tbody>
                     </Table>
+                    {requisitionData.map((req, idx) => {
+                        return req?.status[0]?.status
+                    })}
                 </Container>
 
             </div>

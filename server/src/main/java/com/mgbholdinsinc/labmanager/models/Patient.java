@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,6 +14,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
@@ -32,12 +35,14 @@ public class Patient {
 	private Date dob;
 	@NotEmpty
 	private String sex;
-	@NotEmpty
-	@OneToMany(mappedBy="patient", fetch=FetchType.LAZY)
-	private List<Address> address;
+	@JsonIgnore
+	@OneToOne(fetch=FetchType.EAGER)
+	private Address address;
+	@JsonIgnore
 	@NotEmpty
 	@OneToMany(mappedBy="patient", fetch=FetchType.LAZY)
 	private List<Insurance> insurance;
+	@JsonIgnore
 	@OneToMany(mappedBy="patient", fetch=FetchType.LAZY)
 	private List<Requisition> requisitions;
 	@Column(updatable=false)
@@ -92,10 +97,10 @@ public class Patient {
 	public void setSex(String sex) {
 		this.sex = sex;
 	}
-	public List<Address> getAddress() {
+	public Address getAddress() {
 		return address;
 	}
-	public void setAddress(List<Address> address) {
+	public void setAddress(Address address) {
 		this.address = address;
 	}
 	public List<Insurance> getInsurance() {

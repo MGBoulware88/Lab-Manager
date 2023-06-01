@@ -34,7 +34,12 @@ public class AccountService {
 		return accountRepo.save(account);
 	}
 	//delete one by ID
-	public void deleteAccountById(long id) {
+	public void deleteAccountById(Long id) {
 		accountRepo.deleteById(id);
+	}
+	
+	//get address ID
+	public Long findAddressIdByAccountId(Long id) {
+		return accountRepo.findAddressIdByAccountId(id);
 	}
 }

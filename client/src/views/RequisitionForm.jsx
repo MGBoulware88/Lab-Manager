@@ -24,7 +24,6 @@ export default function RequisitionForm() {
     const [patientInsuranceInsurer, setPatientInsuranceInsurer] = useState("");
     const [patientInsurancePlanId, setPatientInsurancePlanId] = useState("");
     const [patientInsuranceEffectiveDate, setPatientInsuranceEffectiveDate] = useState("");
-    const [patientInsuranceGaurantor, setPatientInsuranceGaurantor] = useState({});
     const [patientInsuranceGaurantorRelationship, setPatientInsuranceGaurantorRelationship] = useState("Self");
     const [patientInsuranceGaurantorFirstName, setPatientInsuranceGaurantorFirstName] = useState("");
     const [patientInsuranceGaurantorLastName, setPatientInsuranceGaurantorLastName] = useState("");
@@ -36,64 +35,45 @@ export default function RequisitionForm() {
     const [orderingProvider, setOrderingProvider] = useState({});
     //test options
     const [allTestOptions, setAllTestOptions] = useState([]);
-    const [selectedTestOptions, setSelectedTestOptions] = useState([]);
-    const [departments, setDepartments] = useState([]);
+    const [testOrder, setTestOrder] = useState([]);
+
+    const handleTestOrderChange = e => {
+        if (testOrder.includes(e.target.value)) {
+            setTestOrder(testOrder.filter((removedTest) => removedTest !== e.target.value));
+        } else setTestOrder([...testOrder, e.target.value]);
+    }
+
 
     const fetchAllAccounts = () => {
         axios
-        .get(`${baseUrl}/accounts`)
-        .then(res => {
-            setAllAccounts(res.data);
-        })
-        .catch(err => {
-            console.log(err);
-        });
+            .get(`${baseUrl}/accounts`)
+            .then(res => {
+                setAllAccounts(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     const fetchAllTestOptions = () => {
         axios
-        .get(`${baseUrl}/test_options`)
-        .then(res => {
-            const tests = res.data;
-            console.log(tests);
-            setAllTestOptions(tests);
-        })
-        .catch(err => {
-            console.log(err);
-        }, []);
-    }
-
-    const parsedTestOptions = () => {
-        const departments = {};
-        const deptArray = [];
-        for (let i=0; i<allTestOptions.length; i++) {
-            const newKey = allTestOptions[i].department;
-            if (departments.hasOwnProperty(newKey)) {
-                const testName = allTestOptions[i].name;
-                departments[newKey].push(testName);
-            } else {
-                departments[newKey] = [];
-                const testName = allTestOptions[i].name;
-                departments[newKey].push(testName);
-            }
-        }
-        console.log("parsed: ", departments);
-        for (const department in departments) {
-            deptArray.push({department: departments[department]});
-        }
-        console.log(deptArray);
-        return deptArray;
+            .get(`${baseUrl}/test_options`)
+            .then(res => {
+                setAllTestOptions(res.data);
+            })
+            .catch(err => {
+                console.log(err);
+            }, []);
     }
 
     useEffect(() => {
-        //grab all accounts to load dropdown
         fetchAllAccounts();
-        console.log("AllAccounts: ", allAccounts)
-        //fetch all test options
+        console.log("fetching accounts: ", allAccounts);
+
         fetchAllTestOptions();
-        //parse test options
-        setDepartments(parsedTestOptions());
-    }, []);
+        console.log("fetching tests: ", allTestOptions);
+
+    }, [])
 
     const handleAccountChange = e => {
         setAccount(e.target.value);
@@ -104,77 +84,64 @@ export default function RequisitionForm() {
         axios
             .get(`${baseUrl}/providers/${e.target.value}`)
             .then(res => {
-                const providerList = res.data;
-                setAccountProviders(providerList);
+                setAccountProviders(res.data);
             })
             .catch(err => {
                 console.log(err);
             });
     }
-    //testing info fields
-    const [testOrder, setTestOrder] = useState([]);
-
-    const handleTestOrderChange = e => {
-        if (testOrder.includes(e.target.value)) {
-            setTestOrder(testOrder.filter((removedTest) => removedTest !== e.target.value));
-        } else setTestOrder([...testOrder, e.target.value]);
-    }
-
-    const handleGaurantorFirstName = e => {
-        setPatientInsuranceGaurantorFirstName(e.target.value);
-        const gaurantorFirstName = patientInsuranceGaurantorFirstName;
-        const gaurantorLastName = patientInsuranceGaurantorLastName;
-        const gaurantorDob = patientInsuranceGaurantorDob;
-        const gaurantor = {
-            gaurantorFirstName,
-            gaurantorLastName,
-            gaurantorDob
-        };
-        setPatientInsuranceGaurantor(gaurantor);
-    }
-    const handleGaurantorLastName = e => {
-        setPatientInsuranceGaurantorLastName(e.target.value);
-        const gaurantorFirstName = patientInsuranceGaurantorFirstName;
-        const gaurantorLastName = patientInsuranceGaurantorLastName;
-        const gaurantorDob = patientInsuranceGaurantorDob;
-        const gaurantor = {
-            gaurantorFirstName,
-            gaurantorLastName,
-            gaurantorDob
-        };
-        setPatientInsuranceGaurantor(gaurantor);
-    }
-    const handleGaurantorDob = e => {
-        setPatientInsuranceGaurantorDob(e.target.value);
-        const gaurantorFirstName = patientInsuranceGaurantorFirstName;
-        const gaurantorLastName = patientInsuranceGaurantorLastName;
-        const gaurantorDob = patientInsuranceGaurantorDob;
-        const gaurantor = {
-            gaurantorFirstName,
-            gaurantorLastName,
-            gaurantorDob
-        };
-        setPatientInsuranceGaurantor(gaurantor);
-    }
 
     // const [reqFormErrors, setReqFormErrors] = useState([]);
 
-    const handleReqFormSubmit = e => {
+    const handleReqFormSubmit = async e => {
         e.preventDefault();
+        //if self, set gaurantor to patient
+        if (patientInsuranceGaurantorRelationship === 'Self') {
+            setPatientInsuranceGaurantorFirstName(patientFirstName);
+            setPatientInsuranceGaurantorLastName(patientLastName);
+            setPatientInsuranceGaurantorDob(patientDob);
+        }
 
         //grab all the form data from state
+        const data = {
+            patientFirstName,
+            patientLastName,
+            patientDob,
+            patientSex,
+            patientAddressStreet,
+            patientAddress2,
+            patientAddressCity,
+            patientAddressState,
+            patientAddressZip,
+            patientInsuranceInsurer,
+            patientInsurancePlanId,
+            patientInsuranceEffectiveDate,
+            patientInsuranceGaurantorRelationship,
+            patientInsuranceGaurantorFirstName,
+            patientInsuranceGaurantorLastName,
+            patientInsuranceGaurantorDob,
+            account,
+            orderingProvider,
+            testOrder
+        };
+
+        //convert the testOrder
+        data.testOrder = data.testOrder.join(',');
+
+        console.log("here's the req data: ", data);
 
         //post to server w/ error handling
-        // try {
-        //     //axios call
-        //     console.log("Saving New Order. Please Wait. . .")
-        // } catch(err)  {
-        //     //errors
-        //     setReqFormErrors("Form Errors: ", err)
-        // }
-
-        // //reload new req page
-        return navigate("/requisitions/success");
+        try {
+            const response = await axios.post(`${baseUrl}/requisitions`, data, {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+            });
+            console.log(response);
+            return navigate("/requisitions");
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     return (
@@ -373,7 +340,7 @@ export default function RequisitionForm() {
                                                         <FloatingLabel controlId="formPatientInsuranceGaurantorFirstName" label="First Name" className="mb-2">
                                                             <Form.Control type="text"
                                                                 placeholder="First Name"
-                                                                onChange={handleGaurantorFirstName}
+                                                                onChange={e => setPatientInsuranceGaurantorFirstName(e.target.value)}
                                                                 className={`${styles.tabField}`}
                                                             />
                                                         </FloatingLabel>
@@ -382,7 +349,7 @@ export default function RequisitionForm() {
                                                         <FloatingLabel controlId="formPatientInsuranceGaurantorLastName" label="Last Name" className="mb-2">
                                                             <Form.Control type="text"
                                                                 placeholder="Last Name"
-                                                                onChange={handleGaurantorLastName}
+                                                                onChange={e => setPatientInsuranceGaurantorLastName(e.target.value)}
                                                                 className={`${styles.tabField}`}
                                                             />
                                                         </FloatingLabel>
@@ -391,7 +358,7 @@ export default function RequisitionForm() {
                                                         <FloatingLabel controlId="formPatientInsuranceGaurantorDob" label="Date of Birth" className="mb-2">
                                                             <Form.Control type="date"
                                                                 placeholder="Date of Birth"
-                                                                onChange={handleGaurantorDob}
+                                                                onChange={e => setPatientInsuranceGaurantorDob(e.target.value)}
                                                                 className={`${styles.tabField}`}
                                                             />
                                                         </FloatingLabel>
@@ -436,37 +403,55 @@ export default function RequisitionForm() {
                                     </Card>
                                 </Tab>
                                 <Tab eventKey="testingInfo" title="Test Selection">
-                                    {departments && departments.map((dept, idx) => {
-                                        return <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`} key={idx}>
-                                            <h1 className="h6">{dept}</h1>
-                                            {dept.map((test, idx) => {
-                                                return (<Form.Check
+                                    <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
+                                        <h1 className="h6">Pathology</h1>
+                                        {allTestOptions.map((test, idx) => {
+                                            return (test.department === "Pathology" && <Form.Check
                                                 label={test.name}
-                                                value={test.name}
+                                                value={test.id}
                                                 readOnly
                                                 type="checkbox"
-                                                name={dept}
+                                                name="pathology"
+                                                id={test}
                                                 key={idx}
-                                                id={test.name}
                                                 onChange={handleTestOrderChange}
                                             />)
-                                            })}
-                                            {/* Dynamic query:
-                                            get all Departments with List<Test> join
-                                            for each Department:
-                                            Deptartment.name as header
-                                                loop through array of tests as Form.Check
-                                                label, value = test.name
-                                                readonly
-                                                type = checkbox
-                                                id = toLowercase(test.name)
+
+                                        })}
+                                    </Card>
+                                    <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
+                                        <h1 className="h6">Infectious Disease</h1>
+                                        {allTestOptions.map((test, idx) => {
+                                            return (test.department === "Infectious Disease" && <Form.Check
+                                                label={test.name}
+                                                value={test.id}
+                                                readOnly
+                                                type="checkbox"
+                                                name="pathology"
+                                                id={test}
+                                                key={idx}
                                                 onChange={handleTestOrderChange}
-                                            */}
-                                        </Card>
+                                            />)
 
-                                    })}
+                                        })}
+                                    </Card>
+                                    <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
+                                        <h1 className="h6">Toxicology</h1>
+                                        {allTestOptions.map((test, idx) => {
+                                            return (test.department === "Toxicology" && <Form.Check
+                                                label={test.name}
+                                                value={test.id}
+                                                readOnly
+                                                type="checkbox"
+                                                name="pathology"
+                                                id={test}
+                                                key={idx}
+                                                onChange={handleTestOrderChange}
+                                            />)
 
-                                        {/* <Form.Group>
+                                        })}
+                                    </Card>
+                                    {/* <Form.Group>
                                             <h1 className="h6">Pathology</h1>
                                             <Form.Check
                                                 label="Biopsy"

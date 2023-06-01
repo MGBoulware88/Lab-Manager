@@ -5,25 +5,24 @@ import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 
 @Entity
-@Table(name="accounts")
+@Table(name = "accounts")
 public class Account {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,33 +36,38 @@ public class Account {
 	@NotEmpty
 	@Email
 	private String contactEmail;
-	@NotNull
-	@OneToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="address_id")
+	@JsonIgnore
+	@OneToOne(fetch = FetchType.EAGER)
 	private Address address;
-	@ManyToMany(fetch=FetchType.LAZY)
-	@JoinTable(
-			name="accounts_providers",
-			joinColumns=@JoinColumn(name="account_id"),
-			inverseJoinColumns=@JoinColumn(name="provider_id")
-	)
+	@JsonIgnore
+	@OneToMany(mappedBy = "account", fetch = FetchType.EAGER)
 	private List<OrderingProvider> orderingProviders;
-	@Column(updatable=false)
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	@Column(updatable = false)
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date createdAt;
-	@DateTimeFormat(pattern="yyyy-MM-dd")
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	private Date updatedAt;
-	
-	public Account() {}
-	
+
+	public Account() {
+	}
+
+	public Account(String name, String contactName, String contactPhone, String contactEmail) {
+		this.name = name;
+		this.contactName = contactName;
+		this.contactPhone = contactPhone;
+		this.contactEmail = contactEmail;
+	}
+
 	@PrePersist
-    protected void onCreate(){
-    	this.createdAt = new Date();
-    }
-    @PreUpdate
-    protected void onUpdate(){
-    	this.updatedAt = new Date();
-    }
+	protected void onCreate() {
+		this.createdAt = new Date();
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		this.updatedAt = new Date();
+	}
 
 	public Long getId() {
 		return id;
@@ -105,14 +109,6 @@ public class Account {
 		this.contactEmail = contactEmail;
 	}
 
-	public Address getAddress() {
-		return address;
-	}
-
-	public void setAddress(Address address) {
-		this.address = address;
-	}
-
 	public List<OrderingProvider> getOrderingProviders() {
 		return orderingProviders;
 	}
@@ -136,4 +132,13 @@ public class Account {
 	public void setUpdatedAt(Date updatedAt) {
 		this.updatedAt = updatedAt;
 	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
 }
