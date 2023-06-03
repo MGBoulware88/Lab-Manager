@@ -1,48 +1,72 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
 import { Form, FloatingLabel, Button, Tabs, Tab, Card } from "react-bootstrap";
-import SideNav from "../components/SideNav";
-import TopNav from "../components/TopNav";
+import SideNav from "./SideNav";
+import TopNav from "./TopNav";
 import styles from "../Style.module.css/RequisitionForm.module.css"
 import axios from 'axios';
 import { GlobalContext } from '../GlobalContext';
 
 
-export default function RequisitionForm() {
+export default function RequisitionForm(props) {
     const baseUrl = useContext(GlobalContext).SITENAV.baseurl;
+    const method = props;
     const navigate = useNavigate();
     //patient info fields
-    const [patientFirstName, setPatientFirstName] = useState("");
-    const [patientLastName, setPatientLastName] = useState("");
-    const [patientDob, setPatientDob] = useState("");
-    const [patientSex, setPatientSex] = useState("");
-    const [patientAddressStreet, setPatientAddressStreet] = useState("");
-    const [patientAddress2, setPatientAddress2] = useState("");
-    const [patientAddressCity, setPatientAddressCity] = useState("");
-    const [patientAddressState, setPatientAddressState] = useState("");
-    const [patientAddressZip, setPatientAddressZip] = useState("");
-    const [patientInsuranceInsurer, setPatientInsuranceInsurer] = useState("");
-    const [patientInsurancePlanId, setPatientInsurancePlanId] = useState("");
-    const [patientInsuranceEffectiveDate, setPatientInsuranceEffectiveDate] = useState("");
-    const [patientInsuranceGaurantorRelationship, setPatientInsuranceGaurantorRelationship] = useState("Self");
-    const [patientInsuranceGaurantorFirstName, setPatientInsuranceGaurantorFirstName] = useState("");
-    const [patientInsuranceGaurantorLastName, setPatientInsuranceGaurantorLastName] = useState("");
-    const [patientInsuranceGaurantorDob, setPatientInsuranceGaurantorDob] = useState("");
+    const [patientFirstName, setPatientFirstName] = useState(props?.reqData.patient?.firstName || "");
+    const [patientLastName, setPatientLastName] = useState(props?.reqData.patient?.lastName || "");
+    const [patientDob, setPatientDob] = useState(props?.reqData.patient?.dob || "");
+    const [patientSex, setPatientSex] = useState(props?.reqData.patient?.sex || "");
+    const [patientAddressStreet, setPatientAddressStreet] = useState(props?.reqData.address?.street);
+    const [patientAddress2, setPatientAddress2] = useState(props?.reqData.address?.address2 || "");
+    const [patientAddressCity, setPatientAddressCity] = useState(props?.reqData.address?.city || "");
+    const [patientAddressState, setPatientAddressState] = useState(props?.reqData.address?.state || "");
+    const [patientAddressZip, setPatientAddressZip] = useState(props?.reqData.address?.zip || "");
+    const [patientInsuranceInsurer, setPatientInsuranceInsurer] = useState(props?.reqData.insurance?.insurer || "");
+    const [patientInsurancePlanId, setPatientInsurancePlanId] = useState(props?.reqData.insurance?.planId || "");
+    const [patientInsuranceEffectiveDate, setPatientInsuranceEffectiveDate] = useState(props?.reqData.insurance?.effectiveDate || "");
+    const [patientInsuranceGaurantorRelationship, setPatientInsuranceGaurantorRelationship] = useState(props?.reqData.insurance?.gaurantorRelationship || 'Self');
+    const [patientInsuranceGaurantorFirstName, setPatientInsuranceGaurantorFirstName] = useState(props?.reqData.insurance?.gaurantorFirstName || "");
+    const [patientInsuranceGaurantorLastName, setPatientInsuranceGaurantorLastName] = useState(props?.reqData.insurance?.gaurantorLastName || "");
+    const [patientInsuranceGaurantorDob, setPatientInsuranceGaurantorDob] = useState(props?.reqData.insurance?.gaurantorDob || "");
     //provider info fields
     const [allAccounts, setAllAccounts] = useState([]);
-    const [account, setAccount] = useState({});
+    const [account, setAccount] = useState(props?.reqData.account?.id || {});
     const [accountProviders, setAccountProviders] = useState([]);
-    const [orderingProvider, setOrderingProvider] = useState({});
+    const [orderingProvider, setOrderingProvider] = useState(props?.reqData.orderingProvider?.id || {});
     //test options
     const [allTestOptions, setAllTestOptions] = useState([]);
-    const [testOrder, setTestOrder] = useState([]);
+    const [testOrder, setTestOrder] = useState(props?.reqData.testOrder || []);
+    console.log(`Tests: ${testOrder.map((test => test.checked))}`);
+    console.log(props);
+
+    // const handleTestOrderChange = (e) => {
+    //     if (testOrder.includes(e.target.value)) {
+    //         testOrder.filter((removedTest) => removedTest !== e.target.value);
+    //         e.target.checked = false;
+    //     } else {
+    //         testOrder.push(e.target.value);
+    //         e.target.checked = true;
+    //     };
+    // }
 
     const handleTestOrderChange = e => {
-        if (testOrder.includes(e.target.value)) {
-            setTestOrder(testOrder.filter((removedTest) => removedTest !== e.target.value));
-        } else setTestOrder([...testOrder, e.target.value]);
-    }
+        //spread current state into a new array
 
+        // .map() the tempArr to update checked value
+
+        //setTestOrder with updated test.checked = true
+        setTestOrder(prevTests => {
+            return prevTests.map(test => {
+                if (test.id === e.target.value) {
+                    if (testOrder.includes(e.target.value)) {
+                        return ([...testOrder, { ...test, checked: e.target.checked }])
+
+                    } else return [...testOrder, { ...test, checked: e.target.checked }]
+                } else return test;
+            });
+        });
+    };
 
     const fetchAllAccounts = () => {
         axios
@@ -68,10 +92,10 @@ export default function RequisitionForm() {
 
     useEffect(() => {
         fetchAllAccounts();
-        console.log("fetching accounts: ", allAccounts);
+        // console.log("fetching accounts: ", allAccounts);
 
         fetchAllTestOptions();
-        console.log("fetching tests: ", allTestOptions);
+        // console.log("fetching tests: ", allTestOptions);
 
     }, [])
 
@@ -101,7 +125,10 @@ export default function RequisitionForm() {
             setPatientInsuranceGaurantorLastName(patientLastName);
             setPatientInsuranceGaurantorDob(patientDob);
         }
-
+        const testIds = [];
+        testOrder.map(test => {
+            return testIds.push(test.id);
+        })
         //grab all the form data from state
         const data = {
             patientFirstName,
@@ -122,26 +149,39 @@ export default function RequisitionForm() {
             patientInsuranceGaurantorDob,
             account,
             orderingProvider,
-            testOrder
+            testOrder: testIds
         };
 
         //convert the testOrder
         data.testOrder = data.testOrder.join(',');
 
         console.log("here's the req data: ", data);
-
-        //post to server w/ error handling
-        try {
-            const response = await axios.post(`${baseUrl}/requisitions`, data, {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded'
-                },
-            });
-            console.log(response);
-            return navigate("/requisitions");
-        } catch (err) {
-            console.log(err);
-        }
+        if (method === "post") {
+            //post to server w/ error handling
+            try {
+                const response = await axios.post(`${baseUrl}/requisitions`, data, {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                });
+                console.log(response);
+                return navigate("/requisitions/success");
+            } catch (err) {
+                console.log(err);
+            }
+        } else if (method === "put") {
+            try {
+                const response = await axios.put(`${baseUrl}/requisitions`, data, {
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                });
+                console.log(response);
+                return navigate("/requisitions/success");
+            } catch (err) {
+                console.log(err);
+            }
+        } else console.log("missing method");
     }
 
     return (
@@ -166,6 +206,7 @@ export default function RequisitionForm() {
                                                 <FloatingLabel controlId="formPatientFirstName" label="First Name" className="mb-2">
                                                     <Form.Control type="text"
                                                         placeholder="First Name"
+                                                        value={patientFirstName}
                                                         onChange={e => setPatientFirstName(e.target.value)}
                                                         className={`${styles.tabField}`}
                                                     />
@@ -175,6 +216,7 @@ export default function RequisitionForm() {
                                                 <FloatingLabel controlId="formPatientLastName" label="Last Name" className="mb-2">
                                                     <Form.Control type="text"
                                                         placeholder="Last Name"
+                                                        value={patientLastName}
                                                         onChange={e => setPatientLastName(e.target.value)}
                                                         className={`${styles.tabField}`}
                                                     />
@@ -184,6 +226,7 @@ export default function RequisitionForm() {
                                                 <FloatingLabel controlId="formPatientDob" label="Date of Birth" className="mb-2">
                                                     <Form.Control type="date"
                                                         placeholder="Date of Birth"
+                                                        value={patientDob}
                                                         onChange={e => setPatientDob(e.target.value)}
                                                         className={`${styles.tabField}`}
                                                     />
@@ -219,6 +262,7 @@ export default function RequisitionForm() {
                                                 <FloatingLabel controlId="formPatientAddressStreet" label="Address" className="mb-2">
                                                     <Form.Control type="text"
                                                         placeholder="Address"
+                                                        value={patientAddressStreet}
                                                         onChange={e => setPatientAddressStreet(e.target.value)}
                                                         className={`${styles.tabField}`}
                                                     />
@@ -228,6 +272,7 @@ export default function RequisitionForm() {
                                                 <FloatingLabel controlId="formPatientAddress2" label="Address 2" className="mb-2">
                                                     <Form.Control type="text"
                                                         placeholder="Address 2"
+                                                        value={patientAddress2}
                                                         onChange={e => setPatientAddress2(e.target.value)}
                                                         className={`${styles.tabField}`}
                                                     />
@@ -237,6 +282,7 @@ export default function RequisitionForm() {
                                                 <FloatingLabel controlId="formPatientAddressCity" label="City" className="mb-2">
                                                     <Form.Control type="text"
                                                         placeholder="City"
+                                                        value={patientAddressCity}
                                                         onChange={e => setPatientAddressCity(e.target.value)}
                                                         className={`${styles.tabField}`}
                                                     />
@@ -246,6 +292,7 @@ export default function RequisitionForm() {
                                                 <FloatingLabel controlId="formPatientAddressState" label="State" className="mb-2">
                                                     <Form.Control type="text"
                                                         placeholder="State"
+                                                        value={patientAddressState}
                                                         onChange={e => setPatientAddressState(e.target.value)}
                                                         className={`${styles.tabField}`}
                                                     />
@@ -255,6 +302,7 @@ export default function RequisitionForm() {
                                                 <FloatingLabel controlId="formPatientAddressZip" label="Zip" className="mb-2">
                                                     <Form.Control type="text"
                                                         placeholder="Zip"
+                                                        value={patientAddressZip}
                                                         onChange={e => setPatientAddressZip(e.target.value)}
                                                         className={`${styles.tabField}`}
                                                     />
@@ -268,6 +316,7 @@ export default function RequisitionForm() {
                                                 <FloatingLabel controlId="formPatientInsuranceInsurer" label="Insurance Provider" className="mb-2">
                                                     <Form.Control type="text"
                                                         placeholder="Insurance"
+                                                        value={patientInsuranceInsurer}
                                                         onChange={e => setPatientInsuranceInsurer(e.target.value)}
                                                         className={`${styles.tabField}`}
                                                     />
@@ -277,6 +326,7 @@ export default function RequisitionForm() {
                                                 <FloatingLabel controlId="formPatientInsuranceId" label="Insurance Plan ID" className="mb-2">
                                                     <Form.Control type="text"
                                                         placeholder="Insurance Plan ID"
+                                                        value={patientInsurancePlanId}
                                                         onChange={e => setPatientInsurancePlanId(e.target.value)}
                                                         className={`${styles.tabField}`}
                                                     />
@@ -286,6 +336,7 @@ export default function RequisitionForm() {
                                                 <FloatingLabel controlId="formPatientInsuranceEffectiveDate" label="Insurance Effective Date" className="mb-2">
                                                     <Form.Control type="date"
                                                         placeholder="Insurance Effective Date"
+                                                        value={patientInsuranceEffectiveDate}
                                                         onChange={e => setPatientInsuranceEffectiveDate(e.target.value)}
                                                         className={`${styles.tabField}`}
                                                     />
@@ -340,6 +391,7 @@ export default function RequisitionForm() {
                                                         <FloatingLabel controlId="formPatientInsuranceGaurantorFirstName" label="First Name" className="mb-2">
                                                             <Form.Control type="text"
                                                                 placeholder="First Name"
+                                                                value={patientInsuranceGaurantorFirstName}
                                                                 onChange={e => setPatientInsuranceGaurantorFirstName(e.target.value)}
                                                                 className={`${styles.tabField}`}
                                                             />
@@ -349,6 +401,7 @@ export default function RequisitionForm() {
                                                         <FloatingLabel controlId="formPatientInsuranceGaurantorLastName" label="Last Name" className="mb-2">
                                                             <Form.Control type="text"
                                                                 placeholder="Last Name"
+                                                                value={patientInsuranceGaurantorLastName}
                                                                 onChange={e => setPatientInsuranceGaurantorLastName(e.target.value)}
                                                                 className={`${styles.tabField}`}
                                                             />
@@ -358,6 +411,7 @@ export default function RequisitionForm() {
                                                         <FloatingLabel controlId="formPatientInsuranceGaurantorDob" label="Date of Birth" className="mb-2">
                                                             <Form.Control type="date"
                                                                 placeholder="Date of Birth"
+                                                                value={patientInsuranceGaurantorDob}
                                                                 onChange={e => setPatientInsuranceGaurantorDob(e.target.value)}
                                                                 className={`${styles.tabField}`}
                                                             />
@@ -373,6 +427,7 @@ export default function RequisitionForm() {
                                         <Form.Group controlId="formOrderingAccount">
                                             <h1 className="h6 mt-2 ms-2">Ordering Account:</h1>
                                             <Form.Select
+                                                value={account}
                                                 className={`py-1 `}
                                                 onChange={handleAccountChange}
                                             >
@@ -406,12 +461,14 @@ export default function RequisitionForm() {
                                     <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
                                         <h1 className="h6">Pathology</h1>
                                         {allTestOptions.map((test, idx) => {
+                                            // const isChecked = find if testOrder includes this test
                                             return (test.department === "Pathology" && <Form.Check
                                                 label={test.name}
                                                 value={test.id}
+                                                // checked={isChecked}
                                                 readOnly
                                                 type="checkbox"
-                                                name="pathology"
+                                                name={test.name}
                                                 id={test}
                                                 key={idx}
                                                 onChange={handleTestOrderChange}
@@ -422,184 +479,43 @@ export default function RequisitionForm() {
                                     <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
                                         <h1 className="h6">Infectious Disease</h1>
                                         {allTestOptions.map((test, idx) => {
-                                            return (test.department === "Infectious Disease" && <Form.Check
-                                                label={test.name}
-                                                value={test.id}
-                                                readOnly
-                                                type="checkbox"
-                                                name="pathology"
-                                                id={test}
-                                                key={idx}
-                                                onChange={handleTestOrderChange}
-                                            />)
-
+                                            if (test.department === "Infectious Disease") {
+                                                // const isChecked = find if testOrder includes this test
+                                                return (
+                                                    < Form.Check
+                                                        label={test.name}
+                                                        value={test.id}
+                                                        // checked={isChecked}
+                                                        readOnly
+                                                        type="checkbox"
+                                                        name={test.name}
+                                                        id={test}
+                                                        key={idx}
+                                                        onChange={handleTestOrderChange}
+                                                    />);
+                                            } else return null;
                                         })}
                                     </Card>
                                     <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
                                         <h1 className="h6">Toxicology</h1>
                                         {allTestOptions.map((test, idx) => {
-                                            return (test.department === "Toxicology" && <Form.Check
-                                                label={test.name}
-                                                value={test.id}
-                                                readOnly
-                                                type="checkbox"
-                                                name="pathology"
-                                                id={test}
-                                                key={idx}
-                                                onChange={handleTestOrderChange}
-                                            />)
-
+                                            if (test.department === "Toxicology") {
+                                                // const isChecked = find if testOrder includes this test
+                                                return (
+                                                    <Form.Check
+                                                        label={test.name}
+                                                        name={test.name}
+                                                        type="checkbox"
+                                                        value={test.id}
+                                                        // checked={isChecked}
+                                                        readOnly
+                                                        id={test}
+                                                        key={idx}
+                                                        onChange={handleTestOrderChange}
+                                                    />);
+                                            } else return null;
                                         })}
                                     </Card>
-                                    {/* <Form.Group>
-                                            <h1 className="h6">Pathology</h1>
-                                            <Form.Check
-                                                label="Biopsy"
-                                                value="Biopsy"
-                                                readOnly
-                                                type="checkbox"
-                                                name="pathology"
-                                                id="biopsy"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                            <Form.Check
-                                                label="Pap Smear"
-                                                value="Pap Smear"
-                                                readOnly
-                                                type="checkbox"
-                                                name="pathology"
-                                                id="papSmear"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                            <Form.Check
-                                                label="Cytopathology (Other)"
-                                                value="Cytopathology (Other)"
-                                                readOnly
-                                                type="checkbox"
-                                                name="pathology"
-                                                id="cytopathology"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                        </Form.Group>
-                                    </Card>
-                                    <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
-                                        <Form.Group>
-                                            <h1 className="h6">Infectious Disease</h1>
-                                            <Form.Check
-                                                label="COVID-19"
-                                                value="COVID-19"
-                                                readOnly
-                                                type="checkbox"
-                                                name="infectiousDisease"
-                                                id="covid19"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                            <Form.Check
-                                                label="RPP"
-                                                value="RPP"
-                                                readOnly
-                                                type="checkbox"
-                                                name="infectiousDisease"
-                                                id="rpp"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                            <Form.Check
-                                                label="Gastrointestinal"
-                                                value="Gastrointestinal"
-                                                readOnly
-                                                type="checkbox"
-                                                name="infectiousDisease"
-                                                id="gastro"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                            <Form.Check
-                                                label="UTI"
-                                                value="UTI"
-                                                readOnly
-                                                type="checkbox"
-                                                name="infectiousDisease"
-                                                id="uti"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                            <Form.Check
-                                                label="Wound/Nail"
-                                                value="Wound/Nail"
-                                                readOnly
-                                                type="checkbox"
-                                                name="infectiousDisease"
-                                                id="woundNail"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                        </Form.Group>
-                                    </Card>
-                                    <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
-                                        <Form.Group>
-                                            <h1 className="h6">Toxicology</h1>
-                                            <Form.Check
-                                                label="Drug Screen"
-                                                value="Drug Screen"
-                                                readOnly
-                                                type="checkbox"
-                                                name="toxicology"
-                                                id="screen"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                            <Form.Check
-                                                label="Amphetamines"
-                                                value="Amphetamines"
-                                                readOnly
-                                                type="checkbox"
-                                                name="toxicology"
-                                                id="amphetamines"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                            <Form.Check
-                                                label="Antidepressants"
-                                                value="Antidepressants"
-                                                readOnly
-                                                type="checkbox"
-                                                name="toxicology"
-                                                id="antidepressants"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                            <Form.Check
-                                                label="Barbiturates"
-                                                value="Barbiturates"
-                                                readOnly
-                                                type="checkbox"
-                                                name="toxicology"
-                                                id="barbs"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                            <Form.Check
-                                                label="Benzodiazepines"
-                                                value="Benzodiazepines"
-                                                readOnly
-                                                type="checkbox"
-                                                name="toxicology"
-                                                id="benzodiazepines"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                            <Form.Check
-                                                label="Buprenorphine"
-                                                value="Buprenorphine"
-                                                readOnly
-                                                type="checkbox"
-                                                name="toxicology"
-                                                id="buprenorphine"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                            <Form.Check
-                                                label="Opioids"
-                                                value="Opioids"
-                                                readOnly
-                                                type="checkbox"
-                                                name="toxicology"
-                                                id="opioids"
-                                                onChange={handleTestOrderChange}
-                                            />
-                                        </Form.Group>
-                                    </Card> */}
                                 </Tab>
                             </Tabs>
                             <Button className="bg-success mb-2 me-1 p-2 px-3 text-dark" type="submit">

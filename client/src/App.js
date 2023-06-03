@@ -4,13 +4,13 @@ import { Routes, Route } from 'react-router-dom';
 import Landing from './views/Landing';
 import Dashboard from './views/Dashboard';
 import RequisitionTable from './views/RequisitionTable';
-import RequisitionForm from './views/RequisitionForm';
 import EditRequisition from './views/EditRequisition';
 import RequisitionRedirect from './components/RequisitionRedirect';
 import AddAccount from './views/AddAccount';
 import AddProvider from './views/AddProvider';
 import Accounts from './views/Accounts';
 import EditAccount from './views/EditAccount';
+import AddRequisition from './views/AddRequisition';
 
 
 function App() {
@@ -29,7 +29,7 @@ function App() {
           <Route exact path="/" element={<Landing />}/>
           <Route exact path={`${SITENAV.dashboard}`} element={<Dashboard />}/>
           <Route exact path={`/requisitions`} element={<RequisitionTable />}/>
-          <Route exact path={`/requisitions/new`} element={<RequisitionForm />}/>
+          <Route exact path={`/requisitions/new`} element={<AddRequisition />}/>
           <Route exact path={`/requisitions/edit/:id`} element={<EditRequisition />}/>
           <Route exact path={`/requisitions/success`} element={<RequisitionRedirect />}/>
           <Route exact path={`/accounts`} element={<Accounts/>}/>

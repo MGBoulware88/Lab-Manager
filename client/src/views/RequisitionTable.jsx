@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import SideNav from '../components/SideNav';
 import TopNav from '../components/TopNav';
-import { Form, FloatingLabel, Table, Container, Modal } from 'react-bootstrap';
+import { Form, FloatingLabel, Table, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faFilter, faMagnifyingGlassArrowRight, faPen, faX } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faMagnifyingGlassArrowRight, faPen, faX } from '@fortawesome/free-solid-svg-icons';
 import styles from "../Style.module.css/RequisitionTable.module.css";
 import axios from 'axios';
 import { GlobalContext } from '../GlobalContext';
@@ -97,7 +97,7 @@ export default function RequisitionTable() {
                                     <td>{req?.testOrder[0]?.department}</td>
                                     <td>{req?.status?.status}</td>
                                     <td>
-                                        <a target="_blank" rel="noreferrer noopener" href={`/requisitions/edit?${req.id}`}>
+                                        <a target="_blank" rel="noreferrer noopener" href={`/requisitions/edit/${req.id}`}>
                                             <FontAwesomeIcon
                                                 icon={faPen}
                                                 title="Edit Req"
@@ -105,7 +105,7 @@ export default function RequisitionTable() {
                                                 style={{ cursor: "pointer" }}
                                             />
                                         </a>
-                                        <a target="_blank" rel="noreferrer noopener" href={`/requisitions/view?${req.id}`}>
+                                        <a target="_blank" rel="noreferrer noopener" href={`/requisitions/view/${req.id}`}>
                                             <FontAwesomeIcon
                                                 icon={faEye}
                                                 title="View Req"
