@@ -36,9 +36,13 @@ export default function RequisitionForm(props) {
     const [orderingProvider, setOrderingProvider] = useState(props?.reqData.orderingProvider?.id || {});
     //test options
     const [allTestOptions, setAllTestOptions] = useState([]);
-    const [testOrder, setTestOrder] = useState(props?.reqData.testOrder || []);
-    console.log(`Tests: ${testOrder.map((test => test.checked))}`);
-    console.log(props);
+    const [importedTestOrder] = useState(props?.reqData.testOrder || []);
+    //wait for promises to resolve
+    const [isProviderLoading, setIsProviderLoading] = useState(true);
+    const [isTestsLoading, setIsTestsLoading] = useState(true);
+    
+    // console.log(`Tests: ${importedTestOrder.map((test => test.checked))}`);
+    // console.log(props);
 
     // const handleTestOrderChange = (e) => {
     //     if (testOrder.includes(e.target.value)) {
@@ -51,21 +55,22 @@ export default function RequisitionForm(props) {
     // }
 
     const handleTestOrderChange = e => {
+        console.log("box was checked or unchecked, boss!");
         //spread current state into a new array
 
         // .map() the tempArr to update checked value
 
         //setTestOrder with updated test.checked = true
-        setTestOrder(prevTests => {
-            return prevTests.map(test => {
-                if (test.id === e.target.value) {
-                    if (testOrder.includes(e.target.value)) {
-                        return ([...testOrder, { ...test, checked: e.target.checked }])
+        // setImportedTestOrder(prevTests => {
+        //     return prevTests.map(test => {
+        //         if (test.id === e.target.value) {
+        //             if (importedTestOrder.includes(e.target.value)) {
+        //                 return ([...importedTestOrder, { ...test, checked: e.target.checked }])
 
-                    } else return [...testOrder, { ...test, checked: e.target.checked }]
-                } else return test;
-            });
-        });
+        //             } else return [...importedTestOrder, { ...test, checked: e.target.checked }]
+        //         } else return test;
+        //     });
+        // });
     };
 
     const fetchAllAccounts = () => {
@@ -73,31 +78,50 @@ export default function RequisitionForm(props) {
             .get(`${baseUrl}/accounts`)
             .then(res => {
                 setAllAccounts(res.data);
+                setIsProviderLoading(false);
             })
             .catch(err => {
                 console.log(err);
             });
     }
 
+    const updateFetchedTests = (testData) => {
+        const updatedTests = testData.map(test => {
+            for (let i=0; i<importedTestOrder.length; i++) {
+                if (importedTestOrder[i].id === test.id) {
+                    return {...test, checked: true};
+                }
+            }
+            return test;
+        })
+        setAllTestOptions(updatedTests);
+        setIsTestsLoading(false);
+    }
+
     const fetchAllTestOptions = () => {
+        
         axios
             .get(`${baseUrl}/test_options`)
             .then(res => {
-                setAllTestOptions(res.data);
+                // console.log(`res.data: ${res.data}`);
+                updateFetchedTests(res.data);
             })
             .catch(err => {
                 console.log(err);
-            }, []);
+            })
     }
 
+
     useEffect(() => {
-        fetchAllAccounts();
+        isProviderLoading && fetchAllAccounts();
         // console.log("fetching accounts: ", allAccounts);
 
-        fetchAllTestOptions();
-        // console.log("fetching tests: ", allTestOptions);
+        isTestsLoading && fetchAllTestOptions();
 
-    }, [])
+        //update tests as checked for loaded test options
+        // isTestsLoading && updateFetchedTests();       
+
+    })
 
     const handleAccountChange = e => {
         setAccount(e.target.value);
@@ -125,10 +149,13 @@ export default function RequisitionForm(props) {
             setPatientInsuranceGaurantorLastName(patientLastName);
             setPatientInsuranceGaurantorDob(patientDob);
         }
-        const testIds = [];
-        testOrder.map(test => {
-            return testIds.push(test.id);
-        })
+        const selectedTests = [];
+        for (const test in allTestOptions) {
+            if (test.checked === true) {
+                selectedTests.push(test.id);
+            }
+        }
+        
         //grab all the form data from state
         const data = {
             patientFirstName,
@@ -149,7 +176,7 @@ export default function RequisitionForm(props) {
             patientInsuranceGaurantorDob,
             account,
             orderingProvider,
-            testOrder: testIds
+            testOrder: selectedTests
         };
 
         //convert the testOrder
@@ -189,7 +216,7 @@ export default function RequisitionForm(props) {
             <TopNav />
             <div className="d-flex">
                 <SideNav />
-                <Form onSubmit={handleReqFormSubmit}>
+                {isTestsLoading ? <p>Loading Red Data</p> : <Form onSubmit={handleReqFormSubmit}>
                     <div className="d-flex flex-column px-3">
                         <div>
                             <Tabs
@@ -462,10 +489,11 @@ export default function RequisitionForm(props) {
                                         <h1 className="h6">Pathology</h1>
                                         {allTestOptions.map((test, idx) => {
                                             // const isChecked = find if testOrder includes this test
+                                            console.log(`Test Checked Val: ${test.checked}`)
                                             return (test.department === "Pathology" && <Form.Check
                                                 label={test.name}
                                                 value={test.id}
-                                                // checked={isChecked}
+                                                checked={test.checked}
                                                 readOnly
                                                 type="checkbox"
                                                 name={test.name}
@@ -485,7 +513,7 @@ export default function RequisitionForm(props) {
                                                     < Form.Check
                                                         label={test.name}
                                                         value={test.id}
-                                                        // checked={isChecked}
+                                                        checked={test.checked}
                                                         readOnly
                                                         type="checkbox"
                                                         name={test.name}
@@ -507,7 +535,7 @@ export default function RequisitionForm(props) {
                                                         name={test.name}
                                                         type="checkbox"
                                                         value={test.id}
-                                                        // checked={isChecked}
+                                                        checked={test.checked}
                                                         readOnly
                                                         id={test}
                                                         key={idx}
@@ -523,7 +551,7 @@ export default function RequisitionForm(props) {
                             </Button>
                         </div>
                     </div>
-                </Form>
+                </Form>}
             </div>
         </>
     )
