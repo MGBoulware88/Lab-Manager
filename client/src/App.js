@@ -11,6 +11,7 @@ import AddProvider from './views/AddProvider';
 import Accounts from './views/Accounts';
 import EditAccount from './views/EditAccount';
 import AddRequisition from './views/AddRequisition';
+import ViewRequisition from './views/ViewRequisition';
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route exact path="/" element={<Landing />}/>
           <Route exact path={`${SITENAV.dashboard}`} element={<Dashboard />}/>
           <Route exact path={`/requisitions`} element={<RequisitionTable />}/>
+          <Route exact path={`/requisitions/view/:id`} element={<ViewRequisition />}/>
           <Route exact path={`/requisitions/new`} element={<AddRequisition />}/>
           <Route exact path={`/requisitions/edit/:id`} element={<EditRequisition />}/>
           <Route exact path={`/requisitions/success`} element={<RequisitionRedirect />}/>

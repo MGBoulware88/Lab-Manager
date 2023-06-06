@@ -182,7 +182,7 @@ export default function RequisitionForm(props) {
                     },
                 });
                 console.log(response);
-                return navigate("/requisitions");
+                return navigate(`/requisitions/view/${props.reqData.id}`);
             } catch (err) {
                 console.log(err);
             }
@@ -464,6 +464,7 @@ export default function RequisitionForm(props) {
                                 </Tab>
                                 <Tab eventKey="testingInfo" title="Test Selection">
                                     <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
+                                        {/* TODO: dynamically render departments */}
                                         <h1 className="h6">Pathology</h1>
                                         {allTestOptions.map((test, idx) => {
                                             // const isChecked = find if testOrder includes this test

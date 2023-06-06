@@ -3,34 +3,46 @@ import SideNav from '../components/SideNav';
 import TopNav from '../components/TopNav';
 import { Form, FloatingLabel, Table, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faMagnifyingGlassArrowRight, faPen, faX } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import styles from "../Style.module.css/RequisitionTable.module.css";
 import axios from 'axios';
 import { GlobalContext } from '../GlobalContext';
 
 export default function RequisitionTable() {
     const baseUrl = useContext(GlobalContext).SITENAV.baseurl;
-    const [searchTerm, setSearchTerm] = useState("");
-    // const [isFilterReqModalOpen, setIsFilterReqModalOpen] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
+    const [searchRecords, setSearchRecords] = useState("");
     const [requisitionData, setRequisitionData] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
 
+    async function getReqData() {
+        const response = await axios.get(`${baseUrl}/requisitions`);
+        const reqData = response.data;
+        setRequisitionData(reqData);
+        setIsLoading(false);
+        // console.log(requisitionData);
+    }
     useEffect(() => {
-        async function getReqData() {
-            const response = await axios.get(`${baseUrl}/requisitions`);
-            const reqData = response.data;
-            setRequisitionData(reqData);
-            setIsLoading(false);
-            // console.log(requisitionData);
-        }
 
         isLoading && getReqData();
 
     });
 
-    const handleSearch = e => {
+    const handleSearchRecords = e => {
         e.preventDefault();
-        alert("You searched for " + searchTerm);
+        // alert("You searched for " + searchRecords);
+
+        //crude search method that requires refresh to backtrack
+        //will update to db query searching later
+        const filteredData = [];
+        requisitionData.map(record => {
+            const formId = record.formId;
+            const stringifyFormId = formId.toString();
+            if (stringifyFormId.includes(searchRecords)) {
+                filteredData.push(record);
+            }
+            return record
+        });
+        setRequisitionData(filteredData)
     }
 
     // const showFilterModal = () => {
@@ -48,30 +60,6 @@ export default function RequisitionTable() {
                 <SideNav />
                 <Container>
                     <div className='d-flex justify-content-between align-items-center'>
-                        <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
-                            <Form.Group controlId="inputSearchField">
-                                <FloatingLabel
-                                    controlId="inputSearchField"
-                                    label="search"
-                                    className=""
-                                >
-                                    <Form.Control type="text" placeholder="search" className={`${styles.search}`} value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
-                                </FloatingLabel>
-
-                            </Form.Group>
-                            <FontAwesomeIcon icon={faMagnifyingGlassArrowRight} title="Search" style={{ color: "50AB42", height: "2rem", cursor: "pointer" }} onClick={handleSearch} />
-                            {/* <FontAwesomeIcon icon={faFilter} title="Filter" style={{ color: "#485794", height: "1.75rem", cursor: "pointer" }} onClick={showFilterModal} /> */}
-                        </Form>
-                        {/* {isFilterReqModalOpen &&
-                            <Modal show={isFilterReqModalOpen} onHide={hideFilterModal}>
-                                <Modal.Header closeButton>
-                                    <Modal.Title>Filter Requisitions</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <FilterReqForm reqData={requisitionData}/>
-                                </Modal.Body>
-                            </Modal>
-                        } */}
                         <a className="btn bg-success d-flex align-items-center gap-2 text-light" href="/requisitions/new">
                             +
                         </a>
@@ -79,6 +67,92 @@ export default function RequisitionTable() {
                     <hr />
                     <Table striped bordered hover variant="light" className={`${styles.tableBorder} ${styles.tableHeader}`} >
                         <thead >
+                            <tr>
+                                <th>
+                                    <Form onSubmit={handleSearchRecords} >
+                                        <Form.Group controlId="inputSearchRecordsField">
+                                            <FloatingLabel
+                                                controlId="inputSearchRecordsField"
+                                                label="search records"
+                                            >
+                                                <Form.Control type="text" placeholder="search records" className={`${styles.search}`} value={searchRecords} onChange={e => setSearchRecords(e.target.value)} />
+                                            </FloatingLabel>
+
+                                        </Form.Group>
+                                    </Form>
+                                </th>
+                                {/* <th>
+                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                        <Form.Group controlId="inputSearchField">
+                                            <FloatingLabel
+                                                controlId="inputSearchField"
+                                                label="search"
+                                                className=""
+                                            >
+                                                <Form.Control type="text" placeholder="search" className={`${styles.search}`} value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                                            </FloatingLabel>
+
+                                        </Form.Group>
+                                    </Form>
+                                </th>
+                                <th>
+                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                        <Form.Group controlId="inputSearchField">
+                                            <FloatingLabel
+                                                controlId="inputSearchField"
+                                                label="search"
+                                                className=""
+                                            >
+                                                <Form.Control type="text" placeholder="search" className={`${styles.search}`} value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                                            </FloatingLabel>
+
+                                        </Form.Group>
+                                    </Form>
+                                </th>
+                                <th>
+                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                        <Form.Group controlId="inputSearchField">
+                                            <FloatingLabel
+                                                controlId="inputSearchField"
+                                                label="search"
+                                                className=""
+                                            >
+                                                <Form.Control type="text" placeholder="search" className={`${styles.search}`} value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                                            </FloatingLabel>
+
+                                        </Form.Group>
+                                    </Form>
+                                </th>
+                                <th>
+                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                        <Form.Group controlId="inputSearchField">
+                                            <FloatingLabel
+                                                controlId="inputSearchField"
+                                                label="search"
+                                                className=""
+                                            >
+                                                <Form.Control type="text" placeholder="search" className={`${styles.search}`} value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                                            </FloatingLabel>
+
+                                        </Form.Group>
+                                    </Form>
+                                </th>
+                                <th>
+                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                        <Form.Group controlId="inputSearchField">
+                                            <FloatingLabel
+                                                controlId="inputSearchField"
+                                                label="search"
+                                                className=""
+                                            >
+                                                <Form.Control type="text" placeholder="search" className={`${styles.search}`} value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
+                                            </FloatingLabel>
+
+                                        </Form.Group>
+                                    </Form>
+                                </th>
+                                <th></th> */}
+                            </tr>
                             <tr className={`${styles.tableHeader}`}>
                                 <th>Record ID</th>
                                 <th>Patient Name</th>
@@ -90,7 +164,7 @@ export default function RequisitionTable() {
                             </tr>
                         </thead>
                         <tbody>
-                            {isLoading ? <tr><td colSpan={7}>Loading Requisition Data. . .</td></tr> :  requisitionData.map((req, idx) => {
+                            {isLoading ? <tr><td colSpan={7}>Loading Requisition Data. . .</td></tr> : requisitionData.map((req, idx) => {
                                 return <tr key={idx}>
                                     <td>{req?.accessionNumber ? req.accessionNumber : req?.formId}</td>
                                     <td>{req?.patient?.firstName} {req?.patient?.lastName}</td>
@@ -103,7 +177,7 @@ export default function RequisitionTable() {
                                             <FontAwesomeIcon
                                                 icon={faPen}
                                                 title="Edit Req"
-                                                className="me-2 text-success"
+                                                className="me-2"
                                                 style={{ cursor: "pointer" }}
                                             />
                                         </a>
@@ -117,9 +191,9 @@ export default function RequisitionTable() {
                                         </a>
                                         <a target="_blank" rel="noreferrer noopener" href={`/requisitions/delete/${req.id}`}>
                                             <FontAwesomeIcon
-                                                icon={faX}
+                                                icon={faTrashCan}
                                                 title="Delete Req"
-                                                className="me-1 text-danger"
+                                                className="me-1"
                                                 style={{ cursor: "pointer" }}
                                             />
                                         </a>

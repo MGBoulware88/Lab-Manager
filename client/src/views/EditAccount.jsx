@@ -21,6 +21,7 @@ export default function EditAccount() {
     const [accountContactPhone, setAccountContactPhone] = useState("");
     const [accountContactEmail, setAccountContactEmail] = useState("");
     const { id } = useParams();
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -29,6 +30,7 @@ export default function EditAccount() {
         //generate the data for PUT
         const data = new URLSearchParams();
         data.append("name", accountName);
+        data.append("addressId", addressId);
         data.append("street", accountAddressStreet);
         data.append("address2", accountAddress2);
         data.append("city", accountAddressCity);
@@ -59,6 +61,7 @@ export default function EditAccount() {
                 const accountAddress = data?.address;
                 console.log(data);
                 setAccountName(data.name);
+                setAddressId(accountAddress?.id);
                 setAccountAddressStreet(accountAddress?.street);
                 setAccountAddress2(accountAddress?.address2);
                 setAccountAddressCity(accountAddress?.city);
@@ -67,6 +70,7 @@ export default function EditAccount() {
                 setAccountContactName(data.contactName);
                 setAccountContactPhone(data.contactPhone);
                 setAccountContactEmail(data.contactEmail);
+                setIsLoading(false);
             })
             .catch(err => {
                 console.log(err);
@@ -74,8 +78,8 @@ export default function EditAccount() {
     }
 
     useEffect(() => {
-        fetchAccount(id);
-    }, []);
+        isLoading && fetchAccount(id);
+    });
 
 
 
@@ -84,7 +88,7 @@ export default function EditAccount() {
             <TopNav />
             <div className="d-flex">
                 <SideNav />
-                <div className="d-flex flex-column px-3">
+                {isLoading ? <h1 className="text-dark ms-2 mt-1 h3">Loading Account Info. . .</h1> : <div className="d-flex flex-column px-3">
                     <h1 className="text-primary">Edit account</h1>
                     <Form onSubmit={handleEditAccount} className="">
                         <Card border="primary" className={`p-2 mb-2 ${styles.cardBody}`}>
@@ -191,7 +195,7 @@ export default function EditAccount() {
                             Save
                         </Button>
                     </Form>
-                </div>
+                </div>}
             </div>
         </>
     )

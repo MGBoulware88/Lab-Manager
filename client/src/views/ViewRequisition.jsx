@@ -2,9 +2,11 @@ import React, { useState, useEffect, useContext } from "react";
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import { GlobalContext } from '../GlobalContext';
-import RequisitionForm from '../components/RequisitionForm';
+import TopNav from '../components/TopNav';
+import SideNav from '../components/SideNav';
+import { Container } from "react-bootstrap";
 
-export default function EditRequisition() {
+export default function ViewRequisition() {
     const baseUrl = useContext(GlobalContext).SITENAV.baseurl;
     const { id } = useParams();
     const [reqData, setReqData] = useState({});
@@ -26,17 +28,21 @@ export default function EditRequisition() {
         console.log(`Req Data: ${reqData}`);
 
     });
-
     return (
         <>
-            {isLoading ? (
-                <div>Loading. . .</div>
-                ) : (
-                    <RequisitionForm
-                        method="put"
-                        reqData={reqData}
-                    />
-            )}
+            <TopNav />
+            <div className="d-flex">
+                <SideNav />
+                {isLoading ? <p>Loading Req Data. . .</p> : <Container>
+                    <ul>
+                        <li>{reqData.patient}</li>
+                        <li>{reqData.account}</li>
+                        <li>{reqData.testOrder}</li>
+                        <li>{reqData.address}</li>
+                        <li>{reqData.insurance}</li>
+                    </ul>
+                    </Container>}
+            </div>
         </>
     )
 }
