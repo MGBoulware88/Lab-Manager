@@ -28,7 +28,6 @@ public class Requisition {
 	private Long id;
 	private int formId;
 	private String accessionNumber;
-	@NotNull
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "status_id")
 	private RequisitionStatus status;

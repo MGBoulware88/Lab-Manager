@@ -12,6 +12,7 @@ export default function RequisitionTable() {
     const baseUrl = useContext(GlobalContext).SITENAV.baseurl;
     const [searchTerm, setSearchTerm] = useState("");
     // const [isFilterReqModalOpen, setIsFilterReqModalOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
     const [requisitionData, setRequisitionData] = useState([]);
 
     useEffect(() => {
@@ -19,12 +20,13 @@ export default function RequisitionTable() {
             const response = await axios.get(`${baseUrl}/requisitions`);
             const reqData = response.data;
             setRequisitionData(reqData);
-            console.log(requisitionData);
+            setIsLoading(false);
+            // console.log(requisitionData);
         }
 
-        getReqData();
+        isLoading && getReqData();
 
-    }, []);
+    });
 
     const handleSearch = e => {
         e.preventDefault();
@@ -88,7 +90,7 @@ export default function RequisitionTable() {
                             </tr>
                         </thead>
                         <tbody>
-                            {requisitionData ? requisitionData.map((req, idx) => {
+                            {isLoading ? <tr><td colSpan={7}>Loading Requisition Data. . .</td></tr> :  requisitionData.map((req, idx) => {
                                 return <tr key={idx}>
                                     <td>{req?.accessionNumber ? req.accessionNumber : req?.formId}</td>
                                     <td>{req?.patient?.firstName} {req?.patient?.lastName}</td>
@@ -123,11 +125,7 @@ export default function RequisitionTable() {
                                         </a>
                                     </td>
                                 </tr>
-                            })
-                                :
-                                <tr>
-                                    <td colSpan={7}>Loading Requisition Data. . .</td>
-                                </tr>}
+                            })}
 
                         </tbody>
                     </Table>

@@ -29,7 +29,11 @@ public class TestOptionsApi {
 	@GetMapping("")
 	@CrossOrigin(origins="http://localhost:3000")
 	List<TestOption> getAllTests() {
-		return testOptionService.findAllTestOptions();
+		List<TestOption> allTests = testOptionService.findAllTestOptions();
+		for (TestOption test : allTests) {
+			test.setChecked(false);
+		}
+		return allTests;
 	}
 	
 }

@@ -60,8 +60,8 @@ public class RequisitionStatus {
 		return status;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setStatus(String reqStatus) {
+		this.status = reqStatus;
 	}
 
 	public List<Requisition> getRequisition() {

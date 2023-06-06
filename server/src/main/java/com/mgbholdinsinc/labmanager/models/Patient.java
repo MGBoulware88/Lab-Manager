@@ -39,7 +39,6 @@ public class Patient {
 	@OneToOne(fetch=FetchType.EAGER)
 	private Address address;
 	@JsonIgnore
-	@NotEmpty
 	@OneToMany(mappedBy="patient", fetch=FetchType.LAZY)
 	private List<Insurance> insurance;
 	@JsonIgnore

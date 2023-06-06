@@ -9,69 +9,38 @@ import { GlobalContext } from '../GlobalContext';
 
 
 export default function RequisitionForm(props) {
+    // console.log(`props: ${props}`);
     const baseUrl = useContext(GlobalContext).SITENAV.baseurl;
-    const method = props;
+    const method = props?.method;
     const navigate = useNavigate();
     //patient info fields
-    const [patientFirstName, setPatientFirstName] = useState(props?.reqData.patient?.firstName || "");
-    const [patientLastName, setPatientLastName] = useState(props?.reqData.patient?.lastName || "");
-    const [patientDob, setPatientDob] = useState(props?.reqData.patient?.dob || "");
-    const [patientSex, setPatientSex] = useState(props?.reqData.patient?.sex || "");
-    const [patientAddressStreet, setPatientAddressStreet] = useState(props?.reqData.address?.street);
-    const [patientAddress2, setPatientAddress2] = useState(props?.reqData.address?.address2 || "");
-    const [patientAddressCity, setPatientAddressCity] = useState(props?.reqData.address?.city || "");
-    const [patientAddressState, setPatientAddressState] = useState(props?.reqData.address?.state || "");
-    const [patientAddressZip, setPatientAddressZip] = useState(props?.reqData.address?.zip || "");
-    const [patientInsuranceInsurer, setPatientInsuranceInsurer] = useState(props?.reqData.insurance?.insurer || "");
-    const [patientInsurancePlanId, setPatientInsurancePlanId] = useState(props?.reqData.insurance?.planId || "");
-    const [patientInsuranceEffectiveDate, setPatientInsuranceEffectiveDate] = useState(props?.reqData.insurance?.effectiveDate || "");
-    const [patientInsuranceGaurantorRelationship, setPatientInsuranceGaurantorRelationship] = useState(props?.reqData.insurance?.gaurantorRelationship || 'Self');
-    const [patientInsuranceGaurantorFirstName, setPatientInsuranceGaurantorFirstName] = useState(props?.reqData.insurance?.gaurantorFirstName || "");
-    const [patientInsuranceGaurantorLastName, setPatientInsuranceGaurantorLastName] = useState(props?.reqData.insurance?.gaurantorLastName || "");
-    const [patientInsuranceGaurantorDob, setPatientInsuranceGaurantorDob] = useState(props?.reqData.insurance?.gaurantorDob || "");
+    const [patientFirstName, setPatientFirstName] = useState(props?.reqData?.patient?.firstName || "");
+    const [patientLastName, setPatientLastName] = useState(props?.reqData?.patient?.lastName || "");
+    const [patientDob, setPatientDob] = useState(props?.reqData?.patient?.dob || "");
+    const [patientSex, setPatientSex] = useState(props?.reqData?.patient?.sex || "");
+    const [patientAddressStreet, setPatientAddressStreet] = useState(props?.reqData?.address?.street);
+    const [patientAddress2, setPatientAddress2] = useState(props?.reqData?.address?.address2 || "");
+    const [patientAddressCity, setPatientAddressCity] = useState(props?.reqData?.address?.city || "");
+    const [patientAddressState, setPatientAddressState] = useState(props?.reqData?.address?.state || "");
+    const [patientAddressZip, setPatientAddressZip] = useState(props?.reqData?.address?.zip || "");
+    const [patientInsuranceInsurer, setPatientInsuranceInsurer] = useState(props?.reqData?.insurance?.insurer || "");
+    const [patientInsurancePlanId, setPatientInsurancePlanId] = useState(props?.reqData?.insurance?.planId || "");
+    const [patientInsuranceEffectiveDate, setPatientInsuranceEffectiveDate] = useState(props?.reqData?.insurance?.effectiveDate || "");
+    const [patientInsuranceGaurantorRelationship, setPatientInsuranceGaurantorRelationship] = useState(props?.reqData?.insurance?.gaurantorRelationship || 'Self');
+    const [patientInsuranceGaurantorFirstName, setPatientInsuranceGaurantorFirstName] = useState(props?.reqData?.insurance?.gaurantorFirstName || "");
+    const [patientInsuranceGaurantorLastName, setPatientInsuranceGaurantorLastName] = useState(props?.reqData?.insurance?.gaurantorLastName || "");
+    const [patientInsuranceGaurantorDob, setPatientInsuranceGaurantorDob] = useState(props?.reqData?.insurance?.gaurantorDob || "");
     //provider info fields
     const [allAccounts, setAllAccounts] = useState([]);
-    const [account, setAccount] = useState(props?.reqData.account?.id || {});
+    const [account, setAccount] = useState(props?.reqData?.account?.id || {});
     const [accountProviders, setAccountProviders] = useState([]);
-    const [orderingProvider, setOrderingProvider] = useState(props?.reqData.orderingProvider?.id || {});
+    const [orderingProvider, setOrderingProvider] = useState(props?.reqData?.orderingProvider?.id || {});
     //test options
     const [allTestOptions, setAllTestOptions] = useState([]);
-    const [importedTestOrder] = useState(props?.reqData.testOrder || []);
+    const [importedTestOrder] = useState(props?.reqData?.testOrder || []);
     //wait for promises to resolve
     const [isProviderLoading, setIsProviderLoading] = useState(true);
     const [isTestsLoading, setIsTestsLoading] = useState(true);
-    
-    // console.log(`Tests: ${importedTestOrder.map((test => test.checked))}`);
-    // console.log(props);
-
-    // const handleTestOrderChange = (e) => {
-    //     if (testOrder.includes(e.target.value)) {
-    //         testOrder.filter((removedTest) => removedTest !== e.target.value);
-    //         e.target.checked = false;
-    //     } else {
-    //         testOrder.push(e.target.value);
-    //         e.target.checked = true;
-    //     };
-    // }
-
-    const handleTestOrderChange = e => {
-        console.log("box was checked or unchecked, boss!");
-        //spread current state into a new array
-
-        // .map() the tempArr to update checked value
-
-        //setTestOrder with updated test.checked = true
-        // setImportedTestOrder(prevTests => {
-        //     return prevTests.map(test => {
-        //         if (test.id === e.target.value) {
-        //             if (importedTestOrder.includes(e.target.value)) {
-        //                 return ([...importedTestOrder, { ...test, checked: e.target.checked }])
-
-        //             } else return [...importedTestOrder, { ...test, checked: e.target.checked }]
-        //         } else return test;
-        //     });
-        // });
-    };
 
     const fetchAllAccounts = () => {
         axios
@@ -111,17 +80,25 @@ export default function RequisitionForm(props) {
             })
     }
 
-
     useEffect(() => {
         isProviderLoading && fetchAllAccounts();
-        // console.log("fetching accounts: ", allAccounts);
-
-        isTestsLoading && fetchAllTestOptions();
-
-        //update tests as checked for loaded test options
-        // isTestsLoading && updateFetchedTests();       
+        isTestsLoading && fetchAllTestOptions();   
 
     })
+
+    const handleTestOrderChange = e => {
+        const updatedTestOptions = [...allTestOptions];
+        updatedTestOptions.map(test => {
+            //parseInt so === works
+            if (test.id === parseInt(e.target.value)) {
+                test.checked = e.target.checked;
+                // console.log(test.checked);
+                return test;
+            }
+            return test;
+        })
+        setAllTestOptions(updatedTestOptions);
+    };
 
     const handleAccountChange = e => {
         setAccount(e.target.value);
@@ -149,13 +126,15 @@ export default function RequisitionForm(props) {
             setPatientInsuranceGaurantorLastName(patientLastName);
             setPatientInsuranceGaurantorDob(patientDob);
         }
+        //grab only checked tests
         const selectedTests = [];
-        for (const test in allTestOptions) {
+        allTestOptions.map(test => {
+            // console.log("test for selected tests: ", test);
             if (test.checked === true) {
                 selectedTests.push(test.id);
             }
-        }
-        
+            return test;
+        })
         //grab all the form data from state
         const data = {
             patientFirstName,
@@ -178,13 +157,12 @@ export default function RequisitionForm(props) {
             orderingProvider,
             testOrder: selectedTests
         };
-
         //convert the testOrder
         data.testOrder = data.testOrder.join(',');
-
-        console.log("here's the req data: ", data);
+        //what's the form data look like now?
+        // console.log("here's the req data: ", data);
+        //check if Edit or New Req
         if (method === "post") {
-            //post to server w/ error handling
             try {
                 const response = await axios.post(`${baseUrl}/requisitions`, data, {
                     headers: {
@@ -198,17 +176,17 @@ export default function RequisitionForm(props) {
             }
         } else if (method === "put") {
             try {
-                const response = await axios.put(`${baseUrl}/requisitions`, data, {
+                const response = await axios.put(`${baseUrl}/requisitions/${props.reqData.id}`, data, {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded'
                     },
                 });
                 console.log(response);
-                return navigate("/requisitions/success");
+                return navigate("/requisitions");
             } catch (err) {
                 console.log(err);
             }
-        } else console.log("missing method");
+        } else console.log("invalid/missing method!");
     }
 
     return (
@@ -489,7 +467,7 @@ export default function RequisitionForm(props) {
                                         <h1 className="h6">Pathology</h1>
                                         {allTestOptions.map((test, idx) => {
                                             // const isChecked = find if testOrder includes this test
-                                            console.log(`Test Checked Val: ${test.checked}`)
+                                            // console.log(`Test Checked Val: ${test.checked}`)
                                             return (test.department === "Pathology" && <Form.Check
                                                 label={test.name}
                                                 value={test.id}

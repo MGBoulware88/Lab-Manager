@@ -31,6 +31,7 @@ public class TestOption {
 	private String name;
 	@NotEmpty
 	private String department;
+	private Boolean checked;
 	@JsonIgnore
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
@@ -86,6 +87,14 @@ public class TestOption {
 
 	public void setDepartment(String department) {
 		this.department = department;
+	}
+
+	public Boolean getChecked() {
+		return checked;
+	}
+
+	public void setChecked(Boolean checked) {
+		this.checked = checked;
 	}
 
 	public List<Requisition> getRequisitions() {

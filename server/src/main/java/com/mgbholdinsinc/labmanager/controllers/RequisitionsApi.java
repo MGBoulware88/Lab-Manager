@@ -9,7 +9,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -56,11 +58,24 @@ public class RequisitionsApi {
 	@CrossOrigin(origins="http://localhost:3000")
 	public List<Requisition> getAllReqs() {
 		List<Requisition> allReqs = requisitionService.findAllRequisitions();
-		System.out.println(allReqs);
+//		System.out.println(allReqs);
 		return allReqs;
 	}
 	
 	//get one req by Id
+	@GetMapping("/{requisition_id}")
+	@CrossOrigin(origins="http://localhost:3000")
+	public Requisition findReq(@PathVariable("requisition_id")Long reqId) {
+//		System.out.println(reqId);
+		Requisition thisReq = requisitionService.findRequisitionById(reqId);
+		for (TestOption test : thisReq.getTestOrder()) {
+			test.setChecked(true);
+//			System.out.println(test.getChecked());
+		}
+//		System.out.println(thisReq.getTestOrder().get(0).getChecked());
+		return thisReq;
+		
+	}
 	
 	//create a req
 	@PostMapping("")
@@ -95,16 +110,14 @@ public class RequisitionsApi {
 			newReq.getTestOrder().add(thisTest);
 		}
 		//grab starting Status
-		RequisitionStatus reqStatus = new RequisitionStatus();
-		reqStatus.setStatus("New Order");
-		//save
-		reqStatusService.createStatus(reqStatus);
-		//add Account, Provider, Patient, Address to Req
+		RequisitionStatus reqStatus = reqStatusService.findReqStatusById((long) 1);
+		//add Account, Provider, Patient, Address, Insurance, Status, FormId to Req
 		newReq.setAccount(orderingAccount);
 		newReq.setOrderingProvider(orderingProvider);
 		newReq.setAddress(address);
 		newReq.setInsurance(insurance);
 		newReq.setStatus(reqStatus);
+		//TODO: create FormID Generator
 		newReq.setFormId(0012345);
 		//also add Address to Patient
 		patient.setAddress(address);
@@ -117,6 +130,74 @@ public class RequisitionsApi {
 	}
 	
 	//edit a req
+	@PutMapping("{requisition_id}")
+	@CrossOrigin(origins="http://localhost:3000")
+	public Requisition editReq(@PathVariable("requisition_id")Long reqId,@RequestParam("patientFirstName")String patientFirstName,@RequestParam("patientLastName")String patientLastName,@RequestParam("patientDob")String patientDob ,@RequestParam("patientSex")String patientSex,@RequestParam("patientAddressStreet")String patientAddressStreet,@RequestParam("patientAddress2")String patientAddress2,@RequestParam("patientAddressCity")String patientAddressCity,@RequestParam("patientAddressState")String patientAddressState,@RequestParam("patientAddressZip")String patientAddressZip,@RequestParam("patientInsuranceInsurer")String patientInsuranceInsurer,@RequestParam("patientInsurancePlanId")String patientInsurancePlanId,@RequestParam("patientInsuranceEffectiveDate")String patientInsuranceEffectiveDate,@RequestParam("patientInsuranceGaurantorRelationship")String patientInsuranceGaurantorRelationship,@RequestParam("patientInsuranceGaurantorFirstName")String patientInsuranceGaurantorFirstName,@RequestParam("patientInsuranceGaurantorLastName")String patientInsuranceGaurantorLastName,@RequestParam("patientInsuranceGaurantorDob")String patientInsuranceGaurantorDob,@RequestParam("account")Long accountId,@RequestParam("orderingProvider")Long orderingProviderId,@RequestParam("testOrder")List<Long> order) throws ParseException {
+		//fetch req
+		Requisition updatedReq = requisitionService.findRequisitionById(reqId);
+		//**Don't fetch status --not editable on this form**
+		//fetch account
+		Account account = accountService.findAccountById(accountId);
+		//add account to req
+		updatedReq.setAccount(account);
+		//fetch  provider
+		OrderingProvider provider = orderingProviderService.findOrderingProviderById(orderingProviderId);
+		//add provider to req
+		updatedReq.setOrderingProvider(provider);
+		//replace testOrder with current test list
+//		System.out.println("Order" + order);
+		updatedReq.setTestOrder(new ArrayList<TestOption>());
+		for (Long testId : order) {
+			TestOption thisTest = testOptionService.findOneById(testId);
+			updatedReq.getTestOrder().add(thisTest);
+//			System.out.println("TestOrder: " + updatedReq.getTestOrder());
+		}
+		//fetch patient
+		Patient patient = patientService.findPatientById(updatedReq.getPatient().getId());
+		//format DOB
+		SimpleDateFormat df = new SimpleDateFormat("yyy-MM-dd");
+		Date patientDobDate = df.parse(patientDob);
+		//update patient fields
+		patient.setFirstName(patientFirstName);
+		patient.setLastName(patientLastName);
+		patient.setDob(patientDobDate);
+		patient.setSex(patientSex);
+		//fetch address
+		Address address = addressService.findAddressById(updatedReq.getAddress().getId());
+		address.setStreet(patientAddressStreet);
+		//**always set address2 because "" might be an update**
+		address.setAddress2(patientAddress2);
+		address.setCity(patientAddressCity);
+		address.setState(patientAddressState);
+		address.setZip(patientAddressZip);
+		//add updated address to patient and req
+		addressService.createAddress(address);
+		updatedReq.setAddress(address);
+		patient.setAddress(address);
+		//fetch insurance
+		Insurance insurance = insuranceService.findInsuranceById(updatedReq.getInsurance().getId());
+		//format dates
+		Date effectiveDate = df.parse(patientInsuranceEffectiveDate);
+		Date gaurantorDobDate = df.parse(patientInsuranceGaurantorDob);
+		//update insurance
+		insurance.setInsurer(patientInsuranceInsurer);
+		insurance.setPlanId(patientInsurancePlanId);
+		insurance.setEffectiveDate(effectiveDate);
+		insurance.setGaurantorRelationship(patientInsuranceGaurantorRelationship);
+		insurance.setGaurantorFirstName(patientInsuranceGaurantorFirstName);
+		insurance.setGaurantorLastName(patientInsuranceGaurantorLastName);
+		insurance.setGaurantorDob(gaurantorDobDate);
+		//add updated insurance to patient and req
+		insuranceService.createInsurance(insurance);
+		updatedReq.setInsurance(insurance);
+		patient.getInsurance().add(insurance);		
+		//save patient
+		patientService.createPatient(patient);
+		//add patient to req
+		updatedReq.setPatient(patient);
+		//save & return the updated req
+		return requisitionService.createRequisition(updatedReq);
+	}
 	
 	//delete a req??
 
