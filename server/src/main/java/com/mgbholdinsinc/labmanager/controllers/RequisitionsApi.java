@@ -80,7 +80,7 @@ public class RequisitionsApi {
 	//get reqs via search
 	@GetMapping("/search")
 	@CrossOrigin(origins="http://localhost:3000")
-	public List<Requisition> searchReqs(@RequestParam(value="formId", required=false)String formId, @RequestParam(value="patientFirstName", required=false)String patientFirstName,@RequestParam(value="patientLastName", required=false)String patientLastName, @RequestParam(value="accountName", required=false)String accountName, @RequestParam(value="orderingProviderName", required=false)String orderingProviderName, @RequestParam(value="department", required=false)String department, @RequestParam(value="status", required=false)String status) {
+	public List<Requisition> searchReqs(@RequestParam(value="formId", required=false)String formId, @RequestParam(value="patientFirstName", required=false)String patientFirstName,@RequestParam(value="patientLastName", required=false)String patientLastName, @RequestParam(value="accountName", required=false)String accountName, @RequestParam(value="providerName", required=false)String orderingProviderName, @RequestParam(value="department", required=false)String department, @RequestParam(value="status", required=false)String status) {
 		List<Requisition> foundReqs = requisitionService.findRequisitionsBySearch(formId, patientFirstName, patientLastName, accountName, orderingProviderName, department, status);
 		return foundReqs;
 	}

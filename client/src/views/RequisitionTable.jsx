@@ -79,6 +79,7 @@ export default function RequisitionTable() {
             .get(`${baseUrl}/requisitions/search?${query}`)
             .then(res => {
                 setRequisitionData(res.data);
+                // console.log(res.data);
             })
             .catch(err => console.log(err));
     };
