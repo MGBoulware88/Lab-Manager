@@ -77,6 +77,14 @@ public class RequisitionsApi {
 		
 	}
 	
+	//get reqs via search
+	@GetMapping("/search")
+	@CrossOrigin(origins="http://localhost:3000")
+	public List<Requisition> searchReqs(@RequestParam(value="formId", required=false)String formId, @RequestParam(value="patientFirstName", required=false)String patientFirstName,@RequestParam(value="patientLastName", required=false)String patientLastName, @RequestParam(value="accountName", required=false)String accountName, @RequestParam(value="orderingProviderName", required=false)String orderingProviderName, @RequestParam(value="department", required=false)String department, @RequestParam(value="status", required=false)String status) {
+		List<Requisition> foundReqs = requisitionService.findRequisitionsBySearch(formId, patientFirstName, patientLastName, accountName, orderingProviderName, department, status);
+		return foundReqs;
+	}
+	
 	//create a req
 	@PostMapping("")
 	@CrossOrigin(origins="http://localhost:3000")
@@ -118,7 +126,7 @@ public class RequisitionsApi {
 		newReq.setInsurance(insurance);
 		newReq.setStatus(reqStatus);
 		//TODO: create FormID Generator
-		newReq.setFormId(0012345);
+		newReq.setFormId("0012345");
 		//also add Address to Patient
 		patient.setAddress(address);
 		patient.setInsurance(new ArrayList<Insurance>());
@@ -135,6 +143,11 @@ public class RequisitionsApi {
 	public Requisition editReq(@PathVariable("requisition_id")Long reqId,@RequestParam("patientFirstName")String patientFirstName,@RequestParam("patientLastName")String patientLastName,@RequestParam("patientDob")String patientDob ,@RequestParam("patientSex")String patientSex,@RequestParam("patientAddressStreet")String patientAddressStreet,@RequestParam("patientAddress2")String patientAddress2,@RequestParam("patientAddressCity")String patientAddressCity,@RequestParam("patientAddressState")String patientAddressState,@RequestParam("patientAddressZip")String patientAddressZip,@RequestParam("patientInsuranceInsurer")String patientInsuranceInsurer,@RequestParam("patientInsurancePlanId")String patientInsurancePlanId,@RequestParam("patientInsuranceEffectiveDate")String patientInsuranceEffectiveDate,@RequestParam("patientInsuranceGaurantorRelationship")String patientInsuranceGaurantorRelationship,@RequestParam("patientInsuranceGaurantorFirstName")String patientInsuranceGaurantorFirstName,@RequestParam("patientInsuranceGaurantorLastName")String patientInsuranceGaurantorLastName,@RequestParam("patientInsuranceGaurantorDob")String patientInsuranceGaurantorDob,@RequestParam("account")Long accountId,@RequestParam("orderingProvider")Long orderingProviderId,@RequestParam("testOrder")List<Long> order) throws ParseException {
 		//fetch req
 		Requisition updatedReq = requisitionService.findRequisitionById(reqId);
+		System.out.println(updatedReq.getPatient().getFirstName());
+		System.out.println(updatedReq.getAddress().getState());
+		System.out.println(updatedReq.getAccount().getName());
+		System.out.println(updatedReq.getTestOrder());
+		System.out.println(updatedReq.getOrderingProvider());
 		//**Don't fetch status --not editable on this form**
 		//fetch account
 		Account account = accountService.findAccountById(accountId);

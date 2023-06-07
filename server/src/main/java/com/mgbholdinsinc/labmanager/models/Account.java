@@ -36,7 +36,6 @@ public class Account {
 	@NotEmpty
 	@Email
 	private String contactEmail;
-	@JsonIgnore
 	@OneToOne(fetch = FetchType.EAGER)
 	private Address address;
 	@JsonIgnore

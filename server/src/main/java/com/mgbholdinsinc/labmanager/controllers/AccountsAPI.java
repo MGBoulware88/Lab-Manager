@@ -57,7 +57,7 @@ public class AccountsAPI {
 			for (OrderingProvider provider : providers) {
 				account.getOrderingProviders().add(provider);
 			}
-//		System.out.println(account.getAddress().getStreet());
+		System.out.println(account.getAddress().getStreet());
 		return account;
 	}
 	

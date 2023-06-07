@@ -26,7 +26,7 @@ public class Requisition {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private int formId;
+	private String formId;
 	private String accessionNumber;
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "status_id")
@@ -93,11 +93,11 @@ public class Requisition {
 		this.id = id;
 	}
 
-	public int getFormId() {
+	public String getFormId() {
 		return formId;
 	}
 
-	public void setFormId(int formId) {
+	public void setFormId(String formId) {
 		this.formId = formId;
 	}
 

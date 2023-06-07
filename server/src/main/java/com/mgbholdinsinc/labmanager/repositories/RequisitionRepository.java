@@ -8,4 +8,5 @@ import com.mgbholdinsinc.labmanager.models.Requisition;
 
 public interface RequisitionRepository extends CrudRepository<Requisition, Long>{
 	List<Requisition> findAll();
+	List<Requisition> findRequisitionsByFormId(long id);
 }
