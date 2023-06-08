@@ -88,7 +88,7 @@ public class RequisitionsApi {
 	//create a req
 	@PostMapping("")
 	@CrossOrigin(origins="http://localhost:3000")
-	public Requisition createReq(@RequestParam("patientFirstName")String patientFirstName,@RequestParam("patientLastName")String patientLastName,@RequestParam("patientDob")String patientDob ,@RequestParam("patientSex")String patientSex,@RequestParam("patientAddressStreet")String patientAddressStreet,@RequestParam("patientAddress2")String patientAddress2,@RequestParam("patientAddressCity")String patientAddressCity,@RequestParam("patientAddressState")String patientAddressState,@RequestParam("patientAddressZip")String patientAddressZip,@RequestParam("patientInsuranceInsurer")String patientInsuranceInsurer,@RequestParam("patientInsurancePlanId")String patientInsurancePlanId,@RequestParam("patientInsuranceEffectiveDate")String patientInsuranceEffectiveDate,@RequestParam("patientInsuranceGaurantorRelationship")String patientInsuranceGaurantorRelationship,@RequestParam("patientInsuranceGaurantorFirstName")String patientInsuranceGaurantorFirstName,@RequestParam("patientInsuranceGaurantorLastName")String patientInsuranceGaurantorLastName,@RequestParam("patientInsuranceGaurantorDob")String patientInsuranceGaurantorDob,@RequestParam("account")Long accountId,@RequestParam("orderingProvider")Long orderingProviderId,@RequestParam("testOrder")List<Long> order) throws ParseException {
+	public Requisition createReq(@RequestParam("patientFirstName")String patientFirstName,@RequestParam("patientLastName")String patientLastName,@RequestParam("patientDob")String patientDob ,@RequestParam("patientSex")String patientSex,@RequestParam("patientAddressStreet")String patientAddressStreet,@RequestParam("patientAddress2")String patientAddress2,@RequestParam("patientAddressCity")String patientAddressCity,@RequestParam("patientAddressState")String patientAddressState,@RequestParam("patientAddressZip")String patientAddressZip,@RequestParam("patientInsuranceInsurer")String patientInsuranceInsurer,@RequestParam("patientInsurancePlanId")String patientInsurancePlanId,@RequestParam("patientInsuranceEffectiveDate")String patientInsuranceEffectiveDate,@RequestParam("patientInsuranceGaurantorRelationship")String patientInsuranceGaurantorRelationship,@RequestParam("patientInsuranceGaurantorFirstName")String patientInsuranceGaurantorFirstName,@RequestParam("patientInsuranceGaurantorLastName")String patientInsuranceGaurantorLastName,@RequestParam("patientInsuranceGaurantorDob")String patientInsuranceGaurantorDob,@RequestParam("account")Long accountId,@RequestParam("orderingProvider")Long orderingProviderId,@RequestParam("testOrder")List<Long> order,@RequestParam("formId")String formId) throws ParseException {
 		//grab account by ID
 		Account orderingAccount = accountService.findAccountById(accountId);
 		//grab provider by ID
@@ -126,7 +126,7 @@ public class RequisitionsApi {
 		newReq.setInsurance(insurance);
 		newReq.setStatus(reqStatus);
 		//TODO: create FormID Generator
-		newReq.setFormId("0012345");
+		newReq.setFormId(formId);
 		//also add Address to Patient
 		patient.setAddress(address);
 		patient.setInsurance(new ArrayList<Insurance>());

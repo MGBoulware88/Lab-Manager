@@ -61,6 +61,14 @@ public class AccountsAPI {
 		return account;
 	}
 	
+	//GET Accounts by Search fields
+	@GetMapping("/search")
+	@CrossOrigin(origins="http://localhost:3000")
+	public List<Account> searchAccounts(@RequestParam(value="accountName", required=false)String accountName,@RequestParam(value="contactName", required=false)String contactName,@RequestParam(value="contactPhone", required=false)String contactPhone,@RequestParam(value="contactEmail", required=false)String contactEmail) {
+		List<Account> foundAccounts = accountService.findAccountsBySearch(accountName, contactName, contactPhone, contactEmail);
+		return foundAccounts;
+	}
+	
 	//CREATE One account --Add Account page
 	@PostMapping("/new")
 	@CrossOrigin(origins="http://localhost:3000")
