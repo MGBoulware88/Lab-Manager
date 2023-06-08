@@ -1,13 +1,21 @@
 .tabHeader {
-    background-color: rgb(118, 161, 129);
+    background-color: #576cbc;
     color: #fafafa;
+    position: sticky;
+    z-index: 1;
+    top: 80px;
 }
 
 .tabBody {
     background-color: #fafafa;
-    border:2px solid rgb(118, 161, 129);
+    border:2px solid #0b2447;
 }
 
 .tabField {
     background-color: #fafafa;
+}
+
+.btn {
+    /* background-color: orange; */
+    color: #fafafa;
 }

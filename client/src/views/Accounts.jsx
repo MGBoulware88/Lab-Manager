@@ -1,20 +1,25 @@
-import React, { useState, useEffect, useContext, useCallback } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import SideNav from '../components/SideNav';
 import TopNav from '../components/TopNav';
-import { Form, FloatingLabel, Table, Container, Modal } from 'react-bootstrap';
+import { Form, Table, Container, Modal } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faFilter, faMagnifyingGlassArrowRight, faPen, faX } from '@fortawesome/free-solid-svg-icons';
+import { faEye, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import styles from "../Style.module.css/RequisitionTable.module.css";
 import axios from 'axios';
 import { GlobalContext } from '../GlobalContext';
+import { debounce } from 'lodash';
 
 
-export default function RequisitionTable() {
+export default function AccountTable() {
     const baseUrl = useContext(GlobalContext).SITENAV.baseurl + '/accounts';
 
-    const [searchTerm, setSearchTerm] = useState("");
+    const [searchAccountName, setSearchAccountName] = useState("");
+    const [searchContactName, setSearchContactName] = useState("");
+    const [searchContactPhone, setSearchContactPhone] = useState("");
+    const [searchContactEmail, setSearchContactEmail] = useState("");
     // const [isFilterReqModalOpen, setIsFilterReqModalOpen] = useState(false);
     const [allAccounts, setAllAccounts] = useState(null);
+    const [isAccountDataLoading, setIsAccountDataLoading] = useState(true);
 
     //fetch all accounts
     const fetchAccounts = () => {
@@ -23,6 +28,7 @@ export default function RequisitionTable() {
             .then(res => {
                 const data = res.data;
                 data && setAllAccounts(data);
+                setIsAccountDataLoading(false);
                 console.log(allAccounts);
             })
             .catch(err => {
@@ -30,23 +36,69 @@ export default function RequisitionTable() {
             });
     }
 
-    //fetch all accounts on render w/ empty dependency array so it only fetches once
+    //fetch all accounts on render w/ isLoading control
     useEffect(() => {
-        fetchAccounts();
-    }, []);
+        isAccountDataLoading && fetchAccounts();
+    });
+
+    const getSearchData = () => {
+        //build the query with whichever fields have data
+        let query = "";
+        if (searchAccountName) {
+            if (query !== "") {
+                query += `&accountName=${searchAccountName}`;
+            } else query += `accountName=${searchAccountName}`;
+        }
+        if (searchContactName) {
+            if (query !== "") {
+                query += `&contactName=${searchContactName}`;
+            } else query += `contactName=${searchContactName}`;
+        }
+        if (searchContactPhone) {
+            if (query !== "") {
+                query += `&contactPhone=${searchContactPhone}`;
+            } else query += `contactPhone=${searchContactPhone}`;
+        }
+        if (searchContactEmail) {
+            if (query !== "") {
+                query += `&contactEmail=${searchContactEmail}`;
+            } else query += `contactEmail=${searchContactEmail}`;
+        }
+
+        axios
+            .get(`${baseUrl}/search?${query}`)
+            .then(res => {
+                setAllAccounts(res.data);
+                console.log(res.data);
+            })
+            .catch(err => console.log(err));
+    };
+
+    const getDataWithDelay = debounce(() => {
+        getSearchData();
+    }, 250);
 
     const handleSearch = e => {
         e.preventDefault();
-        alert("You searched for " + searchTerm);
+        getSearchData();
     }
 
-    // const showFilterModal = () => {
-    //     setIsFilterReqModalOpen(true);
-    // }
-
-    // const hideFilterModal = () => {
-    //     setIsFilterReqModalOpen(false);
-    // }
+    const handleSearchAccountName = e => {
+        setSearchAccountName(e.target.value);
+        getDataWithDelay();
+    }
+    const handleSearchContactName = e => {
+        setSearchContactName(e.target.value);
+        getDataWithDelay();
+    }
+    const handleSearchContactPhone = e => {
+        setSearchContactPhone(e.target.value);
+        getDataWithDelay();
+    }
+    const handleSearchContactEmail = e => {
+        setSearchContactEmail(e.target.value);
+        getDataWithDelay();
+    }
 
     return (
         <>
@@ -55,20 +107,6 @@ export default function RequisitionTable() {
                 <SideNav />
                 <Container>
                     <div className='d-flex justify-content-between align-items-center'>
-                        <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
-                            <Form.Group controlId="inputSearchField">
-                                <FloatingLabel
-                                    controlId="inputSearchField"
-                                    label="search"
-                                    className=""
-                                >
-                                    <Form.Control type="text" placeholder="search" className={`${styles.search}`} value={searchTerm} onChange={e => setSearchTerm(e.target.value)} />
-                                </FloatingLabel>
-
-                            </Form.Group>
-                            <FontAwesomeIcon icon={faMagnifyingGlassArrowRight} title="Search" style={{ color: "50AB42", height: "2rem", cursor: "pointer" }} onClick={handleSearch} />
-                            {/* <FontAwesomeIcon icon={faFilter} title="Filter" style={{ color: "#485794", height: "1.75rem", cursor: "pointer" }} onClick={showFilterModal} /> */}
-                        </Form>
                         {/* {isFilterReqModalOpen &&
                             <Modal show={isFilterReqModalOpen} onHide={hideFilterModal}>
                                 <Modal.Header closeButton>
@@ -79,13 +117,44 @@ export default function RequisitionTable() {
                                 </Modal.Body>
                             </Modal>
                         } */}
-                        <a className="btn bg-success d-flex align-items-center gap-2 text-light" href="/accounts/new">
+                        <a className="btn bg-secondary d-flex align-items-center gap-2 text-light" href="/accounts/new">
                             +
                         </a>
                     </div>
                     <hr />
                     <Table striped bordered hover variant="light" className={`${styles.tableBorder} ${styles.tableHeader}`} >
                         <thead >
+                            <tr>
+                                <th>
+                                    <Form onSubmit={handleSearch} >
+                                        <Form.Group controlId="inputSearchAccountNameField">
+                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchAccountName} onKeyUp={e => handleSearchAccountName(e)} onChange={e => setSearchAccountName(e.target.value)} />
+                                        </Form.Group>
+                                    </Form>
+                                </th>
+                                <th>
+                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                        <Form.Group controlId="inputSearchPatientfirstNameField">
+                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchContactName} onKeyUp={e => handleSearchContactName(e)} onChange={e => setSearchContactName(e.target.value)} />
+                                        </Form.Group>
+                                    </Form>
+                                </th>
+                                <th>
+                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                        <Form.Group controlId="inputSearchPatientLastNameField">
+                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchContactPhone} onKeyUp={e => handleSearchContactPhone(e)} onChange={e => setSearchContactPhone(e.target.value)} />
+                                        </Form.Group>
+                                    </Form>
+                                </th>
+                                <th>
+                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                        <Form.Group controlId="inputSearchAccountNameField">
+                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchContactEmail} onKeyUp={e => handleSearchContactEmail(e)} onChange={e => setSearchContactEmail(e.target.value)} />
+                                        </Form.Group>
+                                    </Form>
+                                </th>
+                                <th></th>
+                            </tr>
                             <tr className={`${styles.tableHeader}`}>
                                 <th>Account Name</th>
                                 <th>Contact Name</th>
@@ -95,7 +164,7 @@ export default function RequisitionTable() {
                             </tr>
                         </thead>
                         <tbody>
-                            {allAccounts?.length > 0 ? allAccounts.map((account) => (
+                            {!isAccountDataLoading ? allAccounts.map((account) => (
                                 <tr key={account.id}>
                                     <td>{account.name}</td>
                                     <td>{account.contactName}</td>
@@ -103,43 +172,42 @@ export default function RequisitionTable() {
                                     <td>{account.contactEmail}</td>
                                     <td>
                                         <a target="_blank" rel="noreferrer noopener" href={`/accounts/edit/${account.id}`}>
-                                        <FontAwesomeIcon
-                                            icon={faPen}
-                                            title="Edit Account"
-                                            className="me-2 text-success"
-                                            style={{ cursor: "pointer" }}
-                                        />
-                                    </a>
-                                    <a target="_blank" rel="noreferrer noopener" href={`/accounts/view/${account.id}`}>
-                                        <FontAwesomeIcon
-                                            icon={faEye}
-                                            title="View Account"
-                                            className="me-2"
-                                            style={{ cursor: "pointer" }}
-                                        />
-                                    </a>
-                                        
                                             <FontAwesomeIcon
-                                                icon={faX}
-                                                title="Delete Account"
-                                                className="me-1 text-danger"
+                                                icon={faPen}
+                                                title="Edit Account"
+                                                className="me-2 text"
                                                 style={{ cursor: "pointer" }}
                                             />
+                                        </a>
+                                        <a target="_blank" rel="noreferrer noopener" href={`/accounts/view/${account.id}`}>
+                                            <FontAwesomeIcon
+                                                icon={faEye}
+                                                title="View Account"
+                                                className="me-2"
+                                                style={{ cursor: "pointer" }}
+                                            />
+                                        </a>
+
+                                        <FontAwesomeIcon
+                                            icon={faTrashCan}
+                                            title="Delete Account"
+                                            className="me-1"
+                                            style={{ cursor: "pointer" }}
+                                        />
                                     </td>
                                 </tr>
-                            )):
-                            <tr>
-                                <td>Add an account first</td>
-                                <td>Click the green button</td>
-                                <td>You can do it!</td>
-                                <td>I beleive in you!</td>
-                            </tr>
+                            )) :
+                                <tr>
+                                    <td>Add an account first</td>
+                                    <td>Click the green button</td>
+                                    <td>You can do it!</td>
+                                    <td>I believe in you!</td>
+                                </tr>
                             }
 
                         </tbody>
                     </Table>
                 </Container>
-
             </div>
         </>
     )

@@ -91,13 +91,12 @@ export default function RequisitionTable() {
     const handleSearch = e => {
         e.preventDefault();
         // alert("You searched for " + searchRecords);
-
         getSearchData();
     }
 
     const handleSearchRecords = e => {
         setSearchRecords(e.target.value);
-        console.log(searchRecords);
+        // console.log(searchRecords);
         getDataWithDelay();
     }
 
@@ -141,128 +140,129 @@ export default function RequisitionTable() {
 
     return (
         <>
-            <TopNav />
-            <div className="d-flex">
-                <SideNav />
-                <Container>
-                    <div className='d-flex justify-content-between align-items-center'>
-                        <a className="btn bg-success d-flex align-items-center gap-2 text-light" href="/requisitions/new">
-                            +
-                        </a>
-                    </div>
-                    <hr />
-                    <Table striped bordered hover variant="light" className={`${styles.tableBorder} ${styles.tableHeader}`} >
-                        <thead >
-                            <tr>
-                                <th>
-                                    <Form onSubmit={handleSearch} >
-                                        <Form.Group controlId="inputSearchRecordsField">
-                                            <Form.Control size="sm" type="text" placeholder="search records" className={`${styles.search}`} value={searchRecords} onKeyUp={e => handleSearchRecords(e)} onChange={e => setSearchRecords(e.target.value)} />
-                                        </Form.Group>
-                                    </Form>
-                                </th>
-                                <th>
-                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
-                                        <Form.Group controlId="inputSearchPatientfirstNameField">
-                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchPatientFirstName} onKeyUp={e => handleSearchPatientFirstName(e)} onChange={e => setSearchPatientFirstName(e.target.value)} />
-                                        </Form.Group>
-                                    </Form>
-                                </th>
-                                <th>
-                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
-                                        <Form.Group controlId="inputSearchPatientLastNameField">
-                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchPatientLastName} onKeyUp={e => handleSearchPatientLastName(e)} onChange={e => setSearchPatientLastName(e.target.value)} />
-                                        </Form.Group>
-                                    </Form>
-                                </th>
-                                <th>
-                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
-                                        <Form.Group controlId="inputSearchAccountNameField">
-                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchAccountName} onKeyUp={e => handleSearchAccountName(e)} onChange={e => setSearchAccountName(e.target.value)} />
-                                        </Form.Group>
-                                    </Form>
-                                </th>
-                                <th>
-                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
-                                        <Form.Group controlId="inputSearchProviderNameField">
-                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchProviderName} onKeyUp={e => handleSearchProviderName(e)} onChange={e => setSearchProviderName(e.target.value)} />
-                                        </Form.Group>
-                                    </Form>
-                                </th>
-                                <th>
-                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
-                                        <Form.Group controlId="inputSearchDepartmentField">
-                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchDepartment} onKeyUp={e => handleSearchDepartmentName(e)} onChange={e => setSearchDepartment(e.target.value)} />
-                                        </Form.Group>
-                                    </Form>
-                                </th>
-                                <th>
-                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
-                                        <Form.Group controlId="inputSearchStatusField">
-                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchStatus} onKeyUp={e => handleSearchStatus(e)} onChange={e => setSearchStatus(e.target.value)} />
-                                        </Form.Group>
-                                    </Form>
-                                </th>
-                                <th></th>
-                            </tr>
-                            <tr className={`${styles.tableHeader}`}>
-                                <th>Record ID</th>
-                                <th>Patient First Name</th>
-                                <th>Patient Last Name</th>
-                                <th>Account Name</th>
-                                <th>Provider Name</th>
-                                <th>Department</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {isLoading ? <tr><td colSpan={7}>Loading Requisition Data. . .</td></tr> : requisitionData.map((req, idx) => {
-                                return <tr key={idx}>
-                                    <td>{req?.accessionNumber ? req.accessionNumber : req?.formId}</td>
-                                    <td>{req?.patient?.firstName}</td>
-                                    <td>{req?.patient?.lastName}</td>
-                                    <td>{req?.account?.name}</td>
-                                    <td>{req?.orderingProvider?.name}</td>
-                                    <td>{req?.testOrder[0]?.department}</td>
-                                    <td>{req?.status?.status}</td>
-                                    <td>
-                                        <a target="_blank" rel="noreferrer noopener" href={`/requisitions/edit/${req.id}`}>
-                                            <FontAwesomeIcon
-                                                icon={faPen}
-                                                title="Edit Req"
-                                                className="me-2"
-                                                style={{ cursor: "pointer" }}
-                                            />
-                                        </a>
-                                        <a target="_blank" rel="noreferrer noopener" href={`/requisitions/view/${req.id}`}>
-                                            <FontAwesomeIcon
-                                                icon={faEye}
-                                                title="View Req"
-                                                className="me-2"
-                                                style={{ cursor: "pointer" }}
-                                            />
-                                        </a>
-                                        <a target="_blank" rel="noreferrer noopener" href={`/requisitions/delete/${req.id}`}>
-                                            <FontAwesomeIcon
-                                                icon={faTrashCan}
-                                                title="Delete Req"
-                                                className="me-1"
-                                                style={{ cursor: "pointer" }}
-                                            />
-                                        </a>
-                                    </td>
+                <div className="d-flex">
+                    <SideNav />
+                <div className="d-flex flex-column">
+                    <TopNav />
+                    <Container>
+                        <div className='d-flex justify-content-between align-items-center'>
+                            <a className="btn bg-secondary d-flex align-items-center gap-2 text-light" href="/requisitions/new">
+                                +
+                            </a>
+                        </div>
+                        <hr />
+                        <Table striped bordered hover variant="light" className={`${styles.tableBorder} ${styles.tableHeader}`} >
+                            <thead >
+                                <tr >
+                                    <th>
+                                        <Form onSubmit={handleSearch} >
+                                            <Form.Group controlId="inputSearchRecordsField">
+                                                <Form.Control size="sm" type="text" placeholder="search records" className={`${styles.search}`} value={searchRecords} onKeyUp={e => handleSearchRecords(e)} onChange={e => setSearchRecords(e.target.value)} />
+                                            </Form.Group>
+                                        </Form>
+                                    </th>
+                                    <th>
+                                        <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                            <Form.Group controlId="inputSearchPatientfirstNameField">
+                                                <Form.Control size="sm" type="text" placeholder="search first name" className={`${styles.search}`} value={searchPatientFirstName} onKeyUp={e => handleSearchPatientFirstName(e)} onChange={e => setSearchPatientFirstName(e.target.value)} />
+                                            </Form.Group>
+                                        </Form>
+                                    </th>
+                                    <th>
+                                        <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                            <Form.Group controlId="inputSearchPatientLastNameField">
+                                                <Form.Control size="sm" type="text" placeholder="search last name" className={`${styles.search}`} value={searchPatientLastName} onKeyUp={e => handleSearchPatientLastName(e)} onChange={e => setSearchPatientLastName(e.target.value)} />
+                                            </Form.Group>
+                                        </Form>
+                                    </th>
+                                    <th>
+                                        <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                            <Form.Group controlId="inputSearchAccountNameField">
+                                                <Form.Control size="sm" type="text" placeholder="search account name" className={`${styles.search}`} value={searchAccountName} onKeyUp={e => handleSearchAccountName(e)} onChange={e => setSearchAccountName(e.target.value)} />
+                                            </Form.Group>
+                                        </Form>
+                                    </th>
+                                    <th>
+                                        <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                            <Form.Group controlId="inputSearchProviderNameField">
+                                                <Form.Control size="sm" type="text" placeholder="search provider name" className={`${styles.search}`} value={searchProviderName} onKeyUp={e => handleSearchProviderName(e)} onChange={e => setSearchProviderName(e.target.value)} />
+                                            </Form.Group>
+                                        </Form>
+                                    </th>
+                                    <th>
+                                        <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                            <Form.Group controlId="inputSearchDepartmentField">
+                                                <Form.Control size="sm" type="text" placeholder="search department" className={`${styles.search}`} value={searchDepartment} onKeyUp={e => handleSearchDepartmentName(e)} onChange={e => setSearchDepartment(e.target.value)} />
+                                            </Form.Group>
+                                        </Form>
+                                    </th>
+                                    <th>
+                                        <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                            <Form.Group controlId="inputSearchStatusField">
+                                                <Form.Control size="sm" type="text" placeholder="search status" className={`${styles.search}`} value={searchStatus} onKeyUp={e => handleSearchStatus(e)} onChange={e => setSearchStatus(e.target.value)} />
+                                            </Form.Group>
+                                        </Form>
+                                    </th>
+                                    <th></th>
                                 </tr>
-                            })}
+                                <tr className={`${styles.stickyTop}`}>
+                                    <th>Record ID</th>
+                                    <th>Patient First Name</th>
+                                    <th>Patient Last Name</th>
+                                    <th>Account Name</th>
+                                    <th>Provider Name</th>
+                                    <th>Department</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {isLoading ? <tr><td colSpan={7}>Loading Requisition Data. . .</td></tr> : requisitionData.map((req, idx) => {
+                                    return <tr key={idx}>
+                                        <td>{req?.accessionNumber ? req.accessionNumber : req?.formId}</td>
+                                        <td>{req?.patient?.firstName}</td>
+                                        <td>{req?.patient?.lastName}</td>
+                                        <td>{req?.account?.name}</td>
+                                        <td>{req?.orderingProvider?.name}</td>
+                                        <td>{req?.testOrder[0]?.department}</td>
+                                        <td>{req?.status?.status}</td>
+                                        <td>
+                                            <a target="_blank" rel="noreferrer noopener" href={`/requisitions/edit/${req.id}`}>
+                                                <FontAwesomeIcon
+                                                    icon={faPen}
+                                                    title="Edit Req"
+                                                    className="me-2"
+                                                    style={{ cursor: "pointer" }}
+                                                />
+                                            </a>
+                                            <a target="_blank" rel="noreferrer noopener" href={`/requisitions/view/${req.id}`}>
+                                                <FontAwesomeIcon
+                                                    icon={faEye}
+                                                    title="View Req"
+                                                    className="me-2"
+                                                    style={{ cursor: "pointer" }}
+                                                />
+                                            </a>
+                                            <a target="_blank" rel="noreferrer noopener" href={`/requisitions/delete/${req.id}`}>
+                                                <FontAwesomeIcon
+                                                    icon={faTrashCan}
+                                                    title="Delete Req"
+                                                    className="me-1"
+                                                    style={{ cursor: "pointer" }}
+                                                />
+                                            </a>
+                                        </td>
+                                    </tr>
+                                })}
 
-                        </tbody>
-                    </Table>
-                    {requisitionData.map((req, idx) => {
-                        return req?.status[0]?.status
-                    })}
-                </Container>
-
-            </div>
+                            </tbody>
+                        </Table>
+                        {requisitionData.map((req, idx) => {
+                            return req?.status[0]?.status
+                        })}
+                    </Container>
+                </div>
+                </div>
         </>
     )
 }

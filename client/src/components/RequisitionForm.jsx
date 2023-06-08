@@ -39,15 +39,15 @@ export default function RequisitionForm(props) {
     const [allTestOptions, setAllTestOptions] = useState([]);
     const [importedTestOrder] = useState(props?.reqData?.testOrder || []);
     //wait for promises to resolve
-    const [isProviderLoading, setIsProviderLoading] = useState(true);
-    const [isTestsLoading, setIsTestsLoading] = useState(true);
+    const [isAccountDataLoading, setIsAccountDataLoading] = useState(true);
+    const [isTestDataLoading, setIsTestDataLoading] = useState(true);
 
     const fetchAllAccounts = () => {
         axios
             .get(`${baseUrl}/accounts`)
             .then(res => {
                 setAllAccounts(res.data);
-                setIsProviderLoading(false);
+                setIsAccountDataLoading(false);
             })
             .catch(err => {
                 console.log(err);
@@ -64,7 +64,7 @@ export default function RequisitionForm(props) {
             return test;
         })
         setAllTestOptions(updatedTests);
-        setIsTestsLoading(false);
+        setIsTestDataLoading(false);
     }
 
     const fetchAllTestOptions = () => {
@@ -81,8 +81,8 @@ export default function RequisitionForm(props) {
     }
 
     useEffect(() => {
-        isProviderLoading && fetchAllAccounts();
-        isTestsLoading && fetchAllTestOptions();   
+        isAccountDataLoading && fetchAllAccounts();
+        isTestDataLoading && fetchAllTestOptions();   
 
     })
 
@@ -194,7 +194,7 @@ export default function RequisitionForm(props) {
             <TopNav />
             <div className="d-flex">
                 <SideNav />
-                {isTestsLoading ? <p>Loading Red Data</p> : <Form onSubmit={handleReqFormSubmit}>
+                {isTestDataLoading ? <p>Loading Red Data</p> : <Form onSubmit={handleReqFormSubmit}>
                     <div className="d-flex flex-column px-3">
                         <div>
                             <Tabs
@@ -204,7 +204,7 @@ export default function RequisitionForm(props) {
                             >
                                 <Tab eventKey="patientInfo" title="Patient Info" className={`mb-2`}>
                                     <div className="d-flex gap-2">
-                                        <Card border="primary" className={`px-2 mb-2 ${styles.tabBody}`} >
+                                        <Card className={`px-2 mb-2 ${styles.tabBody}`} >
                                             <h1 className="h5 mt-2 ms-2">Patient Demographics</h1>
                                             {/* save all to state onChange */}
                                             <Form.Group controlId="formPatientFirstName">
@@ -525,7 +525,7 @@ export default function RequisitionForm(props) {
                                     </Card>
                                 </Tab>
                             </Tabs>
-                            <Button className="bg-success mb-2 me-1 p-2 px-3 text-dark" type="submit">
+                            <Button className={`mb-2 me-1 p-2 px-3 bg-secondary ${styles.btn}`} type="submit">
                                 Save
                             </Button>
                         </div>

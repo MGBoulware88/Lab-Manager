@@ -1,5 +1,6 @@
 .tableBorder th, .tableBorder td {
     border: 1px solid #041208;
+    white-space: nowrap;
 }
 
 .tableBorder tr:nth-child(1) th {
@@ -7,10 +8,11 @@
 }
 
 .tableBorder tr:nth-child(2) th {
-    background-color: #50AB42;
+    background-color: #19376d;
+    color: #fafafa;
 }
 
-.tableHeader {
+.stickyTop {
     position: sticky;
     top: 80px;
 }
@@ -18,5 +20,5 @@
 .search {
     background-color:rgb(175, 175, 200);
     height: 20px;
-    width: 90%;
+    /* width: 97%; */
 }

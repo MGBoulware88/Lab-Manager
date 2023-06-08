@@ -3,7 +3,7 @@ import { Modal } from "react-bootstrap";
 import LoginForm from "./LoginForm";
 import RegForm from "./RegForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHospital, faClipboard } from '@fortawesome/free-solid-svg-icons';
+import { faHospital, faClipboard, faBedPulse } from '@fortawesome/free-solid-svg-icons';
 import styles from "../Style.module.css/TopNav.module.css";
 
 export default function TopNav() {
@@ -54,8 +54,8 @@ export default function TopNav() {
             </Nav.Link>
             
             else: */}
-            <div className="d-flex p-2 sticky-top" style={{ height: "80px", width: "100%", backgroundColor: "#0b3818", color: "#fafafa" }}>
-                <div className="col-3 d-flex gap-1" style={{ height: "2rem" }}>
+            <div className={`d-flex p-2 sticky-top ${styles.navBar}`}>
+                <div className={`col-3 d-flex gap-1 ${styles.navLinkContainer}`}>
                     {/* icon + login link */}
                     <FontAwesomeIcon icon={faHospital} className={`${styles.navIcons}`} />
                     <p onClick={showLoginModal} className={`modalToggle ${styles.navLinks}`}>
@@ -65,9 +65,10 @@ export default function TopNav() {
                 </div>
                 <div className="col-6 d-flex justify-content-center">
                     {/* centered page title*/}
+                    <FontAwesomeIcon icon={faBedPulse} className={`mx-3 mb-2 ${styles.brandLogo}`} />
                     <h1 className={`${styles.siteHeader}`}>Lab Manager</h1>
                 </div>
-                <div className="col-3 d-flex align-content-center justify-content-end gap-1" style={{ height: "2rem" }}>
+                <div className={`col-3 d-flex align-content-center justify-content-end gap-1 ${styles.navLinkContainer}`} >
                     {/* reg/learn more/site nav links*/}
                     <FontAwesomeIcon icon={faClipboard} className={`${styles.navIcons}`} />
                     <p onClick={showLoginModal} className={`modalToggle ${styles.navLinks}`}>

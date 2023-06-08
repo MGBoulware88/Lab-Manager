@@ -1,3 +1,17 @@
+.navBar {
+    height: 80px;
+    width: 100%;
+    display: inline-block;
+    background-color: #0b2447;
+    border-bottom: 1px solid #fafafa;
+}
+
+.brandLogo {
+    height: 3rem;
+    margin-bottom: 0.2rem;
+    color: #fafafa;
+}
+
 .navIcons {
     color: #fafafa;
     margin-top: 0.1rem;
@@ -10,6 +24,10 @@
 .navLinks {
     color: #fafafa;
     /* font-weight: bold; */
+}
+
+.navLinkContainer {
+    height: 2rem;
 }
 
 .linkBtn {

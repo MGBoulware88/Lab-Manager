@@ -85,7 +85,7 @@ export default function LoginForm() {
                     Trouble logging in? <Link to={'/password'}>Reset Password</Link>
                 </div>
 
-                <Button type="submit" className="me-2 bg-primary text-dark">
+                <Button type="submit" className="me-2 bg-primary text-light">
                     Login
                 </Button>
                 {/* This needs to close login modal and open reg modal --else redirect to a new reg page */}
