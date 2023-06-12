@@ -6,6 +6,8 @@
     /* margin: 0.25rem 0; */
     border: 2px solid black;
     border-radius: 1rem;
+    /* position: relative; */
+    /* top: 85px; */
 }
 
 .sideNavBtn {
@@ -29,7 +31,8 @@
 
 .brandLogo {
     height: 75px;
-    margin-bottom: 5px;
+    margin: 10px;
+    margin-bottom: 15px;
     color: #fafafa;
     position: sticky;
     top: 5px;
@@ -48,5 +51,10 @@
 
 .stickyTop {
     position: sticky;
-    top: 85px;
+    top: 10px;
+}
+
+.stickyTop2 {
+    position: sticky;
+    top: 100px;
 }

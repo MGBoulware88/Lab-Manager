@@ -13,9 +13,9 @@ export default function SideNav() {
 
     return (
         <>
-            <div className={`btn-group-vertical justify-content-start align-items-center ${styles.sideBar}`}>
-            <FontAwesomeIcon icon={faBedPulse} className={`mx-3 mb-2 ${styles.brandLogo}`} />
-                <ul className={`${styles.navList} ${styles.stickyTop}`}>
+            <nav className={`btn-group-vertical justify-content-start align-items-center ${styles.sideBar}`}>
+            <FontAwesomeIcon icon={faBedPulse} className={`mx-3 mb-2 ${styles.brandLogo} ${styles.stickyTop}`} />
+                <ul className={`${styles.navList} ${styles.stickyTop2}`}>
                     <li>
                         <Nav.Link href="/dashboard" className={`${styles.navLink}`}>
                             <Button
@@ -173,7 +173,7 @@ export default function SideNav() {
                         </Nav.Link>
                     </li>
                 </ul>
-            </div>
+            </nav>
         </>
     );
 };

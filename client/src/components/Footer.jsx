@@ -1,21 +1,11 @@
-import React, {useState} from "react";
-import { Modal, Button } from "react-bootstrap";
-import LoginForm from "./LoginForm";
-import RegForm from "./RegForm";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHospital, faClipboard } from '@fortawesome/free-solid-svg-icons';
+import React from "react";
 
 export default function TopNav() {
-    //which data needs to come in?
-    
-
     return (
-        // update to Navbar/Nav tags
         <>
-            <div className="d-flex px-2" style={{height: "15vh"}}>
-                <p>footer content</p>
-
-            </div>
+            <footer className="d-flex justify-content-center p-2" style={{height: "5vh"}}>
+                <p style={{color: "#0b2447", position: "absolute", bottom: "0"}}>Do I need a footer? 🤔</p>
+            </footer>
         </>
     );
 }

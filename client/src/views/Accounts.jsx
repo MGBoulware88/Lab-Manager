@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import SideNav from '../components/SideNav';
 import TopNav from '../components/TopNav';
-import { Form, Table, Container, Modal } from 'react-bootstrap';
+import { Form, Table, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import styles from "../Style.module.css/RequisitionTable.module.css";
@@ -12,15 +12,12 @@ import { debounce } from 'lodash';
 
 export default function AccountTable() {
     const baseUrl = useContext(GlobalContext).SITENAV.baseurl + '/accounts';
-
     const [searchAccountName, setSearchAccountName] = useState("");
     const [searchContactName, setSearchContactName] = useState("");
     const [searchContactPhone, setSearchContactPhone] = useState("");
     const [searchContactEmail, setSearchContactEmail] = useState("");
-    // const [isFilterReqModalOpen, setIsFilterReqModalOpen] = useState(false);
     const [allAccounts, setAllAccounts] = useState(null);
     const [isAccountDataLoading, setIsAccountDataLoading] = useState(true);
-
     //fetch all accounts
     const fetchAccounts = () => {
         axios
@@ -35,14 +32,14 @@ export default function AccountTable() {
                 console.log(err);
             });
     }
-
     //fetch all accounts on render w/ isLoading control
     useEffect(() => {
         isAccountDataLoading && fetchAccounts();
     });
-
+    //build the query and GET updated Accounts
     const getSearchData = () => {
         //build the query with whichever fields have data
+        //if query is not empty, prepend '&'
         let query = "";
         if (searchAccountName) {
             if (query !== "") {
@@ -73,16 +70,16 @@ export default function AccountTable() {
             })
             .catch(err => console.log(err));
     };
-
+    //use debounce to delay search by .25s after keyup
     const getDataWithDelay = debounce(() => {
         getSearchData();
     }, 250);
-
+    //handle if user hits enter before delayed search takes effect --is this even necessary?
     const handleSearch = e => {
         e.preventDefault();
         getSearchData();
     }
-
+    //handle keyup events for searching the table
     const handleSearchAccountName = e => {
         setSearchAccountName(e.target.value);
         getDataWithDelay();
@@ -107,16 +104,6 @@ export default function AccountTable() {
                 <SideNav />
                 <Container>
                     <div className='d-flex justify-content-between align-items-center'>
-                        {/* {isFilterReqModalOpen &&
-                            <Modal show={isFilterReqModalOpen} onHide={hideFilterModal}>
-                                <Modal.Header closeButton>
-                                    <Modal.Title>Filter Requisitions</Modal.Title>
-                                </Modal.Header>
-                                <Modal.Body>
-                                    <FilterReqForm reqData={requisitionData}/>
-                                </Modal.Body>
-                            </Modal>
-                        } */}
                         <a className="btn bg-secondary d-flex align-items-center gap-2 text-light" href="/accounts/new">
                             +
                         </a>
@@ -128,28 +115,28 @@ export default function AccountTable() {
                                 <th>
                                     <Form onSubmit={handleSearch} >
                                         <Form.Group controlId="inputSearchAccountNameField">
-                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchAccountName} onKeyUp={e => handleSearchAccountName(e)} onChange={e => setSearchAccountName(e.target.value)} />
+                                            <Form.Control size="sm" type="text" placeholder="search account name" className={`${styles.search}`} value={searchAccountName} onKeyUp={e => handleSearchAccountName(e)} onChange={e => setSearchAccountName(e.target.value)} />
                                         </Form.Group>
                                     </Form>
                                 </th>
                                 <th>
-                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                    <Form onSubmit={handleSearch}>
                                         <Form.Group controlId="inputSearchPatientfirstNameField">
-                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchContactName} onKeyUp={e => handleSearchContactName(e)} onChange={e => setSearchContactName(e.target.value)} />
+                                            <Form.Control size="sm" type="text" placeholder="search contact" className={`${styles.search}`} value={searchContactName} onKeyUp={e => handleSearchContactName(e)} onChange={e => setSearchContactName(e.target.value)} />
                                         </Form.Group>
                                     </Form>
                                 </th>
                                 <th>
-                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                    <Form onSubmit={handleSearch} >
                                         <Form.Group controlId="inputSearchPatientLastNameField">
-                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchContactPhone} onKeyUp={e => handleSearchContactPhone(e)} onChange={e => setSearchContactPhone(e.target.value)} />
+                                            <Form.Control size="sm" type="text" placeholder="search phone" className={`${styles.search}`} value={searchContactPhone} onKeyUp={e => handleSearchContactPhone(e)} onChange={e => setSearchContactPhone(e.target.value)} />
                                         </Form.Group>
                                     </Form>
                                 </th>
                                 <th>
-                                    <Form onSubmit={handleSearch} className="d-flex justify-content-start align-items-center gap-2">
+                                    <Form onSubmit={handleSearch}>
                                         <Form.Group controlId="inputSearchAccountNameField">
-                                            <Form.Control size="sm" type="text" placeholder="search" className={`${styles.search}`} value={searchContactEmail} onKeyUp={e => handleSearchContactEmail(e)} onChange={e => setSearchContactEmail(e.target.value)} />
+                                            <Form.Control size="sm" type="text" placeholder="search email" className={`${styles.search}`} value={searchContactEmail} onKeyUp={e => handleSearchContactEmail(e)} onChange={e => setSearchContactEmail(e.target.value)} />
                                         </Form.Group>
                                     </Form>
                                 </th>

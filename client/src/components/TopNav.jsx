@@ -71,7 +71,7 @@ export default function TopNav() {
                 <div className={`col-3 d-flex align-content-center justify-content-end gap-1 ${styles.navLinkContainer}`} >
                     {/* reg/learn more/site nav links*/}
                     <FontAwesomeIcon icon={faClipboard} className={`${styles.navIcons}`} />
-                    <p onClick={showLoginModal} className={`modalToggle ${styles.navLinks}`}>
+                    <p onClick={showRegModal} className={`modalToggle ${styles.navLinks}`}>
                         Register
                     </p>
                 </div>
