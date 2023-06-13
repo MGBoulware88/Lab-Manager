@@ -130,18 +130,10 @@ export default function RequisitionTable() {
         getDataWithDelay();
     }
 
-    // const showFilterModal = () => {
-    //     setIsFilterReqModalOpen(true);
-    // }
-
-    // const hideFilterModal = () => {
-    //     setIsFilterReqModalOpen(false);
-    // }
-
     return (
         <>
-                <div className="d-flex">
-                    <SideNav />
+            <div className="d-flex">
+                <SideNav />
                 <div className="d-flex flex-column">
                     <TopNav />
                     <Container>
@@ -262,7 +254,7 @@ export default function RequisitionTable() {
                         })}
                     </Container>
                 </div>
-                </div>
+            </div>
         </>
     )
 }

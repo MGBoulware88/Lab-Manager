@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate } from 'react-router-dom';
-import { Form, FloatingLabel, Button, Tabs, Tab, Card } from "react-bootstrap";
+import { Form, FloatingLabel, Button, Tabs, Tab, Card, Container } from "react-bootstrap";
 import SideNav from "./SideNav";
 import TopNav from "./TopNav";
 import styles from "../Style.module.css/RequisitionForm.module.css"
@@ -188,308 +188,294 @@ export default function RequisitionForm(props) {
             }
         } else console.log("invalid/missing method!");
     }
-
+    
     return (
-        <>
-            <TopNav />
-            <div className="d-flex">
-                <SideNav />
-                {isTestDataLoading ? <p>Loading Red Data</p> : <Form onSubmit={handleReqFormSubmit}>
-                    <div className="d-flex flex-column px-3">
-                        <div>
-                            <Tabs
-                                defaultActiveKey={"patientInfo"}
-                                id="uncontrolled-req-tab"
-                                className={`${styles.tabHeader}`}
-                            >
-                                <Tab eventKey="patientInfo" title="Patient Info" className={`mb-2`}>
-                                    <div className="d-flex gap-2">
-                                        <Card className={`px-2 mb-2 ${styles.tabBody}`} >
-                                            <h1 className="h5 mt-2 ms-2">Patient Demographics</h1>
-                                            {/* save all to state onChange */}
-                                            <Form.Group controlId="formPatientFirstName">
-                                                <FloatingLabel controlId="formPatientFirstName" label="First Name" className="mb-2">
-                                                    <Form.Control type="text"
-                                                        placeholder="First Name"
-                                                        value={patientFirstName}
-                                                        onChange={e => setPatientFirstName(e.target.value)}
-                                                        className={`${styles.tabField}`}
-                                                    />
-                                                </FloatingLabel>
-                                            </Form.Group>
-                                            <Form.Group controlId="formPatientLastName">
-                                                <FloatingLabel controlId="formPatientLastName" label="Last Name" className="mb-2">
-                                                    <Form.Control type="text"
-                                                        placeholder="Last Name"
-                                                        value={patientLastName}
-                                                        onChange={e => setPatientLastName(e.target.value)}
-                                                        className={`${styles.tabField}`}
-                                                    />
-                                                </FloatingLabel>
-                                            </Form.Group>
-                                            <Form.Group controlId="formPatientDob">
-                                                <FloatingLabel controlId="formPatientDob" label="Date of Birth" className="mb-2">
-                                                    <Form.Control type="date"
-                                                        placeholder="Date of Birth"
-                                                        value={patientDob}
-                                                        onChange={e => setPatientDob(e.target.value)}
-                                                        className={`${styles.tabField}`}
-                                                    />
-                                                </FloatingLabel>
-                                            </Form.Group>
-                                            <Form.Group controlId="formPatientSex">
-                                                <h3 className="h6 mt-1 ms-1">Patient Sex</h3>
-                                                <Form.Check
-                                                    inline
-                                                    label="Female"
-                                                    value="Female"
-                                                    readOnly
-                                                    checked={patientSex === "Female"}
-                                                    name="patientSex"
-                                                    type="radio"
-                                                    id="female"
-                                                    className="ms-1 mb-1"
-                                                    onClick={e => setPatientSex(e.target.value)}
-                                                />
-                                                <Form.Check
-                                                    inline
-                                                    label="Male"
-                                                    value="Male"
-                                                    readOnly
-                                                    checked={patientSex === "Male"}
-                                                    name="patientSex"
-                                                    type="radio"
-                                                    id="male"
-                                                    onClick={e => setPatientSex(e.target.value)}
-                                                />
-                                            </Form.Group>
-                                            <Form.Group controlId="formPatientAddressStreet">
-                                                <FloatingLabel controlId="formPatientAddressStreet" label="Address" className="mb-2">
-                                                    <Form.Control type="text"
-                                                        placeholder="Address"
-                                                        value={patientAddressStreet}
-                                                        onChange={e => setPatientAddressStreet(e.target.value)}
-                                                        className={`${styles.tabField}`}
-                                                    />
-                                                </FloatingLabel>
-                                            </Form.Group>
-                                            <Form.Group controlId="formPatientAddress2">
-                                                <FloatingLabel controlId="formPatientAddress2" label="Address 2" className="mb-2">
-                                                    <Form.Control type="text"
-                                                        placeholder="Address 2"
-                                                        value={patientAddress2}
-                                                        onChange={e => setPatientAddress2(e.target.value)}
-                                                        className={`${styles.tabField}`}
-                                                    />
-                                                </FloatingLabel>
-                                            </Form.Group>
-                                            <Form.Group controlId="formPatientAddressCity">
-                                                <FloatingLabel controlId="formPatientAddressCity" label="City" className="mb-2">
-                                                    <Form.Control type="text"
-                                                        placeholder="City"
-                                                        value={patientAddressCity}
-                                                        onChange={e => setPatientAddressCity(e.target.value)}
-                                                        className={`${styles.tabField}`}
-                                                    />
-                                                </FloatingLabel>
-                                            </Form.Group>
-                                            <Form.Group controlId="formPatientAddressState">
-                                                <FloatingLabel controlId="formPatientAddressState" label="State" className="mb-2">
-                                                    <Form.Control type="text"
-                                                        placeholder="State"
-                                                        value={patientAddressState}
-                                                        onChange={e => setPatientAddressState(e.target.value)}
-                                                        className={`${styles.tabField}`}
-                                                    />
-                                                </FloatingLabel>
-                                            </Form.Group>
-                                            <Form.Group controlId="formPatientAddressZip">
-                                                <FloatingLabel controlId="formPatientAddressZip" label="Zip" className="mb-2">
-                                                    <Form.Control type="text"
-                                                        placeholder="Zip"
-                                                        value={patientAddressZip}
-                                                        onChange={e => setPatientAddressZip(e.target.value)}
-                                                        className={`${styles.tabField}`}
-                                                    />
-                                                </FloatingLabel>
-                                            </Form.Group>
-                                        </Card>
-                                        <Card className={`px-2 mb-2 ${styles.tabBody}`}>
-                                            <h1 className="h5 mt-2 ms-2">Insurance Details</h1>
-                                            {/* save all to state onChange */}
-                                            <Form.Group controlId="formPatientInsuranceInsurer">
-                                                <FloatingLabel controlId="formPatientInsuranceInsurer" label="Insurance Provider" className="mb-2">
-                                                    <Form.Control type="text"
-                                                        placeholder="Insurance"
-                                                        value={patientInsuranceInsurer}
-                                                        onChange={e => setPatientInsuranceInsurer(e.target.value)}
-                                                        className={`${styles.tabField}`}
-                                                    />
-                                                </FloatingLabel>
-                                            </Form.Group>
-                                            <Form.Group controlId="formPatientInsuranceId">
-                                                <FloatingLabel controlId="formPatientInsuranceId" label="Insurance Plan ID" className="mb-2">
-                                                    <Form.Control type="text"
-                                                        placeholder="Insurance Plan ID"
-                                                        value={patientInsurancePlanId}
-                                                        onChange={e => setPatientInsurancePlanId(e.target.value)}
-                                                        className={`${styles.tabField}`}
-                                                    />
-                                                </FloatingLabel>
-                                            </Form.Group>
-                                            <Form.Group controlId="formPatientInsuranceEffectiveDate">
-                                                <FloatingLabel controlId="formPatientInsuranceEffectiveDate" label="Insurance Effective Date" className="mb-2">
-                                                    <Form.Control type="date"
-                                                        placeholder="Insurance Effective Date"
-                                                        value={patientInsuranceEffectiveDate}
-                                                        onChange={e => setPatientInsuranceEffectiveDate(e.target.value)}
-                                                        className={`${styles.tabField}`}
-                                                    />
-                                                </FloatingLabel>
-                                            </Form.Group>
-                                            <Form.Group controlId="formPatientInsuranceGuarantorRelationship">
-                                                <h3 className="h5 mt-1 ms-1">Relationship to Insured</h3>
-                                                <div className="d-flex mb-2">
+        <div className="d-flex" style={{height: "100vh"}}>
+            <SideNav />
+            <div className="d-flex flex-column" style={{width: "100%"}}>
+                <TopNav  className="flex-grow-5"/>
+                <Container id="requisitionForm" style={{width: "auto"}}>
+                    {isTestDataLoading ? (
+                        <p>Loading Requisition Data</p> 
+                    ) : (
+                        <Form onSubmit={handleReqFormSubmit} >
+                            <div className="d-flex flex-column px-3">
+                                <Tabs
+                                    defaultActiveKey={"patientInfo"}
+                                    id="uncontrolled-req-tab"
+                                    className={`${styles.tabHeader} margin-auto`}
+                                >
+                                    <Tab eventKey="patientInfo" title="Patient Info" className={`mb-2`}>
+                                        <section id="patientInfo" className="d-flex gap-2">
+                                            <Card className={`px-2 mb-2 ${styles.tabBody}`} >
+                                                <h1 className="h5 mt-2 ms-2">Patient Demographics</h1>
+                                                {/* save all to state onChange */}
+                                                <Form.Group controlId="formPatientFirstName">
+                                                    <FloatingLabel controlId="formPatientFirstName" label="First Name" className="mb-2">
+                                                        <Form.Control type="text"
+                                                            placeholder="First Name"
+                                                            value={patientFirstName}
+                                                            onChange={e => setPatientFirstName(e.target.value)}
+                                                            className={`${styles.tabField}`}
+                                                        />
+                                                    </FloatingLabel>
+                                                </Form.Group>
+                                                <Form.Group controlId="formPatientLastName">
+                                                    <FloatingLabel controlId="formPatientLastName" label="Last Name" className="mb-2">
+                                                        <Form.Control type="text"
+                                                            placeholder="Last Name"
+                                                            value={patientLastName}
+                                                            onChange={e => setPatientLastName(e.target.value)}
+                                                            className={`${styles.tabField}`}
+                                                        />
+                                                    </FloatingLabel>
+                                                </Form.Group>
+                                                <Form.Group controlId="formPatientDob">
+                                                    <FloatingLabel controlId="formPatientDob" label="Date of Birth" className="mb-2">
+                                                        <Form.Control type="date"
+                                                            placeholder="Date of Birth"
+                                                            value={patientDob}
+                                                            onChange={e => setPatientDob(e.target.value)}
+                                                            className={`${styles.tabField}`}
+                                                        />
+                                                    </FloatingLabel>
+                                                </Form.Group>
+                                                <Form.Group controlId="formPatientSex">
+                                                    <h3 className="h6 mt-1 ms-1">Patient Sex</h3>
                                                     <Form.Check
                                                         inline
-                                                        label="Self"
-                                                        value="Self"
+                                                        label="Female"
+                                                        value="Female"
                                                         readOnly
-                                                        checked={patientInsuranceGuarantorRelationship === "Self"}
-                                                        name="relationship"
+                                                        checked={patientSex === "Female"}
+                                                        name="patientSex"
                                                         type="radio"
-                                                        id="self"
-                                                        className="ms-1"
-                                                        onClick={e => setPatientInsuranceGuarantorRelationship(e.target.value)}
+                                                        id="female"
+                                                        className="ms-1 mb-1"
+                                                        onClick={e => setPatientSex(e.target.value)}
                                                     />
                                                     <Form.Check
                                                         inline
-                                                        label="Other"
-                                                        value="Other"
+                                                        label="Male"
+                                                        value="Male"
                                                         readOnly
-                                                        checked={patientInsuranceGuarantorRelationship !== "Self"}
-                                                        name="relationship"
+                                                        checked={patientSex === "Male"}
+                                                        name="patientSex"
                                                         type="radio"
-                                                        id="other"
-                                                        className="ms-1"
-                                                        onClick={e => setPatientInsuranceGuarantorRelationship(e.target.value)}
+                                                        id="male"
+                                                        onClick={e => setPatientSex(e.target.value)}
                                                     />
-                                                    {patientInsuranceGuarantorRelationship !== "Self" &&
-                                                        <Form.Select
-                                                            className={`py-1 `}
-                                                            value={patientInsuranceGuarantorRelationship}
-                                                            onChange={e => setPatientInsuranceGuarantorRelationship(e.target.value)}
-                                                        >
-                                                            {patientInsuranceGuarantorRelationship === 'Other' && <option value="">Select</option>}
-                                                            <option value="Dependent">Dependent</option>
-                                                            <option value="Parent">Parent</option>
-                                                            <option value="Legal Guardian">Legal Guardian</option>
-                                                        </Form.Select>
-                                                    }
-                                                </div>
-                                            </Form.Group>
-                                            {/* conditionally render this if Relationship isnot Self */}
-                                            {patientInsuranceGuarantorRelationship !== "Self" &&
-                                                <>
-                                                    <h4 className="h6 mt-2 ms-1">Insured Details:</h4>
-                                                    <Form.Group controlId="formPatientInsuranceGuarantorFirstName">
-                                                        <FloatingLabel controlId="formPatientInsuranceGuarantorFirstName" label="First Name" className="mb-2">
-                                                            <Form.Control type="text"
-                                                                placeholder="First Name"
-                                                                value={patientInsuranceGuarantorFirstName}
-                                                                onChange={e => setPatientInsuranceGuarantorFirstName(e.target.value)}
-                                                                className={`${styles.tabField}`}
-                                                            />
-                                                        </FloatingLabel>
-                                                    </Form.Group>
-                                                    <Form.Group controlId="formPatientInsuranceGuarantorLastName">
-                                                        <FloatingLabel controlId="formPatientInsuranceGuarantorLastName" label="Last Name" className="mb-2">
-                                                            <Form.Control type="text"
-                                                                placeholder="Last Name"
-                                                                value={patientInsuranceGuarantorLastName}
-                                                                onChange={e => setPatientInsuranceGuarantorLastName(e.target.value)}
-                                                                className={`${styles.tabField}`}
-                                                            />
-                                                        </FloatingLabel>
-                                                    </Form.Group>
-                                                    <Form.Group controlId="formPatientInsuranceGuarantorDob">
-                                                        <FloatingLabel controlId="formPatientInsuranceGuarantorDob" label="Date of Birth" className="mb-2">
-                                                            <Form.Control type="date"
-                                                                placeholder="Date of Birth"
-                                                                value={patientInsuranceGuarantorDob}
-                                                                onChange={e => setPatientInsuranceGuarantorDob(e.target.value)}
-                                                                className={`${styles.tabField}`}
-                                                            />
-                                                        </FloatingLabel>
-                                                    </Form.Group>
-                                                </>
-                                            }
-                                        </Card>
-                                    </div>
-                                </Tab>
-                                <Tab eventKey="providerInfo" title="Provider Info">
-                                    <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
-                                        <Form.Group controlId="formOrderingAccount">
-                                            <h1 className="h6 mt-2 ms-2">Ordering Account:</h1>
-                                            <Form.Select
-                                                value={account}
-                                                className={`py-1 `}
-                                                onChange={handleAccountChange}
-                                            >
-                                                <option value="">Select Account</option>
-                                                {allAccounts.map((account, idx) => {
-                                                    return <option value={account.id} key={idx}>{account.name}</option>
-                                                })
+                                                </Form.Group>
+                                                <Form.Group controlId="formPatientAddressStreet">
+                                                    <FloatingLabel controlId="formPatientAddressStreet" label="Address" className="mb-2">
+                                                        <Form.Control type="text"
+                                                            placeholder="Address"
+                                                            value={patientAddressStreet}
+                                                            onChange={e => setPatientAddressStreet(e.target.value)}
+                                                            className={`${styles.tabField}`}
+                                                        />
+                                                    </FloatingLabel>
+                                                </Form.Group>
+                                                <Form.Group controlId="formPatientAddress2">
+                                                    <FloatingLabel controlId="formPatientAddress2" label="Address 2" className="mb-2">
+                                                        <Form.Control type="text"
+                                                            placeholder="Address 2"
+                                                            value={patientAddress2}
+                                                            onChange={e => setPatientAddress2(e.target.value)}
+                                                            className={`${styles.tabField}`}
+                                                        />
+                                                    </FloatingLabel>
+                                                </Form.Group>
+                                                <Form.Group controlId="formPatientAddressCity">
+                                                    <FloatingLabel controlId="formPatientAddressCity" label="City" className="mb-2">
+                                                        <Form.Control type="text"
+                                                            placeholder="City"
+                                                            value={patientAddressCity}
+                                                            onChange={e => setPatientAddressCity(e.target.value)}
+                                                            className={`${styles.tabField}`}
+                                                        />
+                                                    </FloatingLabel>
+                                                </Form.Group>
+                                                <Form.Group controlId="formPatientAddressState">
+                                                    <FloatingLabel controlId="formPatientAddressState" label="State" className="mb-2">
+                                                        <Form.Control type="text"
+                                                            placeholder="State"
+                                                            value={patientAddressState}
+                                                            onChange={e => setPatientAddressState(e.target.value)}
+                                                            className={`${styles.tabField}`}
+                                                        />
+                                                    </FloatingLabel>
+                                                </Form.Group>
+                                                <Form.Group controlId="formPatientAddressZip">
+                                                    <FloatingLabel controlId="formPatientAddressZip" label="Zip" className="mb-2">
+                                                        <Form.Control type="text"
+                                                            placeholder="Zip"
+                                                            value={patientAddressZip}
+                                                            onChange={e => setPatientAddressZip(e.target.value)}
+                                                            className={`${styles.tabField}`}
+                                                        />
+                                                    </FloatingLabel>
+                                                </Form.Group>
+                                            </Card>
+                                            <Card className={`px-2 mb-2 ${styles.tabBody}`}>
+                                                <h1 className="h5 mt-2 ms-2">Insurance Details</h1>
+                                                {/* save all to state onChange */}
+                                                <Form.Group controlId="formPatientInsuranceInsurer">
+                                                    <FloatingLabel controlId="formPatientInsuranceInsurer" label="Insurance Provider" className="mb-2">
+                                                        <Form.Control type="text"
+                                                            placeholder="Insurance"
+                                                            value={patientInsuranceInsurer}
+                                                            onChange={e => setPatientInsuranceInsurer(e.target.value)}
+                                                            className={`${styles.tabField}`}
+                                                        />
+                                                    </FloatingLabel>
+                                                </Form.Group>
+                                                <Form.Group controlId="formPatientInsuranceId">
+                                                    <FloatingLabel controlId="formPatientInsuranceId" label="Insurance Plan ID" className="mb-2">
+                                                        <Form.Control type="text"
+                                                            placeholder="Insurance Plan ID"
+                                                            value={patientInsurancePlanId}
+                                                            onChange={e => setPatientInsurancePlanId(e.target.value)}
+                                                            className={`${styles.tabField}`}
+                                                        />
+                                                    </FloatingLabel>
+                                                </Form.Group>
+                                                <Form.Group controlId="formPatientInsuranceEffectiveDate">
+                                                    <FloatingLabel controlId="formPatientInsuranceEffectiveDate" label="Insurance Effective Date" className="mb-2">
+                                                        <Form.Control type="date"
+                                                            placeholder="Insurance Effective Date"
+                                                            value={patientInsuranceEffectiveDate}
+                                                            onChange={e => setPatientInsuranceEffectiveDate(e.target.value)}
+                                                            className={`${styles.tabField}`}
+                                                        />
+                                                    </FloatingLabel>
+                                                </Form.Group>
+                                                <Form.Group controlId="formPatientInsuranceGuarantorRelationship">
+                                                    <h3 className="h5 mt-1 ms-1">Relationship to Insured</h3>
+                                                    <div className="d-flex mb-2">
+                                                        <Form.Check
+                                                            inline
+                                                            label="Self"
+                                                            value="Self"
+                                                            readOnly
+                                                            checked={patientInsuranceGuarantorRelationship === "Self"}
+                                                            name="relationship"
+                                                            type="radio"
+                                                            id="self"
+                                                            className="ms-1"
+                                                            onClick={e => setPatientInsuranceGuarantorRelationship(e.target.value)}
+                                                        />
+                                                        <Form.Check
+                                                            inline
+                                                            label="Other"
+                                                            value="Other"
+                                                            readOnly
+                                                            checked={patientInsuranceGuarantorRelationship !== "Self"}
+                                                            name="relationship"
+                                                            type="radio"
+                                                            id="other"
+                                                            className="ms-1"
+                                                            onClick={e => setPatientInsuranceGuarantorRelationship(e.target.value)}
+                                                        />
+                                                        {patientInsuranceGuarantorRelationship !== "Self" &&
+                                                            <Form.Select
+                                                                className={`py-1 `}
+                                                                value={patientInsuranceGuarantorRelationship}
+                                                                onChange={e => setPatientInsuranceGuarantorRelationship(e.target.value)}
+                                                            >
+                                                                {patientInsuranceGuarantorRelationship === 'Other' && <option value="">Select</option>}
+                                                                <option value="Dependent">Dependent</option>
+                                                                <option value="Parent">Parent</option>
+                                                                <option value="Legal Guardian">Legal Guardian</option>
+                                                            </Form.Select>
+                                                        }
+                                                    </div>
+                                                </Form.Group>
+                                                {/* conditionally render this if Relationship isnot Self */}
+                                                {patientInsuranceGuarantorRelationship !== "Self" &&
+                                                    <>
+                                                        <h4 className="h6 mt-2 ms-1">Insured Details:</h4>
+                                                        <Form.Group controlId="formPatientInsuranceGuarantorFirstName">
+                                                            <FloatingLabel controlId="formPatientInsuranceGuarantorFirstName" label="First Name" className="mb-2">
+                                                                <Form.Control type="text"
+                                                                    placeholder="First Name"
+                                                                    value={patientInsuranceGuarantorFirstName}
+                                                                    onChange={e => setPatientInsuranceGuarantorFirstName(e.target.value)}
+                                                                    className={`${styles.tabField}`}
+                                                                />
+                                                            </FloatingLabel>
+                                                        </Form.Group>
+                                                        <Form.Group controlId="formPatientInsuranceGuarantorLastName">
+                                                            <FloatingLabel controlId="formPatientInsuranceGuarantorLastName" label="Last Name" className="mb-2">
+                                                                <Form.Control type="text"
+                                                                    placeholder="Last Name"
+                                                                    value={patientInsuranceGuarantorLastName}
+                                                                    onChange={e => setPatientInsuranceGuarantorLastName(e.target.value)}
+                                                                    className={`${styles.tabField}`}
+                                                                />
+                                                            </FloatingLabel>
+                                                        </Form.Group>
+                                                        <Form.Group controlId="formPatientInsuranceGuarantorDob">
+                                                            <FloatingLabel controlId="formPatientInsuranceGuarantorDob" label="Date of Birth" className="mb-2">
+                                                                <Form.Control type="date"
+                                                                    placeholder="Date of Birth"
+                                                                    value={patientInsuranceGuarantorDob}
+                                                                    onChange={e => setPatientInsuranceGuarantorDob(e.target.value)}
+                                                                    className={`${styles.tabField}`}
+                                                                />
+                                                            </FloatingLabel>
+                                                        </Form.Group>
+                                                    </>
                                                 }
-                                            </Form.Select>
-                                        </Form.Group>
-                                        <Form.Group controlId="formOrderingProvider">
-                                            <h1 className="h6 mt-2 ms-2">Ordering Provider:</h1>
-                                            <Form.Select
-                                                className={`py-1 `}
-                                                value={orderingProvider}
-                                                onChange={e => setOrderingProvider(e.target.value)}
-                                            >
-                                                <option value="">Select Provider</option>
-                                                {accountProviders.map((provider, idx) => {
-                                                    return <option
-                                                        value={`${provider.id}`}
-                                                        key={idx}
-                                                    >{provider.name} - {provider.npi}</option>
-                                                })
-                                                }
-                                            </Form.Select>
-                                        </Form.Group>
-                                    </Card>
-                                </Tab>
-                                <Tab eventKey="testingInfo" title="Test Selection">
-                                    <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
-                                        {/* TODO: dynamically render departments */}
-                                        <h1 className="h6">Pathology</h1>
-                                        {allTestOptions.map((test, idx) => {
-                                            // const isChecked = find if testOrder includes this test
-                                            // console.log(`Test Checked Val: ${test.checked}`)
-                                            return (test.department === "Pathology" && <Form.Check
-                                                label={test.name}
-                                                value={test.id}
-                                                checked={test.checked}
-                                                readOnly
-                                                type="checkbox"
-                                                name={test.name}
-                                                id={test}
-                                                key={idx}
-                                                onChange={handleTestOrderChange}
-                                            />)
-
-                                        })}
-                                    </Card>
-                                    <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
-                                        <h1 className="h6">Infectious Disease</h1>
-                                        {allTestOptions.map((test, idx) => {
-                                            if (test.department === "Infectious Disease") {
-                                                // const isChecked = find if testOrder includes this test
-                                                return (
-                                                    < Form.Check
+                                            </Card>
+                                        </section>
+                                    </Tab>
+                                    <Tab eventKey="providerInfo" title="Provider Info">
+                                        <section id="providerInfo">
+                                            <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
+                                                <Form.Group controlId="formOrderingAccount">
+                                                    <h1 className="h6 mt-2 ms-2">Ordering Account:</h1>
+                                                    <Form.Select
+                                                        value={account}
+                                                        className={`py-1 `}
+                                                        onChange={handleAccountChange}
+                                                    >
+                                                        <option value="">Select Account</option>
+                                                        {allAccounts.map((account, idx) => {
+                                                            return <option value={account.id} key={idx}>{account.name}</option>
+                                                        })
+                                                        }
+                                                    </Form.Select>
+                                                </Form.Group>
+                                                <Form.Group controlId="formOrderingProvider">
+                                                    <h1 className="h6 mt-2 ms-2">Ordering Provider:</h1>
+                                                    <Form.Select
+                                                        className={`py-1 `}
+                                                        value={orderingProvider}
+                                                        onChange={e => setOrderingProvider(e.target.value)}
+                                                    >
+                                                        <option value="">Select Provider</option>
+                                                        {accountProviders.map((provider, idx) => {
+                                                            return <option
+                                                                value={`${provider.id}`}
+                                                                key={idx}
+                                                            >{provider.name} - {provider.npi}</option>
+                                                        })
+                                                        }
+                                                    </Form.Select>
+                                                </Form.Group>
+                                            </Card>
+                                        </section>
+                                    </Tab>
+                                    <Tab eventKey="testingInfo" title="Test Selection">
+                                        <section id="testInfo">
+                                            <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
+                                                {/* TODO: dynamically render departments */}
+                                                <h1 className="h6">Pathology</h1>
+                                                {allTestOptions.map((test, idx) => {
+                                                    // const isChecked = find if testOrder includes this test
+                                                    // console.log(`Test Checked Val: ${test.checked}`)
+                                                    return (test.department === "Pathology" && <Form.Check
                                                         label={test.name}
                                                         value={test.id}
                                                         checked={test.checked}
@@ -499,39 +485,62 @@ export default function RequisitionForm(props) {
                                                         id={test}
                                                         key={idx}
                                                         onChange={handleTestOrderChange}
-                                                    />);
-                                            } else return null;
-                                        })}
-                                    </Card>
-                                    <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
-                                        <h1 className="h6">Toxicology</h1>
-                                        {allTestOptions.map((test, idx) => {
-                                            if (test.department === "Toxicology") {
-                                                // const isChecked = find if testOrder includes this test
-                                                return (
-                                                    <Form.Check
-                                                        label={test.name}
-                                                        name={test.name}
-                                                        type="checkbox"
-                                                        value={test.id}
-                                                        checked={test.checked}
-                                                        readOnly
-                                                        id={test}
-                                                        key={idx}
-                                                        onChange={handleTestOrderChange}
-                                                    />);
-                                            } else return null;
-                                        })}
-                                    </Card>
-                                </Tab>
-                            </Tabs>
-                            <Button className={`mb-2 me-1 p-2 px-3 bg-secondary ${styles.btn}`} type="submit">
-                                Save
-                            </Button>
-                        </div>
-                    </div>
-                </Form>}
+                                                    />)
+                                                })}
+                                            </Card>
+                                            <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
+                                                <h1 className="h6">Infectious Disease</h1>
+                                                {allTestOptions.map((test, idx) => {
+                                                    if (test.department === "Infectious Disease") {
+                                                        // const isChecked = find if testOrder includes this test
+                                                        return (
+                                                            < Form.Check
+                                                                label={test.name}
+                                                                value={test.id}
+                                                                checked={test.checked}
+                                                                readOnly
+                                                                type="checkbox"
+                                                                name={test.name}
+                                                                id={test}
+                                                                key={idx}
+                                                                onChange={handleTestOrderChange}
+                                                            />);
+                                                    } else return null;
+                                                })}
+                                            </Card>
+                                            <Card border="primary" className={`p-2 mb-2 ${styles.tabBody}`}>
+                                                <h1 className="h6">Toxicology</h1>
+                                                {allTestOptions.map((test, idx) => {
+                                                    if (test.department === "Toxicology") {
+                                                        // const isChecked = find if testOrder includes this test
+                                                        return (
+                                                            <Form.Check
+                                                                label={test.name}
+                                                                name={test.name}
+                                                                type="checkbox"
+                                                                value={test.id}
+                                                                checked={test.checked}
+                                                                readOnly
+                                                                id={test}
+                                                                key={idx}
+                                                                onChange={handleTestOrderChange}
+                                                            />);
+                                                    } else return null;
+                                                })}
+                                            </Card>
+                                        </section>
+                                    </Tab>
+                                </Tabs>
+                                <section id="submit">
+                                    <Button className={`mb-2 me-1 p-2 px-3 bg-secondary ${styles.btn}`} type="submit">
+                                        Save
+                                    </Button>
+                                </section>
+                            </div>
+                        </Form>
+                    )}
+                </Container>
             </div>
-        </>
+        </div>
     )
 }

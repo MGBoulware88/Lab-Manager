@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Nav, Button, Collapse } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRightFromBracket, faHospitalUser, faBedPulse, faScrewdriverWrench, faStarOfLife, faHouse } from '@fortawesome/free-solid-svg-icons'
+import { faRightFromBracket, faHospitalUser, faScrewdriverWrench, faStarOfLife, faHouse, faBars } from '@fortawesome/free-solid-svg-icons'
 import styles from "../Style.module.css/SideNav.module.css";
 
 export default function SideNav() {
@@ -9,13 +9,22 @@ export default function SideNav() {
     // const [openManageUsers, setOpenManageUsers] = useState(false);
     const [openManageAccounts, setOpenManageAccounts] = useState(false);
     const [openAdmin, setOpenAdmin] = useState(false);
-
+    const [isSideNavOpen, setIsSideNavOpen] = useState(true);
 
     return (
         <>
-            <nav className={`btn-group-vertical justify-content-start align-items-center ${styles.sideBar}`}>
-            <FontAwesomeIcon icon={faBedPulse} className={`mx-3 mb-2 ${styles.brandLogo} ${styles.stickyTop}`} />
-                <ul className={`${styles.navList} ${styles.stickyTop2}`}>
+            <nav className={`btn-group-vertical justify-content-start align-items-center py-2 ${styles.sideBar}`}>
+                {/* Replace with MUI Drawer later */}
+                {isSideNavOpen? (
+                    <FontAwesomeIcon icon={faBars} className={`mx-3 text-light fs-4 align-self-start ${styles.collapse}`}
+                        onClick={() => setIsSideNavOpen(!isSideNavOpen)}
+                />
+                ): (
+                    <FontAwesomeIcon icon={faBars} className={`mx-3 text-light fs-4 align-self-start ${styles.collapse}`}
+                        onClick={() => setIsSideNavOpen(!isSideNavOpen)}
+                />
+                )}
+                <ul className={`${styles.navList} ${styles.stickyTop}`}>
                     <li>
                         <Nav.Link href="/dashboard" className={`${styles.navLink}`}>
                             <Button
@@ -65,35 +74,6 @@ export default function SideNav() {
                                 <li className={`${styles.subLink}`}><Nav.Link href="/inventory">Manage Inventory</Nav.Link></li> */}
                         </ul>
                     </Collapse>
-                    {/* <li>
-                            <Nav className={`${styles.navLink}`}>
-                                <Button
-                                    type="button"
-                                    className={`btn ${styles.sideNavBtn} `}
-                                    onMouseOver={(e) => {
-                                        e.target.style.backgroundColor = "#f0f5fa";
-                                        e.target.style.color = "#0b2447";
-                                    }}
-                                    onMouseOut={(e) => {
-                                        e.target.style.backgroundColor = "#576cbc";
-                                        e.target.style.color = "#00031C";
-                                    }}
-                                    onClick={() => setOpenManageUsers(!openManageUsers)}
-                                    aria-controls="manage-lab-menu-items"
-                                    aria-expanded={openManageUsers}
-                                >
-                                    <FontAwesomeIcon icon={faUsers} className="mx-3" />
-                                    User Management
-                                </Button>
-                            </Nav>
-                        </li>
-                        <Collapse in={openManageUsers}>
-                            <ul className={`ms-4 text-light ${styles.navList}`}>
-                                <li className={`${styles.subLink}`}><Nav.Link href="/users">Manage Users</Nav.Link></li>
-                                <li className={`${styles.subLink}`}><Nav.Link href="/users/history">User Access History</Nav.Link></li>
-                                <li className={`${styles.subLink}`}><Nav.Link href="/users/logs">User Logs</Nav.Link></li>
-                            </ul>
-                        </Collapse> */}
                     <li>
                         <Nav className={`${styles.navLink}`}>
                             <Button

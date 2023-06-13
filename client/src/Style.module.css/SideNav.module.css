@@ -1,5 +1,5 @@
-.sideNav {
-    display: inline-block;
+.collapse {
+    cursor: pointer;
 }
 
 .navLink {
@@ -25,6 +25,7 @@
     border-right: 1px solid #fafafa;
     border-radius: 0;
     border-color: #fafafa;
+    height: 100vh;
     width: 18rem;
     padding: 0 0.5rem;
 }
@@ -34,14 +35,13 @@
     margin: 10px;
     margin-bottom: 15px;
     color: #fafafa;
-    position: sticky;
-    top: 5px;
 }
 
 .navList {
     list-style: none;
     padding: 0;
     margin: 0;
+    position: relative;
 }
 
 .subLink:hover {
@@ -51,10 +51,5 @@
 
 .stickyTop {
     position: sticky;
-    top: 10px;
-}
-
-.stickyTop2 {
-    position: sticky;
-    top: 100px;
+    top: 80px;
 }

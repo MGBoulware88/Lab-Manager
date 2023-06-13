@@ -10,10 +10,10 @@ export default function Dashboard() {
 
     return (
         <>
-            <TopNav />
             <div className="d-flex m-auto">
                 <SideNav />
                 <div>
+                    <TopNav />
                     <Container className="d-flex row gap-2">
                         <Card className={`col-3 ${styles.tiles}`}>
                             <FontAwesomeIcon icon={faFileMedical} className={`mx-3 ${styles.tileIcons}`} />
@@ -31,11 +31,11 @@ export default function Dashboard() {
                             <h3>New Orders - 25</h3>
                             <p>New Lab Orders entered today</p>
                         </Card>
-                        <Card  className={`col-3 ${styles.tiles} `}>
+                        <Card  className={`col-3 ${styles.tiles}`}>
                             <h3>something admin task</h3>
                             <p>desc about it</p>
                         </Card>
-                        <Card className={`col-3 ${styles.tiles} `}>
+                        <Card className={`col-3 ${styles.tiles}`}>
                             <h3>New Payments - 76</h3>
                             <p>Reimbursements received today</p>
                         </Card>
