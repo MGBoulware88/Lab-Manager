@@ -1,13 +1,24 @@
-.collapse {
+.collapseIcon {
     cursor: pointer;
+    position: sticky;
+    top: 10px;
+}
+
+.expandIcon {
+    cursor: pointer;
+    position: sticky;
+    top: 10px;
 }
 
 .navLink {
-    /* margin: 0.25rem 0; */
     border: 2px solid black;
     border-radius: 1rem;
-    /* position: relative; */
-    /* top: 85px; */
+}
+.navLinkClosed {
+    border: 1px solid black;
+    border-radius: 1rem;
+    padding: 5px;
+    background-color: #576cbc;
 }
 
 .sideNavBtn {
@@ -20,13 +31,24 @@
     margin: 0;
 }
 
-.sideBar {
+.sideNavOpen {
     background-color: #0b2447;
     border-right: 1px solid #fafafa;
     border-radius: 0;
     border-color: #fafafa;
     height: 100vh;
     width: 18rem;
+    padding: 0 0.5rem;
+}
+
+.sideNavClosed {
+    background-color: #0b2447;
+    border-right: 1px solid #fafafa;
+    border-radius: 0;
+    border-color: #fafafa;
+    height: 100vh;
+    width: 5rem;
+    transition: width 0.3;
     padding: 0 0.5rem;
 }
 
@@ -51,5 +73,5 @@
 
 .stickyTop {
     position: sticky;
-    top: 80px;
+    top: 110px;
 }
