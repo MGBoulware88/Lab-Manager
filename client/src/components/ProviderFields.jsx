@@ -4,7 +4,7 @@ import styles from '../Style.module.css/AccountForm.module.css';
 
 export default function ProviderFields({ val1, val2, onChange1, onChange2 }) {
     return (
-        <div>
+        <>
             <Form.Group controlId='formAccountProviderName'>
                 <FloatingLabel controlId="formAccountProviderName" label="Provider Name" className="mb-2">
                     <Form.Control
@@ -27,6 +27,6 @@ export default function ProviderFields({ val1, val2, onChange1, onChange2 }) {
                     />
                 </FloatingLabel>
             </Form.Group>
-        </div>
+        </>
     );
 }

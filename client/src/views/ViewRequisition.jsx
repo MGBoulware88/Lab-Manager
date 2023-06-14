@@ -30,18 +30,20 @@ export default function ViewRequisition() {
     });
     return (
         <>
-            <TopNav />
             <div className="d-flex">
                 <SideNav />
-                {isLoading ? <p>Loading Req Data. . .</p> : <Container>
-                    <ul>
-                        <li>{reqData.patient}</li>
-                        <li>{reqData.account}</li>
-                        <li>{reqData.testOrder}</li>
-                        <li>{reqData.address}</li>
-                        <li>{reqData.insurance}</li>
-                    </ul>
-                    </Container>}
+                <section className="d-flex flex-column" style={{width: "100%"}}>
+                    <TopNav />
+                    {isLoading ? <p>Loading Req Data. . .</p> : <Container>
+                        <ul>
+                            <li>reqData.patient</li>
+                            <li>reqData.account</li>
+                            <li>reqData.testOrder</li>
+                            <li>reqData.address</li>
+                            <li>reqData.insurance</li>
+                        </ul>
+                        </Container>}
+                </section>
             </div>
         </>
     )

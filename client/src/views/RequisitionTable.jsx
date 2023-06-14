@@ -134,7 +134,7 @@ export default function RequisitionTable() {
         <>
             <div className="d-flex">
                 <SideNav />
-                <div className="d-flex flex-column">
+                <section id="requisitionTable" className="d-flex flex-column" style={{width: "100%"}}>
                     <TopNav />
                     <Container>
                         <div className='d-flex justify-content-between align-items-center'>
@@ -253,7 +253,7 @@ export default function RequisitionTable() {
                             return req?.status[0]?.status
                         })}
                     </Container>
-                </div>
+                </section>
             </div>
         </>
     )
