@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Nav, Button, Collapse } from "react-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faRightFromBracket, faHospitalUser, faScrewdriverWrench, faStarOfLife, faHouse, faBars, faArrowAltCircleRight, faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons'
+import { faRightFromBracket, faHospitalUser, faScrewdriverWrench, faStarOfLife, faHouse, faBars, faArrowCircleLeft, faArrowCircleRight } from '@fortawesome/free-solid-svg-icons'
 import styles from "../Style.module.css/SideNav.module.css";
 
 export default function SideNav() {

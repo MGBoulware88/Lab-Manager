@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import SideNav from '../components/SideNav';
 import TopNav from '../components/TopNav';
-import { Form, FloatingLabel, Table, Container } from 'react-bootstrap';
+import { Form, Table, Container } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEye, faPen, faTrashCan } from '@fortawesome/free-solid-svg-icons';
 import styles from "../Style.module.css/RequisitionTable.module.css";
