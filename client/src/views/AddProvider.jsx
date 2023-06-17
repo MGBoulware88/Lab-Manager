@@ -16,6 +16,7 @@ export default function AddProvider() {
     const [selectedAccount, setSelectedAccount] = useState({});
     const [providerName, setProviderName] = useState("");
     const [npi, setNpi] = useState("");
+    const [isLoading, setIsLoading] = useState(true);
 
     const navigate = useNavigate();
 
@@ -44,7 +45,8 @@ export default function AddProvider() {
             .get(`${baseUrl}/accounts`)
             .then(res => {
                 const data = res.data;
-                data && setAllAccounts(data);
+                setAllAccounts(data);
+                setIsLoading(false);
                 console.log(allAccounts);
             })
             .catch(err => {
@@ -53,15 +55,16 @@ export default function AddProvider() {
     }
 
     useEffect(() => {
-        fetchAccounts();
-    }, []);
+        isLoading && fetchAccounts();
+    });
 
     return (
         <div className="d-flex">
             <SideNav />
             <section className="d-flex flex-column" style={{ width: "100%" }}>
                 <TopNav />
-                <Container className="d-flex flex-column px-3" style={{ width: "auto" }}>
+                {isLoading ? <p>Loading Accounts. . .</p> :
+                (<Container className="d-flex flex-column px-3" style={{ width: "auto" }}>
                     <h1 className="text-primary">Add Provider</h1>
                     <Form onSubmit={handleAddProvider} className="">
                         <Card border="primary" className={`p-2 mb-2 ${styles.cardBody}`} >
@@ -94,7 +97,7 @@ export default function AddProvider() {
                             Save
                         </Button>
                     </Form>
-                </Container>
+                </Container>)}
             </section>
         </div>
     )
