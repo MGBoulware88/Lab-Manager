@@ -26,10 +26,10 @@ export default function RequisitionForm(props) {
     const [patientInsuranceInsurer, setPatientInsuranceInsurer] = useState(props?.reqData?.insurance?.insurer || "");
     const [patientInsurancePlanId, setPatientInsurancePlanId] = useState(props?.reqData?.insurance?.planId || "");
     const [patientInsuranceEffectiveDate, setPatientInsuranceEffectiveDate] = useState(props?.reqData?.insurance?.effectiveDate || "");
-    const [patientInsuranceGuarantorRelationship, setPatientInsuranceGuarantorRelationship] = useState(props?.reqData?.insurance?.guarantorRelationship || 'Self');
-    const [patientInsuranceGuarantorFirstName, setPatientInsuranceGuarantorFirstName] = useState(props?.reqData?.insurance?.guarantorFirstName || "");
-    const [patientInsuranceGuarantorLastName, setPatientInsuranceGuarantorLastName] = useState(props?.reqData?.insurance?.guarantorLastName || "");
-    const [patientInsuranceGuarantorDob, setPatientInsuranceGuarantorDob] = useState(props?.reqData?.insurance?.guarantorDob || "");
+    const [patientInsuranceGaurantorRelationship, setPatientInsuranceGaurantorRelationship] = useState(props?.reqData?.insurance?.guarantorRelationship || 'Self');
+    const [patientInsuranceGaurantorFirstName, setPatientInsuranceGaurantorFirstName] = useState(props?.reqData?.insurance?.guarantorFirstName || "");
+    const [patientInsuranceGaurantorLastName, setPatientInsuranceGaurantorLastName] = useState(props?.reqData?.insurance?.guarantorLastName || "");
+    const [patientInsuranceGaurantorDob, setPatientInsuranceGaurantorDob] = useState(props?.reqData?.insurance?.guarantorDob || "");
     //provider info fields
     const [allAccounts, setAllAccounts] = useState([]);
     const [account, setAccount] = useState(props?.reqData?.account?.id || {});
@@ -120,11 +120,12 @@ export default function RequisitionForm(props) {
 
     const handleReqFormSubmit = async e => {
         e.preventDefault();
+        console.log("relationship: " + patientInsuranceGaurantorRelationship);
         //if self, set guarantor to patient
-        if (patientInsuranceGuarantorRelationship === 'Self') {
-            setPatientInsuranceGuarantorFirstName(patientFirstName);
-            setPatientInsuranceGuarantorLastName(patientLastName);
-            setPatientInsuranceGuarantorDob(patientDob);
+        if (patientInsuranceGaurantorRelationship === 'Self') {
+            setPatientInsuranceGaurantorFirstName(patientFirstName);
+            setPatientInsuranceGaurantorLastName(patientLastName);
+            setPatientInsuranceGaurantorDob(patientDob);
         }
         //grab only checked tests
         const selectedTests = [];
@@ -149,10 +150,10 @@ export default function RequisitionForm(props) {
             patientInsuranceInsurer,
             patientInsurancePlanId,
             patientInsuranceEffectiveDate,
-            patientInsuranceGuarantorRelationship,
-            patientInsuranceGuarantorFirstName,
-            patientInsuranceGuarantorLastName,
-            patientInsuranceGuarantorDob,
+            patientInsuranceGaurantorRelationship,
+            patientInsuranceGaurantorFirstName,
+            patientInsuranceGaurantorLastName,
+            patientInsuranceGaurantorDob,
             account,
             orderingProvider,
             testOrder: selectedTests
@@ -160,7 +161,7 @@ export default function RequisitionForm(props) {
         //convert the testOrder
         data.testOrder = data.testOrder.join(',');
         //what's the form data look like now?
-        // console.log("here's the req data: ", data);
+        console.log("here's the req data: ", data);
         //check if Edit or New Req
         if (method === "post") {
             try {
@@ -350,7 +351,7 @@ export default function RequisitionForm(props) {
                                                         />
                                                     </FloatingLabel>
                                                 </Form.Group>
-                                                <Form.Group controlId="formPatientInsuranceGuarantorRelationship">
+                                                <Form.Group controlId="formPatientInsuranceGaurantorRelationship">
                                                     <h3 className="h5 mt-1 ms-1">Relationship to Insured</h3>
                                                     <div className="d-flex mb-2">
                                                         <Form.Check
@@ -358,32 +359,32 @@ export default function RequisitionForm(props) {
                                                             label="Self"
                                                             value="Self"
                                                             readOnly
-                                                            checked={patientInsuranceGuarantorRelationship === "Self"}
+                                                            checked={patientInsuranceGaurantorRelationship === "Self"}
                                                             name="relationship"
                                                             type="radio"
                                                             id="self"
                                                             className="ms-1"
-                                                            onClick={e => setPatientInsuranceGuarantorRelationship(e.target.value)}
+                                                            onClick={e => setPatientInsuranceGaurantorRelationship(e.target.value)}
                                                         />
                                                         <Form.Check
                                                             inline
                                                             label="Other"
                                                             value="Other"
                                                             readOnly
-                                                            checked={patientInsuranceGuarantorRelationship !== "Self"}
+                                                            checked={patientInsuranceGaurantorRelationship !== "Self"}
                                                             name="relationship"
                                                             type="radio"
                                                             id="other"
                                                             className="ms-1"
-                                                            onClick={e => setPatientInsuranceGuarantorRelationship(e.target.value)}
+                                                            onClick={e => setPatientInsuranceGaurantorRelationship(e.target.value)}
                                                         />
-                                                        {patientInsuranceGuarantorRelationship !== "Self" &&
+                                                        {patientInsuranceGaurantorRelationship !== "Self" &&
                                                             <Form.Select
                                                                 className={`py-1 `}
-                                                                value={patientInsuranceGuarantorRelationship}
-                                                                onChange={e => setPatientInsuranceGuarantorRelationship(e.target.value)}
+                                                                value={patientInsuranceGaurantorRelationship}
+                                                                onChange={e => setPatientInsuranceGaurantorRelationship(e.target.value)}
                                                             >
-                                                                {patientInsuranceGuarantorRelationship === 'Other' && <option value="">Select</option>}
+                                                                {patientInsuranceGaurantorRelationship === 'Other' && <option value="">Select</option>}
                                                                 <option value="Dependent">Dependent</option>
                                                                 <option value="Parent">Parent</option>
                                                                 <option value="Legal Guardian">Legal Guardian</option>
@@ -392,35 +393,35 @@ export default function RequisitionForm(props) {
                                                     </div>
                                                 </Form.Group>
                                                 {/* conditionally render this if Relationship isnot Self */}
-                                                {patientInsuranceGuarantorRelationship !== "Self" &&
+                                                {patientInsuranceGaurantorRelationship !== "Self" &&
                                                     <>
                                                         <h4 className="h6 mt-2 ms-1">Insured Details:</h4>
-                                                        <Form.Group controlId="formPatientInsuranceGuarantorFirstName">
-                                                            <FloatingLabel controlId="formPatientInsuranceGuarantorFirstName" label="First Name" className="mb-2">
+                                                        <Form.Group controlId="formPatientInsuranceGaurantorFirstName">
+                                                            <FloatingLabel controlId="formPatientInsuranceGaurantorFirstName" label="First Name" className="mb-2">
                                                                 <Form.Control type="text"
                                                                     placeholder="First Name"
-                                                                    value={patientInsuranceGuarantorFirstName}
-                                                                    onChange={e => setPatientInsuranceGuarantorFirstName(e.target.value)}
+                                                                    value={patientInsuranceGaurantorFirstName}
+                                                                    onChange={e => setPatientInsuranceGaurantorFirstName(e.target.value)}
                                                                     className={`${styles.tabField}`}
                                                                 />
                                                             </FloatingLabel>
                                                         </Form.Group>
-                                                        <Form.Group controlId="formPatientInsuranceGuarantorLastName">
-                                                            <FloatingLabel controlId="formPatientInsuranceGuarantorLastName" label="Last Name" className="mb-2">
+                                                        <Form.Group controlId="formPatientInsuranceGaurantorLastName">
+                                                            <FloatingLabel controlId="formPatientInsuranceGaurantorLastName" label="Last Name" className="mb-2">
                                                                 <Form.Control type="text"
                                                                     placeholder="Last Name"
-                                                                    value={patientInsuranceGuarantorLastName}
-                                                                    onChange={e => setPatientInsuranceGuarantorLastName(e.target.value)}
+                                                                    value={patientInsuranceGaurantorLastName}
+                                                                    onChange={e => setPatientInsuranceGaurantorLastName(e.target.value)}
                                                                     className={`${styles.tabField}`}
                                                                 />
                                                             </FloatingLabel>
                                                         </Form.Group>
-                                                        <Form.Group controlId="formPatientInsuranceGuarantorDob">
-                                                            <FloatingLabel controlId="formPatientInsuranceGuarantorDob" label="Date of Birth" className="mb-2">
+                                                        <Form.Group controlId="formPatientInsuranceGaurantorDob">
+                                                            <FloatingLabel controlId="formPatientInsuranceGaurantorDob" label="Date of Birth" className="mb-2">
                                                                 <Form.Control type="date"
                                                                     placeholder="Date of Birth"
-                                                                    value={patientInsuranceGuarantorDob}
-                                                                    onChange={e => setPatientInsuranceGuarantorDob(e.target.value)}
+                                                                    value={patientInsuranceGaurantorDob}
+                                                                    onChange={e => setPatientInsuranceGaurantorDob(e.target.value)}
                                                                     className={`${styles.tabField}`}
                                                                 />
                                                             </FloatingLabel>
